@@ -1,0 +1,98 @@
+version: '3.4'
+
+services:
+
+  seq:
+    image: datalust/seq:latest
+    
+  postgresql:
+    image: postgres:14.5
+
+  nosqldata:
+    image: mongo
+
+  redis:
+    image: redis:alpine
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+
+  identity-api:
+    image: ${REGISTRY:-eshop}/identity.api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Services/Identity/Identity.API/Dockerfile
+    depends_on:
+      - postgresql
+
+  payment-api:
+    image: ${REGISTRY:-csp}/payment.api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Services/Payment/Payment.API/Dockerfile
+    depends_on:
+      - rabbitmq
+
+  webhooks-api:
+    image: ${REGISTRY:-eshop}/webhooks.api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Services/Webhooks/Webhooks.API/Dockerfile
+    depends_on:
+      - postgresql
+
+  mobile-api-gw:
+    image: envoyproxy/envoy:v1.11.1
+
+  mobile-agg:
+    image: ${REGISTRY:-csp}/mobile-agg:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: ApiGateways/Corpspace.Bff.Mobile/aggregator/Dockerfile
+    depends_on:
+      - nosqldata
+      - postgresql
+      - identity-api
+      - rabbitmq
+
+  web-agg:
+    image: ${REGISTRY:-csp}/web-agg:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: ApiGateways/Corpspace.Bff.Web/aggregator/Dockerfile
+    depends_on:
+      - nosqldata
+      - postgresql
+      - identity-api
+      - rabbitmq
+      - ordering-api
+      - catalog-api
+      - basket-api
+
+  web-status:
+    image: ${REGISTRY:-csp}/web-status:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Web/WebStatus/Dockerfile
+
+  angular-client:
+    image: ${REGISTRY:-csp}/angular:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Web/WebSPA/Dockerfile
+      args:
+        NODE_IMAGE: ${NODE_IMAGE:-node:12.0}
+    depends_on:
+      - web-agg
+      - web-api-gw
+
+  webhooks-client:
+    image: ${REGISTRY:-csp}/webhooks.client:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Web/WebhookClient/Dockerfile
+    depends_on:
+      - webhooks-api
+
+  web-api-gw:
+    image: envoyproxy/envoy:v1.11.1
