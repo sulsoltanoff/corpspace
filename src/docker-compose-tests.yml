@@ -1,0 +1,30 @@
+version: '3.4'
+
+services:
+  postgresql-test:
+    image: postgres:14.5
+
+  nosql-test:
+    image: mongo
+
+  redis-test:
+    image: redis:alpine
+
+  rabbitmq-test:
+    image: rabbitmq:3-management-alpine
+
+  identity-api-test:
+    image: ${REGISTRY:-csp}/identity-api-test:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Services/Identity/Identity.API/Dockerfile
+    depends_on:
+      - postgresql-test
+
+  payment-api-test:
+    image: ${REGISTRY:-csp}/payment-api-test:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Services/Payment/Payment.API/Dockerfile
+    depends_on:
+      - rabbitmq-test
