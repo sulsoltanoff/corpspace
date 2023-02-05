@@ -65,9 +65,6 @@ services:
       - postgresql
       - identity-api
       - rabbitmq
-      - ordering-api
-      - catalog-api
-      - basket-api
 
   web-status:
     image: ${REGISTRY:-csp}/web-status:${PLATFORM:-linux}-${TAG:-latest}
