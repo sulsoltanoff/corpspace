@@ -22,17 +22,17 @@ public interface IEventBus
 {
     void Publish(IntegrationEvent @event);
 
-    void Subscribe<T, TH>()
+    void Subscribe<T, Th>()
         where T : IntegrationEvent
-        where TH : IIntegrationEventHandler<T>;
+        where Th : IIntegrationEventHandler<T>;
 
-    void SubscribeDynamic<TH>(string eventName)
-        where TH : IDynamicIntegrationEventHandler;
+    void SubscribeDynamic<Th>(string eventName)
+        where Th : IDynamicIntegrationEventHandler;
 
-    void UnsubscribeDynamic<TH>(string eventName)
-        where TH : IDynamicIntegrationEventHandler;
+    void UnsubscribeDynamic<Th>(string eventName)
+        where Th : IDynamicIntegrationEventHandler;
 
-    void Unsubscribe<T, TH>()
-        where TH : IIntegrationEventHandler<T>
+    void Unsubscribe<T, Th>()
+        where Th : IIntegrationEventHandler<T>
         where T : IntegrationEvent;
 }

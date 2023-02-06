@@ -52,9 +52,9 @@ public class HttpClientAuthorizationDelegatingHandler : DelegatingHandler
 
     async Task<string> GetToken()
     {
-        const string ACCESS_TOKEN = "access_token";
+        const string accessToken = "access_token";
 
         return await _httpContextAccessor.HttpContext
-            .GetTokenAsync(ACCESS_TOKEN);
+            .GetTokenAsync(accessToken);
     }
 }

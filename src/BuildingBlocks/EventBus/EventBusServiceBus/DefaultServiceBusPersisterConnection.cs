@@ -20,9 +20,9 @@ public class DefaultServiceBusPersisterConnection : IServiceBusPersisterConnecti
 {
     private readonly string _serviceBusConnectionString;
     private ServiceBusClient _topicClient;
-    private ServiceBusAdministrationClient _subscriptionClient;
+    private readonly ServiceBusAdministrationClient _subscriptionClient;
 
-    bool _disposed;
+    private bool _disposed;
 
     public DefaultServiceBusPersisterConnection(string serviceBusConnectionString)
     {
