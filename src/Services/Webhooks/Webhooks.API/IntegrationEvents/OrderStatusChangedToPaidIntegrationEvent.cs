@@ -14,8 +14,6 @@
 // limitations under the License.
 #endregion
 
-using Corpspace.BuildingBlocks.EventBus.Events;
-
 namespace Corpspace.Services.Webhooks.API.IntegrationEvents;
 
 public record OrderStatusChangedToPaidIntegrationEvent : IntegrationEvent

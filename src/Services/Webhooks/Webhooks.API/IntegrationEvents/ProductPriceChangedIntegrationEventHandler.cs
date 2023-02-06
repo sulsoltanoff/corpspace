@@ -14,8 +14,6 @@
 // limitations under the License.
 #endregion
 
-using Corpspace.BuildingBlocks.EventBus.Abstractions;
-
 namespace Corpspace.Services.Webhooks.API.IntegrationEvents;
 
 public class ProductPriceChangedIntegrationEventHandler : IIntegrationEventHandler<ProductPriceChangedIntegrationEvent>

@@ -14,8 +14,6 @@
 // limitations under the License.
 #endregion
 
-using Corpspace.Services.Webhooks.API.Model;
-
 namespace Corpspace.Services.Webhooks.API.Controllers;
 
 public class WebhookSubscriptionRequest : IValidatableObject

@@ -14,9 +14,6 @@
 // limitations under the License.
 #endregion
 
-using Corpspace.Services.Webhooks.API.Infrastructure;
-using Corpspace.Services.Webhooks.API.Model;
-
 namespace Corpspace.Services.Webhooks.API.Services;
 
 public class WebhooksRetriever : IWebhooksRetriever

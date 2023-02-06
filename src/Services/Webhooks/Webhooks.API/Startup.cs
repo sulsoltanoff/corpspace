@@ -14,16 +14,6 @@
 // limitations under the License.
 #endregion
 
-using Corpspace.BuildingBlocks.EventBus;
-using Corpspace.BuildingBlocks.EventBus.Abstractions;
-using Corpspace.BuildingBlocks.EventBusRabbitMQ;
-using Corpspace.BuildingBlocks.EventBusServiceBus;
-using Corpspace.BuildingBlocks.IntegrationEventLogEF.Services;
-using Corpspace.Devspaces.Support;
-using Corpspace.Services.Webhooks.API.Infrastructure;
-using Corpspace.Services.Webhooks.API.IntegrationEvents;
-using Corpspace.Services.Webhooks.API.Services;
-
 namespace Corpspace.Services.Webhooks.API;
 public class Startup
 {
@@ -146,15 +136,15 @@ internal static class CustomExtensionMethods
 
     public static IServiceCollection AddCustomDbContext(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddEntityFrameworkSqlServer()
+        services.AddEntityFrameworkNpgsql()
             .AddDbContext<WebhooksContext>(options =>
         {
-            options.UseSqlServer(configuration["ConnectionString"],
-                                    sqlServerOptionsAction: sqlOptions =>
+            options.UseNpgsql(configuration["ConnectionString"],
+                                    npgsqlOptionsAction: sqlOptions =>
                                     {
                                         sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
                                         //Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
-                                        sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+                                        sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorCodesToAdd: null);
                                     });
         });
 
@@ -167,7 +157,7 @@ internal static class CustomExtensionMethods
         {            
             options.SwaggerDoc("v1", new OpenApiInfo
             {
-                Title = "eShopOnContainers - Webhooks HTTP API",
+                Title = "Corpspace - Webhooks HTTP API",
                 Version = "v1",
                 Description = "The Webhooks Microservice HTTP API. This is a simple webhooks CRUD registration entrypoint"
             });
@@ -204,7 +194,7 @@ internal static class CustomExtensionMethods
                 var iLifetimeScope = sp.GetRequiredService<ILifetimeScope>();
                 var logger = sp.GetRequiredService<ILogger<EventBusServiceBus>>();
                 var eventBusSubscriptionManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
-                string subscriptionName = configuration["SubscriptionClientName"];
+                var subscriptionName = configuration["SubscriptionClientName"];
 
                 return new EventBusServiceBus(serviceBusPersisterConnection, logger,
                     eventBusSubscriptionManager, iLifetimeScope, subscriptionName);
@@ -213,12 +203,12 @@ internal static class CustomExtensionMethods
         }
         else
         {
-            services.AddSingleton<IEventBus, EventBusRabbitMQ>(sp =>
+            services.AddSingleton<IEventBus, EventBusRabbitMq>(sp =>
             {
                 var subscriptionClientName = configuration["SubscriptionClientName"];
-                var rabbitMQPersistentConnection = sp.GetRequiredService<IRabbitMQPersistentConnection>();
+                var rabbitMqPersistentConnection = sp.GetRequiredService<IRabbitMqPersistentConnection>();
                 var iLifetimeScope = sp.GetRequiredService<ILifetimeScope>();
-                var logger = sp.GetRequiredService<ILogger<EventBusRabbitMQ>>();
+                var logger = sp.GetRequiredService<ILogger<EventBusRabbitMq>>();
                 var eventBusSubscriptionManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
 
                 var retryCount = 5;
@@ -227,7 +217,7 @@ internal static class CustomExtensionMethods
                     retryCount = int.Parse(configuration["EventBusRetryCount"]);
                 }
 
-                return new EventBusRabbitMQ(rabbitMQPersistentConnection, logger, iLifetimeScope, eventBusSubscriptionManager, subscriptionClientName, retryCount);
+                return new EventBusRabbitMq(rabbitMqPersistentConnection, logger, iLifetimeScope, eventBusSubscriptionManager, subscriptionClientName, retryCount);
             });
         }
 
@@ -245,8 +235,8 @@ internal static class CustomExtensionMethods
 
         hcBuilder
             .AddCheck("self", () => HealthCheckResult.Healthy())
-            .AddSqlServer(
-                configuration["ConnectionString"],
+            .AddNpgSql(
+                configuration["ConnectionString"]!,
                 name: "WebhooksApiDb-check",
                 tags: new string[] { "webhooksdb" });
 
@@ -279,9 +269,9 @@ internal static class CustomExtensionMethods
             }
             else
             {
-                services.AddSingleton<IRabbitMQPersistentConnection>(sp =>
+                services.AddSingleton<IRabbitMqPersistentConnection>(sp =>
                 {
-                    var logger = sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>();
+                    var logger = sp.GetRequiredService<ILogger<DefaultRabbitMqPersistentConnection>>();
 
                     var factory = new ConnectionFactory()
                     {
@@ -305,7 +295,7 @@ internal static class CustomExtensionMethods
                         retryCount = int.Parse(configuration["EventBusRetryCount"]);
                     }
 
-                    return new DefaultRabbitMQPersistentConnection(factory, logger, retryCount);
+                    return new DefaultRabbitMqPersistentConnection(factory, logger, retryCount);
                 });
             }
 

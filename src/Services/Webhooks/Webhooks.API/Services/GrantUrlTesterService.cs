@@ -16,7 +16,7 @@
 
 namespace Corpspace.Services.Webhooks.API.Services;
 
-class GrantUrlTesterService : IGrantUrlTesterService
+internal class GrantUrlTesterService : IGrantUrlTesterService
 {
     private readonly IHttpClientFactory _clientFactory;
     private readonly ILogger _logger;
@@ -37,12 +37,12 @@ class GrantUrlTesterService : IGrantUrlTesterService
 
         var client = _clientFactory.CreateClient("GrantClient");
         var msg = new HttpRequestMessage(HttpMethod.Options, url);
-        msg.Headers.Add("X-eshop-whtoken", token);
+        msg.Headers.Add("X-csp-whtoken", token);
         _logger.LogInformation("Sending the OPTIONS message to {Url} with token \"{Token}\"", url, token ?? string.Empty);
         try
         {
             var response = await client.SendAsync(msg);
-            var tokenReceived = response.Headers.TryGetValues("X-eshop-whtoken", out var tokenValues) ? tokenValues.FirstOrDefault() : null;
+            var tokenReceived = response.Headers.TryGetValues("X-csp-whtoken", out var tokenValues) ? tokenValues.FirstOrDefault() : null;
             var tokenExpected = string.IsNullOrWhiteSpace(token) ? null : token;
             _logger.LogInformation("Response code is {StatusCode} for url {Url} and token in header was {TokenReceived} (expected token was {TokenExpected})", response.StatusCode, url, tokenReceived, tokenExpected);
             return response.IsSuccessStatusCode && tokenReceived == tokenExpected;

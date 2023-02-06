@@ -52,11 +52,11 @@ public class ProfileService : IProfileService
         {
             if (_userManager.SupportsUserSecurityStamp)
             {
-                var security_stamp = subject.Claims.Where(c => c.Type == "security_stamp").Select(c => c.Value).SingleOrDefault();
-                if (security_stamp != null)
+                var securityStamp = subject.Claims.Where(c => c.Type == "security_stamp").Select(c => c.Value).SingleOrDefault();
+                if (securityStamp != null)
                 {
-                    var db_security_stamp = await _userManager.GetSecurityStampAsync(user);
-                    if (db_security_stamp != security_stamp)
+                    var dbSecurityStamp = await _userManager.GetSecurityStampAsync(user);
+                    if (dbSecurityStamp != securityStamp)
                         return;
                 }
             }

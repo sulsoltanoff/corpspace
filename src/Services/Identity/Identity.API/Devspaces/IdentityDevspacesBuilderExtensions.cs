@@ -16,7 +16,7 @@
 
 namespace Corpspace.Services.Identity.API.Devspaces;
 
-static class IdentityDevspacesBuilderExtensions
+internal static class IdentityDevspacesBuilderExtensions
 {
     public static IIdentityServerBuilder AddDevspacesIfNeeded(this IIdentityServerBuilder builder, bool useDevspaces)
     {

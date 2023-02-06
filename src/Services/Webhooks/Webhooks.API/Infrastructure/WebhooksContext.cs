@@ -14,8 +14,6 @@
 // limitations under the License.
 #endregion
 
-using Corpspace.Services.Webhooks.API.Model;
-
 namespace Corpspace.Services.Webhooks.API.Infrastructure;
 
 public class WebhooksContext : DbContext
@@ -32,7 +30,7 @@ public class WebhooksContextDesignFactory : IDesignTimeDbContextFactory<Webhooks
     public WebhooksContext CreateDbContext(string[] args)
     {
         var optionsBuilder = new DbContextOptionsBuilder<WebhooksContext>()
-            .UseSqlServer("Server=.;Initial Catalog=Microsoft.eShopOnContainers.Services.CatalogDb;Integrated Security=true");
+            .UseNpgsql("Database=Corpspace.Services.ChatMessage;User Id=corpspace;Password=corpspace;Host=localhost;Port=5432;sslmode=false;");
 
         return new WebhooksContext(optionsBuilder.Options);
     }

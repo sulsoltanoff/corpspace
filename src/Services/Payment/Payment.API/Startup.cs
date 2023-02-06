@@ -14,13 +14,6 @@
 // limitations under the License.
 #endregion
 
-using Corpspace.BuildingBlocks.EventBus;
-using Corpspace.BuildingBlocks.EventBus.Abstractions;
-using Corpspace.BuildingBlocks.EventBusRabbitMQ;
-using Corpspace.BuildingBlocks.EventBusServiceBus;
-using Corpspace.Services.Payment.API.IntegrationEvents.EventHandling;
-using Corpspace.Services.Payment.API.IntegrationEvents.Events;
-
 namespace Corpspace.Services.Payment.API;
 
 public class Startup
@@ -52,9 +45,9 @@ public class Startup
         }
         else
         {
-            services.AddSingleton<IRabbitMQPersistentConnection>(sp =>
+            services.AddSingleton<IRabbitMqPersistentConnection>(sp =>
             {
-                var logger = sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>();
+                var logger = sp.GetRequiredService<ILogger<DefaultRabbitMqPersistentConnection>>();
                 var factory = new ConnectionFactory()
                 {
                     HostName = Configuration["EventBusConnection"],
@@ -77,7 +70,7 @@ public class Startup
                     retryCount = int.Parse(Configuration["EventBusRetryCount"]);
                 }
 
-                return new DefaultRabbitMQPersistentConnection(factory, logger, retryCount);
+                return new DefaultRabbitMqPersistentConnection(factory, logger, retryCount);
             });
         }
 
@@ -141,12 +134,12 @@ public class Startup
         }
         else
         {
-            services.AddSingleton<IEventBus, EventBusRabbitMQ>(sp =>
+            services.AddSingleton<IEventBus, EventBusRabbitMq>(sp =>
             {
                 var subscriptionClientName = Configuration["SubscriptionClientName"];
-                var rabbitMQPersistentConnection = sp.GetRequiredService<IRabbitMQPersistentConnection>();
+                var rabbitMqPersistentConnection = sp.GetRequiredService<IRabbitMqPersistentConnection>();
                 var iLifetimeScope = sp.GetRequiredService<ILifetimeScope>();
-                var logger = sp.GetRequiredService<ILogger<EventBusRabbitMQ>>();
+                var logger = sp.GetRequiredService<ILogger<EventBusRabbitMq>>();
                 var eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
 
                 var retryCount = 5;
@@ -155,7 +148,7 @@ public class Startup
                     retryCount = int.Parse(Configuration["EventBusRetryCount"]);
                 }
 
-                return new EventBusRabbitMQ(rabbitMQPersistentConnection, logger, iLifetimeScope, eventBusSubcriptionsManager, subscriptionClientName, retryCount);
+                return new EventBusRabbitMq(rabbitMqPersistentConnection, logger, iLifetimeScope, eventBusSubcriptionsManager, subscriptionClientName, retryCount);
             });
         }
 

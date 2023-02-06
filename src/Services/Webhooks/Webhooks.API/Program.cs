@@ -15,7 +15,6 @@
 #endregion
 
 using Corpspace.Services.Webhooks.API;
-using Corpspace.Services.Webhooks.API.Infrastructure;
 using Corpspace.WebHost.Customization;
 
 CreateWebHostBuilder(args).Build()

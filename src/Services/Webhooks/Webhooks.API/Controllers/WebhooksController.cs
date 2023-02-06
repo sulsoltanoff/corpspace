@@ -14,10 +14,6 @@
 // limitations under the License.
 #endregion
 
-using Corpspace.Services.Webhooks.API.Infrastructure;
-using Corpspace.Services.Webhooks.API.Model;
-using Corpspace.Services.Webhooks.API.Services;
-
 namespace Corpspace.Services.Webhooks.API.Controllers;
 
 [Route("api/v1/[controller]")]
