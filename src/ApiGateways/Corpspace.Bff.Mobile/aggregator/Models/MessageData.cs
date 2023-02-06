@@ -1,4 +1,4 @@
-﻿#region Corpspace© Apache-2.0
+#region Corpspace© Apache-2.0
 // Copyright 2023 The Corpspace Technologies
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,9 +16,7 @@
 
 namespace Corpspace.Mobile.HttpAggregator.Models;
 
-public class UpdateBasketRequest
+public class MessageData
 {
-    public string BuyerId { get; set; }
-
-    public IEnumerable<UpdateBasketRequestItemData> Items { get; set; }
+    
 }
