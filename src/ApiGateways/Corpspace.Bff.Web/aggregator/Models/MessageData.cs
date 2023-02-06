@@ -1,4 +1,4 @@
-﻿#region Corpspace© Apache-2.0
+#region Corpspace© Apache-2.0
 // Copyright 2023 The Corpspace Technologies
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,10 +16,7 @@
 
 namespace Corpspace.Web.Shopping.HttpAggregator.Models;
 
-public class UpdateBasketItemData
+public class MessageData
 {
-    public string BasketItemId { get; set; }
-
-    public int NewQty { get; set; }
-
+    
 }

@@ -41,4 +41,4 @@ FROM build AS publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .
-ENTRYPOINT ["dotnet", "Web.Shopping.HttpAggregator.dll"]
+ENTRYPOINT ["dotnet", "Corpspace.Web.HttpAggregator.dll"]

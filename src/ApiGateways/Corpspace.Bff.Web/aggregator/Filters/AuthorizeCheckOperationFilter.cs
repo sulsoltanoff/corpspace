@@ -14,37 +14,32 @@
 // limitations under the License.
 #endregion
 
-namespace Corpspace.Web.Shopping.HttpAggregator.Filters
+namespace Corpspace.Web.Shopping.HttpAggregator.Filters;
+
+public class AuthorizeCheckOperationFilter : IOperationFilter
 {
-    namespace Basket.API.Infrastructure.Filters
+    public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
-        public class AuthorizeCheckOperationFilter : IOperationFilter
+        // Check for authorize attribute
+        var hasAuthorize = context.MethodInfo.DeclaringType.GetCustomAttributes(true).OfType<AuthorizeAttribute>().Any() ||
+                           context.MethodInfo.GetCustomAttributes(true).OfType<AuthorizeAttribute>().Any();
+
+        if (!hasAuthorize) return;
+
+        operation.Responses.TryAdd("401", new OpenApiResponse { Description = "Unauthorized" });
+        operation.Responses.TryAdd("403", new OpenApiResponse { Description = "Forbidden" });
+
+        var oAuthScheme = new OpenApiSecurityScheme
         {
-            public void Apply(OpenApiOperation operation, OperationFilterContext context)
+            Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "oauth2" }
+        };
+
+        operation.Security = new List<OpenApiSecurityRequirement>
+        {
+            new()
             {
-                // Check for authorize attribute
-                var hasAuthorize = context.MethodInfo.DeclaringType.GetCustomAttributes(true).OfType<AuthorizeAttribute>().Any() ||
-                                    context.MethodInfo.GetCustomAttributes(true).OfType<AuthorizeAttribute>().Any();
-
-                if (!hasAuthorize) return;
-
-                operation.Responses.TryAdd("401", new OpenApiResponse { Description = "Unauthorized" });
-                operation.Responses.TryAdd("403", new OpenApiResponse { Description = "Forbidden" });
-
-                var oAuthScheme = new OpenApiSecurityScheme
-                {
-                    Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "oauth2" }
-                };
-
-                operation.Security = new List<OpenApiSecurityRequirement>
-            {
-                new()
-                {
-                    [ oAuthScheme ] = new[] { "Microsoft.eShopOnContainers.Corpspace.Web.HttpAggregator" }
-                }
-            };
+                [ oAuthScheme ] = new[] { "Corpspace.Web.HttpAggregator" }
             }
-        }
+        };
     }
-
 }
