@@ -19,4 +19,9 @@
     </None>
     <None Include="docker-compose.yml" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="create-dockerfile-restore.py" />
+    <Content Include="prepare-devspaces.py" />
+    <Content Include="run-test-infra.py" />
+  </ItemGroup>
 </Project>
