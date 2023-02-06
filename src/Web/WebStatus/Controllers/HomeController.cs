@@ -18,7 +18,7 @@ namespace Corpspace.WebStatus.Controllers;
 
 public class HomeController : Controller
 {
-    private IConfiguration _configuration;
+    private readonly IConfiguration _configuration;
 
     public HomeController(IConfiguration configuration)
     {

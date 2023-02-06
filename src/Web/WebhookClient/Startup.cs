@@ -14,8 +14,6 @@
 // limitations under the License.
 #endregion
 
-using Corpspace.WebhookClient.Services;
-
 namespace Corpspace.WebhookClient;
 
 public class Startup
@@ -25,14 +23,14 @@ public class Startup
         Configuration = configuration;
     }
 
-    public IConfiguration Configuration { get; }
+    private IConfiguration Configuration { get; }
 
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddSession(opt =>
             {
-                opt.Cookie.Name = ".eShopWebhooks.Session";
+                opt.Cookie.Name = ".Corpspace.Session";
             })
             .AddConfiguration(Configuration)
             .AddHttpClientServices(Configuration)
@@ -93,9 +91,7 @@ public class Startup
                 }
             });
         });
-
-        // Fix samesite issue when running eShop from docker-compose locally as by default http protocol is being used
-        // Refer to https://github.com/dotnet-architecture/eShopOnContainers/issues/1391
+        
         app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Lax });
 
         app.UseStaticFiles();
@@ -111,7 +107,7 @@ public class Startup
     }
 }
 
-static class ServiceExtensions
+internal static class ServiceExtensions
 {
     public static IServiceCollection AddConfiguration(this IServiceCollection services, IConfiguration configuration)
     {
@@ -135,8 +131,8 @@ static class ServiceExtensions
         .AddOpenIdConnect(options =>
         {
             options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            options.Authority = identityUrl.ToString();
-            options.SignedOutRedirectUri = callBackUrl.ToString();
+            options.Authority = identityUrl;
+            options.SignedOutRedirectUri = callBackUrl;
             options.ClientId = "webhooksclient";
             options.ClientSecret = "secret";
             options.ResponseType = "code";

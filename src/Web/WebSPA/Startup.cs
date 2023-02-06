@@ -14,8 +14,6 @@
 // limitations under the License.
 #endregion
 
-using Corpspace.WebSPA.Server.Infrastructure;
-
 namespace Corpspace.WebSPA;
 
 public class Startup
@@ -25,7 +23,7 @@ public class Startup
         Configuration = configuration;
     }
 
-    public IConfiguration Configuration { get; }
+    private IConfiguration Configuration { get; }
 
     public Startup()
     {
@@ -49,7 +47,7 @@ public class Startup
         {
             services.AddDataProtection(opts =>
             {
-                opts.ApplicationDiscriminator = "eshop.webspa";
+                opts.ApplicationDiscriminator = "corpspace.webspa";
             })
             .PersistKeysToStackExchangeRedis(ConnectionMultiplexer.Connect(Configuration["DPConnectionString"]), "DataProtection-Keys");
         }
@@ -84,18 +82,16 @@ public class Startup
         // This cookie will be read by Angular app and its value will be sent back to the application as the header configured in .AddAntiforgery()
         app.Use(next => context =>
         {
-            string path = context.Request.Path.Value;
+            var path = context.Request.Path.Value;
 
-            if (
-                string.Equals(path, "/", StringComparison.OrdinalIgnoreCase) ||
-                string.Equals(path, "/index.html", StringComparison.OrdinalIgnoreCase))
-            {
-                // The request token has to be sent as a JavaScript-readable cookie, 
-                // and Angular uses it by default.
-                var tokens = antiforgery.GetAndStoreTokens(context);
+            if (!string.Equals(path, "/", StringComparison.OrdinalIgnoreCase) &&
+                !string.Equals(path, "/index.html", StringComparison.OrdinalIgnoreCase)) return next(context);
+            // The request token has to be sent as a JavaScript-readable cookie, 
+            // and Angular uses it by default.
+            var tokens = antiforgery.GetAndStoreTokens(context);
+            if (tokens.RequestToken != null)
                 context.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken,
                     new CookieOptions() { HttpOnly = false });
-            }
 
             return next(context);
         });

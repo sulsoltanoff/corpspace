@@ -16,7 +16,7 @@
 
 namespace Corpspace.WebhookClient;
 
-static class HeaderNames
+internal static class HeaderNames
 {
-    public const string WebHookCheckHeader = "X-eshop-whtoken";
+    public const string WebHookCheckHeader = "X-csp-whtoken";
 }

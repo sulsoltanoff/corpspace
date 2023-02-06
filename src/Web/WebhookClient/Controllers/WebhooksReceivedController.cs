@@ -14,9 +14,6 @@
 // limitations under the License.
 #endregion
 
-using Corpspace.WebhookClient.Models;
-using Corpspace.WebhookClient.Services;
-
 namespace Corpspace.WebhookClient.Controllers;
 
 [ApiController]
@@ -28,7 +25,7 @@ public class WebhooksReceivedController : Controller
     private readonly ILogger _logger;
     private readonly IHooksRepository _hooksRepository;
 
-    public WebhooksReceivedController(IOptions<Settings> settings, ILogger<WebhooksReceivedController> logger, IHooksRepository hooksRepository)
+    public WebhooksReceivedController(IOptions<Settings> settings, ILogger logger, IHooksRepository hooksRepository)
     {
         _settings = settings.Value;
         _logger = logger;

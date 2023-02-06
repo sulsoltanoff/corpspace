@@ -28,6 +28,7 @@ global using System.Linq;
 global using System.Reflection;
 global using Azure.Identity;
 global using Azure.Core;
+global using Corpspace.WebStatus;
 global using Microsoft.AspNetCore.Builder;
 global using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 global using Microsoft.AspNetCore.Hosting;

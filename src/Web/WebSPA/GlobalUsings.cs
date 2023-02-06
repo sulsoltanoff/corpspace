@@ -36,3 +36,4 @@ global using System;
 global using Microsoft.Extensions.Options;
 global using System.IO.Compression;
 global using System.Linq;
+global using Corpspace.WebSPA.Server.Infrastructure;

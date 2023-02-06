@@ -39,3 +39,5 @@ global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Hosting;
 global using System.Net;
+global using Corpspace.WebhookClient.Models;
+global using Corpspace.WebhookClient.Services;

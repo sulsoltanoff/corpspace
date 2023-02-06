@@ -14,8 +14,6 @@
 // limitations under the License.
 #endregion
 
-using Corpspace.WebhookClient.Models;
-using Corpspace.WebhookClient.Services;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Corpspace.WebhookClient.Pages;
