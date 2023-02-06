@@ -14,11 +14,9 @@
 // limitations under the License.
 #endregion
 
-namespace Corpspace.Web.Shopping.HttpAggregator.Models;
+namespace Corpspace.Mobile.HttpAggregator.Models;
 
-public class UpdateBasketRequest
+public class MessageData
 {
-    public string BuyerId { get; set; }
-
-    public IEnumerable<UpdateBasketRequestItemData> Items { get; set; }
+    
 }
