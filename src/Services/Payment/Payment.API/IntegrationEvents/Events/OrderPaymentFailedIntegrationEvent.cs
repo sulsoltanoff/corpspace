@@ -14,8 +14,6 @@
 // limitations under the License.
 #endregion
 
-using Corpspace.BuildingBlocks.EventBus.Events;
-
 namespace Corpspace.Services.Payment.API.IntegrationEvents.Events;
 
 public record OrderPaymentFailedIntegrationEvent : IntegrationEvent

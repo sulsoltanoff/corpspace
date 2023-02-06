@@ -14,10 +14,6 @@
 // limitations under the License.
 #endregion
 
-using Corpspace.BuildingBlocks.EventBus.Abstractions;
-using Corpspace.BuildingBlocks.EventBus.Events;
-using Corpspace.Services.Payment.API.IntegrationEvents.Events;
-
 namespace Corpspace.Services.Payment.API.IntegrationEvents.EventHandling;
     
 public class OrderStatusChangedToStockConfirmedIntegrationEventHandler :
@@ -34,7 +30,7 @@ public class OrderStatusChangedToStockConfirmedIntegrationEventHandler :
     {
         _eventBus = eventBus;
         _settings = settings.Value;
-        _logger = logger ?? throw new System.ArgumentNullException(nameof(logger));
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
         _logger.LogTrace("PaymentSettings: {@PaymentSettings}", _settings);
     }

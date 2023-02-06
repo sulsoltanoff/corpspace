@@ -14,9 +14,6 @@
 // limitations under the License.
 #endregion
 
-using Corpspace.Services.Webhooks.API.Exceptions;
-using Corpspace.Services.Webhooks.API.Infrastructure.ActionResult;
-
 namespace Corpspace.Services.Webhooks.API.Infrastructure;
 
 public class HttpGlobalExceptionFilter : IExceptionFilter

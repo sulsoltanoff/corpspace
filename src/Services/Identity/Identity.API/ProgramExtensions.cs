@@ -109,7 +109,7 @@ public static class ProgramExtensions
     public static void AddCustomApplicationServices(this WebApplicationBuilder builder)
     {
         builder.Services.AddTransient<IProfileService, ProfileService>();
-        builder.Services.AddTransient<ILoginService<ApplicationUser>, EFLoginService>();
+        builder.Services.AddTransient<ILoginService<ApplicationUser>, EfLoginService>();
         builder.Services.AddTransient<IRedirectService, RedirectService>();
     }
 

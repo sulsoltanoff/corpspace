@@ -16,7 +16,7 @@
 
 namespace Corpspace.Services.Identity.API.Configuration;
 
-public class Config
+public static class Config
 {
     // ApiResources define the apis in your system
     public static IEnumerable<ApiResource> GetApis()

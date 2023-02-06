@@ -16,7 +16,7 @@
 
 namespace Corpspace.Services.Webhooks.API.Infrastructure.ActionResult;
 
-class InternalServerErrorObjectResult : ObjectResult
+internal class InternalServerErrorObjectResult : ObjectResult
 {
     public InternalServerErrorObjectResult(object error) : base(error)
     {

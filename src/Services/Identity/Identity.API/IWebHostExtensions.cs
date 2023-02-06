@@ -16,7 +16,7 @@
 
 namespace Corpspace.Services.Identity.API;
 
-public static class IWebHostExtensions
+public static class WebHostExtensions
 {
     public static bool IsInKubernetes(this IWebHost webHost)
     {
@@ -27,7 +27,7 @@ public static class IWebHostExtensions
 
     public static IWebHost MigrateDbContext<TContext>(this IWebHost webHost, Action<TContext, IServiceProvider> seeder) where TContext : DbContext
     {
-        var underK8s = webHost.IsInKubernetes();
+        var underK8S = webHost.IsInKubernetes();
 
         using var scope = webHost.Services.CreateScope();
         var services = scope.ServiceProvider;
@@ -38,7 +38,7 @@ public static class IWebHostExtensions
         {
             logger.LogInformation("Migrating database associated with context {DbContextName}", typeof(TContext).Name);
 
-            if (underK8s)
+            if (underK8S)
             {
                 InvokeSeeder(seeder, context, services);
             }
@@ -66,7 +66,7 @@ public static class IWebHostExtensions
         catch (Exception ex)
         {
             logger.LogError(ex, "An error occurred while migrating the database used on context {DbContextName}", typeof(TContext).Name);
-            if (underK8s)
+            if (underK8S)
             {
                 throw;          // Rethrow under k8s because we rely on k8s to re-run the pod
             }

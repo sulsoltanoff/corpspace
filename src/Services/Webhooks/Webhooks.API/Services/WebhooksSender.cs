@@ -14,8 +14,6 @@
 // limitations under the License.
 #endregion
 
-using Corpspace.Services.Webhooks.API.Model;
-
 namespace Corpspace.Services.Webhooks.API.Services;
 
 public class WebhooksSender : IWebhooksSender
@@ -47,7 +45,7 @@ public class WebhooksSender : IWebhooksSender
 
         if (!string.IsNullOrWhiteSpace(subs.Token))
         {
-            request.Headers.Add("X-eshop-whtoken", subs.Token);
+            request.Headers.Add("X-csp-whtoken", subs.Token);
         }
         _logger.LogDebug("Sending hook to {DestUrl} of type {Type}", subs.Type.ToString(), subs.Type.ToString());
         return client.SendAsync(request);

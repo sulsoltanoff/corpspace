@@ -14,10 +14,6 @@
 // limitations under the License.
 #endregion
 
-using Corpspace.BuildingBlocks.EventBus.Abstractions;
-using Corpspace.Services.Webhooks.API.Model;
-using Corpspace.Services.Webhooks.API.Services;
-
 namespace Corpspace.Services.Webhooks.API.IntegrationEvents;
 
 public class OrderStatusChangedToPaidIntegrationEventHandler : IIntegrationEventHandler<OrderStatusChangedToPaidIntegrationEvent>

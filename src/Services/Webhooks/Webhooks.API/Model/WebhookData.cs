@@ -18,11 +18,11 @@ namespace Corpspace.Services.Webhooks.API.Model;
 
 public class WebhookData
 {
-    public DateTime When { get; }
+    private DateTime When { get; }
 
-    public string Payload { get; }
+    private string Payload { get; }
 
-    public string Type { get; }
+    private string Type { get; }
 
     public WebhookData(WebhookType hookType, object data)
     {
