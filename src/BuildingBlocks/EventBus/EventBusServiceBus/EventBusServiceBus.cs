@@ -26,12 +26,12 @@ public class EventBusServiceBus : IEventBus, IAsyncDisposable
     private readonly ILogger<EventBusServiceBus> _logger;
     private readonly IEventBusSubscriptionsManager _subsManager;
     private readonly ILifetimeScope _autofac;
-    private readonly string _topicName = "eshop_event_bus";
+    private const string TopicName = "csp_event_bus";
     private readonly string _subscriptionName;
     private readonly ServiceBusSender _sender;
     private readonly ServiceBusProcessor _processor;
-    private readonly string AUTOFAC_SCOPE_NAME = "eshop_event_bus";
-    private const string INTEGRATION_EVENT_SUFFIX = "IntegrationEvent";
+    private const string AutofacScopeName = "csp_event_bus";
+    private const string IntegrationEventSuffix = "IntegrationEvent";
 
     public EventBusServiceBus(IServiceBusPersisterConnection serviceBusPersisterConnection,
         ILogger<EventBusServiceBus> logger, IEventBusSubscriptionsManager subsManager, ILifetimeScope autofac, string subscriptionClientName)
@@ -41,9 +41,9 @@ public class EventBusServiceBus : IEventBus, IAsyncDisposable
         _subsManager = subsManager ?? new InMemoryEventBusSubscriptionsManager();
         _autofac = autofac;
         _subscriptionName = subscriptionClientName;
-        _sender = _serviceBusPersisterConnection.TopicClient.CreateSender(_topicName);
-        ServiceBusProcessorOptions options = new ServiceBusProcessorOptions { MaxConcurrentCalls = 10, AutoCompleteMessages = false };
-        _processor = _serviceBusPersisterConnection.TopicClient.CreateProcessor(_topicName, _subscriptionName, options);
+        _sender = _serviceBusPersisterConnection.TopicClient.CreateSender(TopicName);
+        var options = new ServiceBusProcessorOptions { MaxConcurrentCalls = 10, AutoCompleteMessages = false };
+        _processor = _serviceBusPersisterConnection.TopicClient.CreateProcessor(TopicName, _subscriptionName, options);
 
         RemoveDefaultRule();
         RegisterSubscriptionClientMessageHandlerAsync().GetAwaiter().GetResult();
@@ -51,7 +51,7 @@ public class EventBusServiceBus : IEventBus, IAsyncDisposable
 
     public void Publish(IntegrationEvent @event)
     {
-        var eventName = @event.GetType().Name.Replace(INTEGRATION_EVENT_SUFFIX, "");
+        var eventName = @event.GetType().Name.Replace(IntegrationEventSuffix, "");
         var jsonMessage = JsonSerializer.Serialize(@event, @event.GetType());
         var body = Encoding.UTF8.GetBytes(jsonMessage);
 
@@ -67,26 +67,26 @@ public class EventBusServiceBus : IEventBus, IAsyncDisposable
             .GetResult();
     }
 
-    public void SubscribeDynamic<TH>(string eventName)
-        where TH : IDynamicIntegrationEventHandler
+    public void SubscribeDynamic<Th>(string eventName)
+        where Th : IDynamicIntegrationEventHandler
     {
-        _logger.LogInformation("Subscribing to dynamic event {EventName} with {EventHandler}", eventName, typeof(TH).Name);
+        _logger.LogInformation("Subscribing to dynamic event {EventName} with {EventHandler}", eventName, typeof(Th).Name);
 
-        _subsManager.AddDynamicSubscription<TH>(eventName);
+        _subsManager.AddDynamicSubscription<Th>(eventName);
     }
 
-    public void Subscribe<T, TH>()
+    public void Subscribe<T, Th>()
         where T : IntegrationEvent
-        where TH : IIntegrationEventHandler<T>
+        where Th : IIntegrationEventHandler<T>
     {
-        var eventName = typeof(T).Name.Replace(INTEGRATION_EVENT_SUFFIX, "");
+        var eventName = typeof(T).Name.Replace(IntegrationEventSuffix, "");
 
         var containsKey = _subsManager.HasSubscriptionsForEvent<T>();
         if (!containsKey)
         {
             try
             {
-                _serviceBusPersisterConnection.AdministrationClient.CreateRuleAsync(_topicName, _subscriptionName, new CreateRuleOptions
+                _serviceBusPersisterConnection.AdministrationClient.CreateRuleAsync(TopicName, _subscriptionName, new CreateRuleOptions
                 {
                     Filter = new CorrelationRuleFilter() { Subject = eventName },
                     Name = eventName
@@ -98,22 +98,22 @@ public class EventBusServiceBus : IEventBus, IAsyncDisposable
             }
         }
 
-        _logger.LogInformation("Subscribing to event {EventName} with {EventHandler}", eventName, typeof(TH).Name);
+        _logger.LogInformation("Subscribing to event {EventName} with {EventHandler}", eventName, typeof(Th).Name);
 
-        _subsManager.AddSubscription<T, TH>();
+        _subsManager.AddSubscription<T, Th>();
     }
 
-    public void Unsubscribe<T, TH>()
+    public void Unsubscribe<T, Th>()
         where T : IntegrationEvent
-        where TH : IIntegrationEventHandler<T>
+        where Th : IIntegrationEventHandler<T>
     {
-        var eventName = typeof(T).Name.Replace(INTEGRATION_EVENT_SUFFIX, "");
+        var eventName = typeof(T).Name.Replace(IntegrationEventSuffix, "");
 
         try
         {
             _serviceBusPersisterConnection
                 .AdministrationClient
-                .DeleteRuleAsync(_topicName, _subscriptionName, eventName)
+                .DeleteRuleAsync(TopicName, _subscriptionName, eventName)
                 .GetAwaiter()
                 .GetResult();
         }
@@ -124,15 +124,15 @@ public class EventBusServiceBus : IEventBus, IAsyncDisposable
 
         _logger.LogInformation("Unsubscribing from event {EventName}", eventName);
 
-        _subsManager.RemoveSubscription<T, TH>();
+        _subsManager.RemoveSubscription<T, Th>();
     }
 
-    public void UnsubscribeDynamic<TH>(string eventName)
-        where TH : IDynamicIntegrationEventHandler
+    public void UnsubscribeDynamic<Th>(string eventName)
+        where Th : IDynamicIntegrationEventHandler
     {
         _logger.LogInformation("Unsubscribing from dynamic event {EventName}", eventName);
 
-        _subsManager.RemoveDynamicSubscription<TH>(eventName);
+        _subsManager.RemoveDynamicSubscription<Th>(eventName);
     }
 
     private async Task RegisterSubscriptionClientMessageHandlerAsync()
@@ -140,7 +140,7 @@ public class EventBusServiceBus : IEventBus, IAsyncDisposable
         _processor.ProcessMessageAsync +=
             async (args) =>
             {
-                var eventName = $"{args.Message.Subject}{INTEGRATION_EVENT_SUFFIX}";
+                var eventName = $"{args.Message.Subject}{IntegrationEventSuffix}";
                 string messageData = args.Message.Body.ToString();
 
                 // Complete the message so that it is not received again.
@@ -169,7 +169,7 @@ public class EventBusServiceBus : IEventBus, IAsyncDisposable
         var processed = false;
         if (_subsManager.HasSubscriptionsForEvent(eventName))
         {
-            var scope = _autofac.BeginLifetimeScope(AUTOFAC_SCOPE_NAME);
+            var scope = _autofac.BeginLifetimeScope(AutofacScopeName);
             var subscriptions = _subsManager.GetHandlersForEvent(eventName);
             foreach (var subscription in subscriptions)
             {
@@ -201,7 +201,7 @@ public class EventBusServiceBus : IEventBus, IAsyncDisposable
         {
             _serviceBusPersisterConnection
                 .AdministrationClient
-                .DeleteRuleAsync(_topicName, _subscriptionName, RuleProperties.DefaultRuleName)
+                .DeleteRuleAsync(TopicName, _subscriptionName, RuleProperties.DefaultRuleName)
                 .GetAwaiter()
                 .GetResult();
         }

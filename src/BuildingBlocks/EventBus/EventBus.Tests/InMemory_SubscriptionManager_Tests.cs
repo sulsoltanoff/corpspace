@@ -20,7 +20,7 @@ using Xunit;
 
 namespace EventBus.Tests;
 
-public class InMemory_SubscriptionManager_Tests
+public class InMemorySubscriptionManagerTests
 {
     [Fact]
     public void After_Creation_Should_Be_Empty()

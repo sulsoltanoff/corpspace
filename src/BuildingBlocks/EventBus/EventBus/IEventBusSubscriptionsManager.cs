@@ -23,18 +23,18 @@ public interface IEventBusSubscriptionsManager
 {
     bool IsEmpty { get; }
     event EventHandler<string> OnEventRemoved;
-    void AddDynamicSubscription<TH>(string eventName)
-        where TH : IDynamicIntegrationEventHandler;
+    void AddDynamicSubscription<Th>(string eventName)
+        where Th : IDynamicIntegrationEventHandler;
 
-    void AddSubscription<T, TH>()
+    void AddSubscription<T, Th>()
         where T : IntegrationEvent
-        where TH : IIntegrationEventHandler<T>;
+        where Th : IIntegrationEventHandler<T>;
 
-    void RemoveSubscription<T, TH>()
-            where TH : IIntegrationEventHandler<T>
+    void RemoveSubscription<T, Th>()
+            where Th : IIntegrationEventHandler<T>
             where T : IntegrationEvent;
-    void RemoveDynamicSubscription<TH>(string eventName)
-        where TH : IDynamicIntegrationEventHandler;
+    void RemoveDynamicSubscription<Th>(string eventName)
+        where Th : IDynamicIntegrationEventHandler;
 
     bool HasSubscriptionsForEvent<T>() where T : IntegrationEvent;
     bool HasSubscriptionsForEvent(string eventName);

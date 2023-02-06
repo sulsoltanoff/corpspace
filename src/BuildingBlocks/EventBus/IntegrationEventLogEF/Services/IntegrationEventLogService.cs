@@ -30,7 +30,7 @@ public class IntegrationEventLogService : IIntegrationEventLogService, IDisposab
         _dbConnection = dbConnection ?? throw new ArgumentNullException(nameof(dbConnection));
         _integrationEventLogContext = new IntegrationEventLogContext(
             new DbContextOptionsBuilder<IntegrationEventLogContext>()
-                .UseSqlServer(_dbConnection)
+                .UseNpgsql(_dbConnection)
                 .Options);
 
         _eventTypes = Assembly.Load(Assembly.GetEntryAssembly().FullName)

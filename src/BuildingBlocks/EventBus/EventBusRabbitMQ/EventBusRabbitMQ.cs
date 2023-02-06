@@ -21,13 +21,13 @@ using Corpspace.BuildingBlocks.EventBus.Extensions;
 
 namespace Corpspace.BuildingBlocks.EventBusRabbitMQ;
 
-public class EventBusRabbitMQ : IEventBus, IDisposable
+public class EventBusRabbitMq : IEventBus, IDisposable
 {
-    const string BROKER_NAME = "eshop_event_bus";
-    const string AUTOFAC_SCOPE_NAME = "eshop_event_bus";
+    private const string BrokerName = "csp_event_bus";
+    private const string AutofacScopeName = "csp_event_bus";
 
-    private readonly IRabbitMQPersistentConnection _persistentConnection;
-    private readonly ILogger<EventBusRabbitMQ> _logger;
+    private readonly IRabbitMqPersistentConnection _persistentConnection;
+    private readonly ILogger<EventBusRabbitMq> _logger;
     private readonly IEventBusSubscriptionsManager _subsManager;
     private readonly ILifetimeScope _autofac;
     private readonly int _retryCount;
@@ -35,7 +35,7 @@ public class EventBusRabbitMQ : IEventBus, IDisposable
     private IModel _consumerChannel;
     private string _queueName;
 
-    public EventBusRabbitMQ(IRabbitMQPersistentConnection persistentConnection, ILogger<EventBusRabbitMQ> logger,
+    public EventBusRabbitMq(IRabbitMqPersistentConnection persistentConnection, ILogger<EventBusRabbitMq> logger,
         ILifetimeScope autofac, IEventBusSubscriptionsManager subsManager, string queueName = null, int retryCount = 5)
     {
         _persistentConnection = persistentConnection ?? throw new ArgumentNullException(nameof(persistentConnection));
@@ -57,14 +57,12 @@ public class EventBusRabbitMQ : IEventBus, IDisposable
 
         using var channel = _persistentConnection.CreateModel();
         channel.QueueUnbind(queue: _queueName,
-            exchange: BROKER_NAME,
+            exchange: BrokerName,
             routingKey: eventName);
 
-        if (_subsManager.IsEmpty)
-        {
-            _queueName = string.Empty;
-            _consumerChannel.Close();
-        }
+        if (!_subsManager.IsEmpty) return;
+        _queueName = string.Empty;
+        _consumerChannel.Close();
     }
 
     public void Publish(IntegrationEvent @event)
@@ -88,7 +86,7 @@ public class EventBusRabbitMQ : IEventBus, IDisposable
         using var channel = _persistentConnection.CreateModel();
         _logger.LogTrace("Declaring RabbitMQ exchange to publish event: {EventId}", @event.Id);
 
-        channel.ExchangeDeclare(exchange: BROKER_NAME, type: "direct");
+        channel.ExchangeDeclare(exchange: BrokerName, type: "direct");
 
         var body = JsonSerializer.SerializeToUtf8Bytes(@event, @event.GetType(), new JsonSerializerOptions
         {
@@ -103,7 +101,7 @@ public class EventBusRabbitMQ : IEventBus, IDisposable
                 _logger.LogTrace("Publishing event to RabbitMQ: {EventId}", @event.Id);
 
             channel.BasicPublish(
-                exchange: BROKER_NAME,
+                exchange: BrokerName,
                 routingKey: eventName,
                 mandatory: true,
                 basicProperties: properties,
@@ -111,60 +109,58 @@ public class EventBusRabbitMQ : IEventBus, IDisposable
         });
     }
 
-    public void SubscribeDynamic<TH>(string eventName)
-        where TH : IDynamicIntegrationEventHandler
+    public void SubscribeDynamic<Th>(string eventName)
+        where Th : IDynamicIntegrationEventHandler
     {
-        _logger.LogInformation("Subscribing to dynamic event {EventName} with {EventHandler}", eventName, typeof(TH).GetGenericTypeName());
+        _logger.LogInformation("Subscribing to dynamic event {EventName} with {EventHandler}", eventName, typeof(Th).GetGenericTypeName());
 
         DoInternalSubscription(eventName);
-        _subsManager.AddDynamicSubscription<TH>(eventName);
+        _subsManager.AddDynamicSubscription<Th>(eventName);
         StartBasicConsume();
     }
 
-    public void Subscribe<T, TH>()
+    public void Subscribe<T, Th>()
         where T : IntegrationEvent
-        where TH : IIntegrationEventHandler<T>
+        where Th : IIntegrationEventHandler<T>
     {
         var eventName = _subsManager.GetEventKey<T>();
         DoInternalSubscription(eventName);
 
-        _logger.LogInformation("Subscribing to event {EventName} with {EventHandler}", eventName, typeof(TH).GetGenericTypeName());
+        _logger.LogInformation("Subscribing to event {EventName} with {EventHandler}", eventName, typeof(Th).GetGenericTypeName());
 
-        _subsManager.AddSubscription<T, TH>();
+        _subsManager.AddSubscription<T, Th>();
         StartBasicConsume();
     }
 
     private void DoInternalSubscription(string eventName)
     {
         var containsKey = _subsManager.HasSubscriptionsForEvent(eventName);
-        if (!containsKey)
+        if (containsKey) return;
+        if (!_persistentConnection.IsConnected)
         {
-            if (!_persistentConnection.IsConnected)
-            {
-                _persistentConnection.TryConnect();
-            }
- 
-            _consumerChannel.QueueBind(queue: _queueName,
-                                exchange: BROKER_NAME,
-                                routingKey: eventName);
+            _persistentConnection.TryConnect();
         }
+ 
+        _consumerChannel.QueueBind(queue: _queueName,
+            exchange: BrokerName,
+            routingKey: eventName);
     }
 
-    public void Unsubscribe<T, TH>()
+    public void Unsubscribe<T, Th>()
         where T : IntegrationEvent
-        where TH : IIntegrationEventHandler<T>
+        where Th : IIntegrationEventHandler<T>
     {
         var eventName = _subsManager.GetEventKey<T>();
 
         _logger.LogInformation("Unsubscribing from event {EventName}", eventName);
 
-        _subsManager.RemoveSubscription<T, TH>();
+        _subsManager.RemoveSubscription<T, Th>();
     }
 
-    public void UnsubscribeDynamic<TH>(string eventName)
-        where TH : IDynamicIntegrationEventHandler
+    public void UnsubscribeDynamic<Th>(string eventName)
+        where Th : IDynamicIntegrationEventHandler
     {
-        _subsManager.RemoveDynamicSubscription<TH>(eventName);
+        _subsManager.RemoveDynamicSubscription<Th>(eventName);
     }
 
     public void Dispose()
@@ -234,7 +230,7 @@ public class EventBusRabbitMQ : IEventBus, IDisposable
 
         var channel = _persistentConnection.CreateModel();
 
-        channel.ExchangeDeclare(exchange: BROKER_NAME,
+        channel.ExchangeDeclare(exchange: BrokerName,
                                 type: "direct");
 
         channel.QueueDeclare(queue: _queueName,
@@ -261,7 +257,7 @@ public class EventBusRabbitMQ : IEventBus, IDisposable
 
         if (_subsManager.HasSubscriptionsForEvent(eventName))
         {
-            await using var scope = _autofac.BeginLifetimeScope(AUTOFAC_SCOPE_NAME);
+            await using var scope = _autofac.BeginLifetimeScope(AutofacScopeName);
             var subscriptions = _subsManager.GetHandlersForEvent(eventName);
             foreach (var subscription in subscriptions)
             {

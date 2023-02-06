@@ -16,7 +16,7 @@
 
 namespace Corpspace.BuildingBlocks.EventBusRabbitMQ;
 
-public interface IRabbitMQPersistentConnection
+public interface IRabbitMqPersistentConnection
     : IDisposable
 {
     bool IsConnected { get; }
