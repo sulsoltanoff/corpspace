@@ -21,7 +21,7 @@ public class AccountController : Controller
 {
     public async Task<IActionResult> SignIn(string returnUrl)
     {
-        var user = User as ClaimsPrincipal;
+        var user = User;
 
         var token = await HttpContext.GetTokenAsync("access_token");
 

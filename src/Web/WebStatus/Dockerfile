@@ -30,7 +30,7 @@ COPY "docker-compose.dcproj" "docker-compose.dcproj"
 
 COPY "NuGet.config" "NuGet.config"
 
-RUN dotnet restore "Corpspace.sln""
+RUN dotnet restore "Corpspace.sln"
 COPY . .
 WORKDIR /src/Web/WebStatus
 RUN dotnet publish -c Release -o /app

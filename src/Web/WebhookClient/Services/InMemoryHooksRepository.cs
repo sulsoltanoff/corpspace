@@ -14,8 +14,6 @@
 // limitations under the License.
 #endregion
 
-using Corpspace.WebhookClient.Models;
-
 namespace Corpspace.WebhookClient.Services;
 
 public class InMemoryHooksRepository : IHooksRepository

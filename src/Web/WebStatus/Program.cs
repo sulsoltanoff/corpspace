@@ -14,8 +14,6 @@
 // limitations under the License.
 #endregion
 
-using Corpspace.WebStatus;
-
 var configuration = GetConfiguration();
 
 Log.Logger = CreateSerilogLogger(configuration);
@@ -42,19 +40,19 @@ finally
     Log.CloseAndFlush();
 }
 
-IWebHost BuildWebHost(IConfiguration configuration, string[] args) =>
+IWebHost BuildWebHost(IConfiguration config, string[] args) =>
     WebHost.CreateDefaultBuilder(args)
         .CaptureStartupErrors(false)
-        .ConfigureAppConfiguration(x => x.AddConfiguration(configuration))
+        .ConfigureAppConfiguration(x => x.AddConfiguration(config))
         .UseStartup<Startup>()
         .UseContentRoot(Directory.GetCurrentDirectory())
         .UseSerilog()
         .Build();
 
-Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
+Serilog.ILogger CreateSerilogLogger(IConfiguration config)
 {
-    var seqServerUrl = configuration["Serilog:SeqServerUrl"];
-    var logstashUrl = configuration["Serilog:LogstashgUrl"];
+    var seqServerUrl = config["Serilog:SeqServerUrl"];
+    var logstashUrl = config["Serilog:LogstashgUrl"];
     return new LoggerConfiguration()
         .MinimumLevel.Verbose()
         .Enrich.WithProperty("ApplicationContext", Corpspace.WebStatus.Program.AppName)
@@ -62,7 +60,7 @@ Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
         .WriteTo.Console()
         .WriteTo.Seq(string.IsNullOrWhiteSpace(seqServerUrl) ? "http://seq" : seqServerUrl)
         .WriteTo.Http(string.IsNullOrWhiteSpace(logstashUrl) ? "http://logstash:8080" : logstashUrl, null)
-        .ReadFrom.Configuration(configuration)
+        .ReadFrom.Configuration(config)
         .CreateLogger();
 }
 
@@ -75,14 +73,12 @@ IConfiguration GetConfiguration()
 
     var config = builder.Build();
 
-    if (config.GetValue<bool>("UseVault", false))
-    {
-        TokenCredential credential = new ClientSecretCredential(
-            config["Vault:TenantId"],
-            config["Vault:ClientId"],
-            config["Vault:ClientSecret"]);
-        builder.AddAzureKeyVault(new Uri($"https://{config["Vault:Name"]}.vault.azure.net/"), credential);
-    }
+    if (!config.GetValue<bool>("UseVault", false)) return builder.Build();
+    TokenCredential credential = new ClientSecretCredential(
+        config["Vault:TenantId"],
+        config["Vault:ClientId"],
+        config["Vault:ClientSecret"]);
+    builder.AddAzureKeyVault(new Uri($"https://{config["Vault:Name"]}.vault.azure.net/"), credential);
 
     return builder.Build();
 }
@@ -125,7 +121,7 @@ namespace Corpspace.WebStatus
 {
     public partial class Program
     {
-        private static readonly string _namespace = typeof(Startup).Namespace;
-        public static readonly string AppName = _namespace;
+        private static readonly string Namespace = typeof(Startup).Namespace;
+        public static readonly string AppName = Namespace;
     }
 }

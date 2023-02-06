@@ -14,8 +14,6 @@
 // limitations under the License.
 #endregion
 
-using Corpspace.WebhookClient;
-
 CreateWebHostBuilder(args).Build().Run();
 
 

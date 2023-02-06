@@ -37,30 +37,30 @@ public class WebContextSeed
         }
     }
 
-    static void GetPreconfiguredImages(string contentRootPath, string webroot, ILogger log)
+    private static void GetPreconfiguredImages(string contentRootPath, string webroot, ILogger log)
     {
         try
         {
-            string imagesZipFile = Path.Combine(contentRootPath, "Setup", "images.zip");
+            var imagesZipFile = Path.Combine(contentRootPath, "Setup", "images.zip");
             if (!File.Exists(imagesZipFile))
             {
                 log.LogError("Zip file '{ZipFileName}' does not exists.", imagesZipFile);
                 return;
             }
 
-            string imagePath = Path.Combine(webroot, "assets", "images");
+            var imagePath = Path.Combine(webroot, "assets", "images");
             if (!Directory.Exists(imagePath))
             {
                 Directory.CreateDirectory(imagePath);
             }
-            string[] imageFiles = Directory.GetFiles(imagePath).Select(file => Path.GetFileName(file)).ToArray();
+            var imageFiles = Directory.GetFiles(imagePath).Select(file => Path.GetFileName(file)).ToArray();
 
-            using ZipArchive zip = ZipFile.Open(imagesZipFile, ZipArchiveMode.Read);
-            foreach (ZipArchiveEntry entry in zip.Entries)
+            using var zip = ZipFile.Open(imagesZipFile, ZipArchiveMode.Read);
+            foreach (var entry in zip.Entries)
             {
                 if (!imageFiles.Contains(entry.Name))
                 {
-                    string destinationFilename = Path.Combine(imagePath, entry.Name);
+                    var destinationFilename = Path.Combine(imagePath, entry.Name);
                     if (File.Exists(destinationFilename))
                     {
                         File.Delete(destinationFilename);

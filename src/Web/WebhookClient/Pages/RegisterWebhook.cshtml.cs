@@ -15,7 +15,6 @@
 #endregion
 
 using System.Net.Http.Formatting;
-using Corpspace.WebhookClient.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Corpspace.WebhookClient.Pages;
