@@ -1,4 +1,4 @@
-﻿#region Corpspace© Apache-2.0
+#region Corpspace© Apache-2.0
 // Copyright 2023 The Corpspace Technologies
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,21 +14,11 @@
 // limitations under the License.
 #endregion
 
-namespace Corpspace.Web.Shopping.HttpAggregator.Models;
+using Corpspace.Web.Shopping.HttpAggregator.Models;
 
-public class BasketDataItem
+namespace Corpspace.Web.Shopping.HttpAggregator.Services;
+
+public interface IChatService
 {
-    public string Id { get; set; }
-
-    public int ProductId { get; set; }
-
-    public string ProductName { get; set; }
-
-    public decimal UnitPrice { get; set; }
-
-    public decimal OldUnitPrice { get; set; }
-
-    public int Quantity { get; set; }
-
-    public string PictureUrl { get; set; }
+    Task<MessageData> GetMessage();
 }

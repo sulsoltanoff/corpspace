@@ -14,11 +14,7 @@
 // limitations under the License.
 #endregion
 
-using Corpspace.Devspaces.Support;
-using Corpspace.Web.Shopping.HttpAggregator.Config;
-using Corpspace.Web.Shopping.HttpAggregator.Filters.Basket.API.Infrastructure.Filters;
-using Corpspace.Web.Shopping.HttpAggregator.Infrastructure;
-using Corpspace.Web.Shopping.HttpAggregator.Services;
+using Corpspace.Web.Shopping.HttpAggregator.Filters;
 
 namespace Corpspace.Web.Shopping.HttpAggregator;
 
@@ -36,9 +32,6 @@ public class Startup
     {
         services.AddHealthChecks()
             .AddCheck("self", () => HealthCheckResult.Healthy())
-            .AddUrlGroup(new Uri(Configuration["CatalogUrlHC"]), name: "catalogapi-check", tags: new string[] { "catalogapi" })
-            .AddUrlGroup(new Uri(Configuration["OrderingUrlHC"]), name: "orderingapi-check", tags: new string[] { "orderingapi" })
-            .AddUrlGroup(new Uri(Configuration["BasketUrlHC"]), name: "basketapi-check", tags: new string[] { "basketapi" })
             .AddUrlGroup(new Uri(Configuration["IdentityUrlHC"]), name: "identityapi-check", tags: new string[] { "identityapi" })
             .AddUrlGroup(new Uri(Configuration["PaymentUrlHC"]), name: "paymentapi-check", tags: new string[] { "paymentapi" });
 
@@ -71,10 +64,10 @@ public class Startup
         {
             c.SwaggerEndpoint($"{ (!string.IsNullOrEmpty(pathBase) ? pathBase : string.Empty) }/swagger/v1/swagger.json", "Purchase BFF V1");
 
-            c.OAuthClientId("webshoppingaggswaggerui");
+            c.OAuthClientId("web-agg-swagger-ui");
             c.OAuthClientSecret(string.Empty);
             c.OAuthRealm(string.Empty);
-            c.OAuthAppName("web shopping bff Swagger UI");
+            c.OAuthAppName("web bff Swagger UI");
         });
 
         app.UseRouting();
@@ -111,7 +104,7 @@ public static class ServiceCollectionExtensions
         {
             options.Authority = identityUrl;
             options.RequireHttpsMetadata = false;
-            options.Audience = "webshoppingagg";
+            options.Audience = "web-agg";
             options.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateAudience = false
@@ -134,9 +127,9 @@ public static class ServiceCollectionExtensions
 
             options.SwaggerDoc("v1", new OpenApiInfo
             {
-                Title = "Shopping Aggregator for Web Clients",
+                Title = "Aggregator for Web Clients",
                 Version = "v1",
-                Description = "Shopping Aggregator for Web Clients"
+                Description = "Aggregator for Web Clients"
             });
 
             options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
@@ -151,7 +144,7 @@ public static class ServiceCollectionExtensions
 
                         Scopes = new Dictionary<string, string>()
                         {
-                            { "webshoppingagg", "Shopping Aggregator for Web Clients" }
+                            { "web-agg", "Aggregator for Web Clients" }
                         }
                     }
                 }
@@ -178,11 +171,7 @@ public static class ServiceCollectionExtensions
         services.AddTransient<HttpClientAuthorizationDelegatingHandler>();
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-        //register http services
-
-        services.AddHttpClient<IOrderApiClient, OrderApiClient>()
-            .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
-            .AddDevspacesSupport();
+        //register custom http services
 
         return services;
     }
@@ -190,30 +179,6 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddGrpcServices(this IServiceCollection services)
     {
         services.AddTransient<GrpcExceptionInterceptor>();
-
-        services.AddScoped<IBasketService, BasketService>();
-
-        services.AddGrpcClient<Basket.BasketClient>((services, options) =>
-        {
-            var basketApi = services.GetRequiredService<IOptions<UrlsConfig>>().Value.GrpcBasket;
-            options.Address = new Uri(basketApi);
-        }).AddInterceptor<GrpcExceptionInterceptor>();
-
-        services.AddScoped<ICatalogService, CatalogService>();
-
-        services.AddGrpcClient<Catalog.CatalogClient>((services, options) =>
-        {
-            var catalogApi = services.GetRequiredService<IOptions<UrlsConfig>>().Value.GrpcCatalog;
-            options.Address = new Uri(catalogApi);
-        }).AddInterceptor<GrpcExceptionInterceptor>();
-
-        services.AddScoped<IOrderingService, OrderingService>();
-
-        services.AddGrpcClient<OrderingGrpc.OrderingGrpcClient>((services, options) =>
-        {
-            var orderingApi = services.GetRequiredService<IOptions<UrlsConfig>>().Value.GrpcOrdering;
-            options.Address = new Uri(orderingApi);
-        }).AddInterceptor<GrpcExceptionInterceptor>();
 
         return services;
     }

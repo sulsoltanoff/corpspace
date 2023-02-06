@@ -16,7 +16,7 @@
 
 using Corpspace.Web.Shopping.HttpAggregator;
 
-await ﻿BuildWebHost(args).RunAsync();
+await BuildWebHost(args).RunAsync();
 
 IWebHost BuildWebHost(string[] args) =>
     WebHost
