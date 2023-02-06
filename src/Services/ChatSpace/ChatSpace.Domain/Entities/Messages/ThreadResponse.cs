@@ -14,11 +14,30 @@
 // limitations under the License.
 #endregion
 
-using ChatSpace.Domain.SeedWork;
+using ChatSpace.Domain.Entities.SeedWork;
+using ChatSpace.Domain.Entities.User;
 
-namespace ChatSpace.Domain.Messages;
+namespace ChatSpace.Domain.Entities.Messages;
 
-public class MessageImage : EntityBase
+public class ThreadResponse : EntityBase<Guid>
 {
+    public string MessageId { get; set; }
     
+    public long ReplyCount { get; set; }
+    
+    public long LastReplyAt { get; set; }
+    
+    public long LastViewedAt { get; set; }
+    
+    public List<ChatUser> Participants { get; set; }
+    
+    public MessagePost MessagePost { get; set; }
+    
+    public long UnreadReplies { get; set; }
+    
+    public long UnreadMentions { get; set; }
+    
+    public bool IsUrgent { get; set; }
+    
+    public long DeleteAt { get; set; }
 }

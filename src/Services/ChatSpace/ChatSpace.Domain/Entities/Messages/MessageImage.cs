@@ -14,11 +14,11 @@
 // limitations under the License.
 #endregion
 
-namespace ChatSpace.Domain.SeedWork;
+using ChatSpace.Domain.Entities.SeedWork;
 
-public abstract class EntityBase
+namespace ChatSpace.Domain.Entities.Messages;
+
+public class MessageImage : EntityBase<Guid>
 {
-    public Guid Id { get; protected set; } = Guid.NewGuid();
-    public DateTime CreateAt { get; protected set; } = DateTime.UtcNow;
-    public DateTime? UpdateAt { get; protected set; }
+    
 }

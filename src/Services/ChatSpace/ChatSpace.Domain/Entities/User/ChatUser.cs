@@ -14,11 +14,11 @@
 // limitations under the License.
 #endregion
 
-using ChatSpace.Domain.SeedWork;
+using ChatSpace.Domain.Entities.SeedWork;
 
-namespace ChatSpace.Domain.User;
+namespace ChatSpace.Domain.Entities.User;
 
-public class ChatUser : EntityBase
+public class ChatUser : EntityBase<Guid>
 {
     public string Username { get; set; }
     

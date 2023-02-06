@@ -14,9 +14,9 @@
 // limitations under the License.
 #endregion
 
-namespace ChatSpace.Domain.SeedWork;
+namespace ChatSpace.Domain.Entities.SeedWork;
 
-public interface IRepository<T>
+public interface IAggregateRoot
 {
-    IUnitOfWork UnitOfWork { get; }
+    
 }

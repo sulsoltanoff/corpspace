@@ -14,17 +14,19 @@
 // limitations under the License.
 #endregion
 
-using ChatSpace.Domain.SeedWork;
+using ChatSpace.Domain.Entities.SeedWork;
 
-namespace ChatSpace.Domain.Messages;
+namespace ChatSpace.Domain.Entities.Messages;
 
-public class MessageMetadata : EntityBase
+public class Threads : EntityBase<Guid>
 {
-    public List<string> Embeds { get; set; }
-    public List<string> Emojis { get; set; }
-    public List<FileInfo> Files { get; set; }
-    public Dictionary<string, MessageImage> Images { get; set; }
-    public List<string> Reactions { get; set; }
-    public string Priority { get; set; }
-    public List<string> Acknowledgements { get; set; }
+    public long Total { get; set; }
+    
+    public long TotalUnreadThreads { get; set; }
+    
+    public long TotalUnreadMentions { get; set; }
+    
+    public long TotalUnreadUrgentMentions { get; set; }
+    
+    public List<ThreadResponse> ThreadResponses { get; set; }
 }

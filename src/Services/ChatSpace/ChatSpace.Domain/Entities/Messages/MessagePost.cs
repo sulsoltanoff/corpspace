@@ -14,12 +14,12 @@
 // limitations under the License.
 #endregion
 
-using ChatSpace.Domain.SeedWork;
-using ChatSpace.Domain.User;
+using ChatSpace.Domain.Entities.SeedWork;
+using ChatSpace.Domain.Entities.User;
 
-namespace ChatSpace.Domain.Messages;
+namespace ChatSpace.Domain.Entities.Messages;
 
-public class MessagePost : EntityBase
+public class MessagePost : EntityBase<Guid>
 {
     public long EditAt { get; set; }
     public long DeleteAt { get; set; }

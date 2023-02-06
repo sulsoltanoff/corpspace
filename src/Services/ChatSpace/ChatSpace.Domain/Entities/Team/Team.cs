@@ -14,9 +14,11 @@
 // limitations under the License.
 #endregion
 
-namespace ChatSpace.Domain.SeedWork;
+using ChatSpace.Domain.Entities.SeedWork;
 
-public interface IAggregateRoot
+namespace ChatSpace.Domain.Entities.Team;
+
+public class Team : EntityBase<Guid>
 {
     
 }
