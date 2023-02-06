@@ -33,7 +33,7 @@ COPY "NuGet.config" "NuGet.config"
 RUN dotnet restore "Corpspace.sln"
 
 COPY . .
-WORKDIR /src/ApiGateways/Web.Bff.Shopping/aggregator
+WORKDIR /src/ApiGateways/Corpspace.Bff.Web/aggregator
 RUN dotnet publish --no-restore -c Release -o /app
 
 FROM build AS publish
