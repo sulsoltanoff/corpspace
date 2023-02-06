@@ -14,8 +14,6 @@
 // limitations under the License.
 #endregion
 
-using Corpspace.Mobile.HttpAggregator;
-
 await BuildWebHost(args).RunAsync();
 IWebHost BuildWebHost(string[] args) =>
     WebHost

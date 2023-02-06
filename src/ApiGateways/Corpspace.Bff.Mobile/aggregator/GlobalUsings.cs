@@ -14,11 +14,8 @@
 // limitations under the License.
 #endregion
 
-global using CatalogApi;
 global using Grpc.Core.Interceptors;
 global using Grpc.Core;
-global using GrpcBasket;
-global using GrpcOrdering;
 global using HealthChecks.UI.Client;
 global using Microsoft.AspNetCore.Authentication.JwtBearer;
 global using Microsoft.AspNetCore.Authentication;
@@ -34,7 +31,6 @@ global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Diagnostics.HealthChecks;
 global using Microsoft.Extensions.Hosting;
 global using Microsoft.Extensions.Logging;
-global using Microsoft.Extensions.Options;
 global using Microsoft.OpenApi.Models;
 global using Serilog;
 global using Swashbuckle.AspNetCore.SwaggerGen;
@@ -43,9 +39,14 @@ global using System.IdentityModel.Tokens.Jwt;
 global using System.Linq;
 global using System.Net.Http.Headers;
 global using System.Net.Http;
-global using System.Net;
-global using System.Text.Json;
 global using System.Threading.Tasks;
 global using System.Threading;
 global using System;
+global using Corpspace.Devspaces.Support;
+global using Corpspace.Mobile.HttpAggregator;
+global using Corpspace.Mobile.HttpAggregator.Config;
+global using Corpspace.Mobile.HttpAggregator.Filters;
+global using Corpspace.Mobile.HttpAggregator.Infrastructure;
+global using Corpspace.Mobile.HttpAggregator.Models;
+global using Corpspace.Mobile.HttpAggregator.Services;
 global using Microsoft.IdentityModel.Tokens;

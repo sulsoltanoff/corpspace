@@ -33,7 +33,7 @@ COPY "NuGet.config" "NuGet.config"
 RUN dotnet restore "Corpspace.sln"
 
 COPY . .
-WORKDIR /src/ApiGateways/Mobile.Bff.Shopping/aggregator
+WORKDIR /src/ApiGateways/Corpspace.Bff.Mobile/aggregator
 RUN dotnet publish --no-restore -c Release -o /app
 
 FROM build AS publish
@@ -41,5 +41,5 @@ FROM build AS publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .
-ENTRYPOINT ["dotnet", "Mobile.Shopping.HttpAggregator.dll"]
+ENTRYPOINT ["dotnet", "Corpspace.Mobile.HttpAggregator.dll"]
 
