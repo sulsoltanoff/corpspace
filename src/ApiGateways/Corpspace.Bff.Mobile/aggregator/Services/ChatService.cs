@@ -14,12 +14,11 @@
 // limitations under the License.
 #endregion
 
-namespace Corpspace.Mobile.HttpAggregator.Services;
+using Corpspace.Web.Shopping.HttpAggregator.Models;
 
-public class ChatService : IChatService
+namespace Corpspace.Web.Shopping.HttpAggregator.Services;
+
+public interface IOrderApiClient
 {
-    public Task<MessageData> GetMessage()
-    {
-        throw new NotImplementedException();
-    }
+    Task<OrderData> GetOrderDraftFromBasketAsync(BasketData basket);
 }
