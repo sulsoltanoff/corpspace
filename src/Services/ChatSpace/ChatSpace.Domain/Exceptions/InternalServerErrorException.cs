@@ -14,10 +14,13 @@
 // limitations under the License.
 #endregion
 
-namespace ChatSpace.Domain.SeedWork;
+using ChatSpace.Domain.Constants;
 
-public interface IUnitOfWork : IDisposable
+namespace ChatSpace.Domain.Exceptions;
+
+public class InternalServerErrorException : BaseException
 {
-    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
-    Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default);
+    public InternalServerErrorException(string message) : base(ErrorConstants.DefaultType, message)
+    {
+    }
 }
