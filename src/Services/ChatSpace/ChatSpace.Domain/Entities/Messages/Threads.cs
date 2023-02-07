@@ -18,7 +18,7 @@ using ChatSpace.Domain.Entities.SeedWork;
 
 namespace ChatSpace.Domain.Entities.Messages;
 
-public class Threads : EntityBase<Guid>
+public class Threads : Entity<Guid>
 {
     public long Total { get; set; }
     

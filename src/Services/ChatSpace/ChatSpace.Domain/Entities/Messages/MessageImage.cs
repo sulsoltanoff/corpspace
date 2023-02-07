@@ -18,7 +18,7 @@ using ChatSpace.Domain.Entities.SeedWork;
 
 namespace ChatSpace.Domain.Entities.Messages;
 
-public class MessageImage : EntityBase<Guid>
+public class MessageImage : Entity<Guid>
 {
     
 }

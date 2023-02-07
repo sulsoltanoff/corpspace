@@ -14,17 +14,10 @@
 // limitations under the License.
 #endregion
 
-using ChatSpace.Domain.Entities.SeedWork;
-
 namespace ChatSpace.Domain.Entities.Messages;
 
-public class MessageMetadata : Entity<Guid>
+public enum ChatMessageReadState
 {
-    public List<string> Embeds { get; set; }
-    public List<string> Emojis { get; set; }
-    public List<FileInfo> Files { get; set; }
-    public Dictionary<string, MessageImage> Images { get; set; }
-    public List<string> Reactions { get; set; }
-    public string Priority { get; set; }
-    public List<string> Acknowledgements { get; set; }
+    UNREAD,
+    READ
 }

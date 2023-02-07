@@ -19,7 +19,7 @@ using ChatSpace.Domain.Entities.User;
 
 namespace ChatSpace.Domain.Entities.Messages;
 
-public class MessagePost : EntityBase<Guid>
+public class MessagePost : Entity<Guid>
 {
     public long EditAt { get; set; }
     public long DeleteAt { get; set; }

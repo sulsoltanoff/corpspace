@@ -18,7 +18,7 @@ using ChatSpace.Domain.Entities.SeedWork;
 
 namespace ChatSpace.Domain.Entities.Team;
 
-public class Team : EntityBase<Guid>
+public class Team : Entity<Guid>
 {
     
 }

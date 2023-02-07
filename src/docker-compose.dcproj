@@ -23,5 +23,6 @@
     <Content Include="create-dockerfile-restore.py" />
     <Content Include="prepare-devspaces.py" />
     <Content Include="run-test-infra.py" />
+    <Content Include="sonar-analysis.py" />
   </ItemGroup>
 </Project>

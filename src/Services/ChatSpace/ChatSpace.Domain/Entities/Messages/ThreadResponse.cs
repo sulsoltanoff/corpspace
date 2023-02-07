@@ -19,7 +19,7 @@ using ChatSpace.Domain.Entities.User;
 
 namespace ChatSpace.Domain.Entities.Messages;
 
-public class ThreadResponse : EntityBase<Guid>
+public class ThreadResponse : Entity<Guid>
 {
     public string MessageId { get; set; }
     
