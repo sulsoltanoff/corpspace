@@ -1,0 +1,82 @@
+version: '3.4'
+
+services:
+  
+  postgresql-devs:
+    image: postgres:14.5
+    environment:
+      - POSTGRES_USER=corpspace
+      - POSTGRES_PASSWORD=
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    ports:
+      - "127.0.0.1:5432:5432"
+    
+  redis-devs:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+
+  rabbitmq-devs:
+    image: rabbitmq:3-management-alpine
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    
+  sonar-devs:
+    image: sonarqube:9.3.0-community
+    ports:
+      - "9001:9000"
+      - "9092:9092"
+        
+  influxdb-devs:
+    image: docker.io/influxdb:latest
+    volumes:
+      - ../build/config/influxdb/data:/var/lib/influxdb
+      - ../build/config/influxdb/config/:/etc/influxdb/
+    ports:
+      - "8086:8086"
+      - "8082:8082"
+      # UDP Port
+      - "8089:8089/udp"
+
+  telegraf-devs:
+    image: docker.io/telegraf:latest
+    environment:
+      HOSTNAME: "tick-host"
+    links:
+      - influxdb-devs
+    ports:
+      - "8094:8094"
+      - "6514:6514"
+    volumes:
+      - ../build/config/telegraf/:/etc/telegraf/
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - influxdb-devs
+
+  grafana-devs:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    links:
+      - influxdb-devs:influxdb
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_SECURITY_SECRET_KEY: grafana
+      GF_USERS_ALLOW_SIGN_UP: "true"
+      GF_USERS_ALLOW_ORG_CREATE: "true"
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_NAME: grafana
+      GF_DASHBOARDS_JSON_ENABLED: "true"
+      GF_DASHBOARDS_JSON_PATH: /opt/grafana
+    volumes:
+      - ../build/config/grafana/data/:/var/lib/grafana
+      - ../build/config/grafana/data/log:/var/log/grafana
+      - ../build/config/grafana/data/plugins:/var/lib/grafana/plugins
+      - ../build/config/grafana/data/provisioning:/etc/grafana/provisioning/datasources
+      - ../build/config/grafana/data/dashboard:/etc/grafana/provisioning/dashboards
+    restart: always
+    depends_on:
+      - influxdb-devs
+      - telegraf-devs
