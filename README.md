@@ -48,17 +48,39 @@ So, if you're looking for an open-source project that will help you and your tea
 
 > **Warning**
 > We are currently in the process of developing our platform and are open to feedback and suggestions from the community. We hope to make corpspace a better platform for online meetings and look forward to your thoughts and ideas.
+> ---
+> _We would also be pleased if you could suggest an alternative solution._ <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Hand%20gestures/Heart%20Hands.png" alt="Heart Hands" width="25" height="25" />
 
 <!-- Table of Contents -->
 
 # Table of Contents
 
-- [About the Project](#-star2--about-the-project)
+- [About the Project](#about-the-project)
+  - [Platform architecture](#platform-architecture) 
+  - [Installation](#installations)
 - [License](#license)
 
-## :star2: About the Project
+## About the Project
 
+### Platform architecture
 
+### Installations
+1. Clone git repository
+```bash
+  git clone git@github.com:sulsoltanoff/corpspace.git
+  # OR HTTP
+  git clone https://github.com/sulsoltanoff/corpspace.git
+```
+
+2. Build .NET solutions and run infrastructure.
+```bash
+    cd corpsace/src
+    dotnet build Corpspace.sln
+    dotnet restore Corpspace.sln
+```
+```bash
+    python run-test-infra.py
+```
 
 ## License
 

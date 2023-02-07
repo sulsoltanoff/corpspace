@@ -1,0 +1,9 @@
+blank_issues_enabled: true
+
+contact_links:
+  - name: Corpspace Security Response Center 🔐
+    url: https://github.com/sulsoltanoff/corpspace/issues/new
+    about: Please report security vulnerabilities here.
+  - name: Corpspace Documentation issue 📄
+    url: https://github.com/sulsoltanoff/corpspace/issues/new
+    about: Report issues with the documentation for the Corpspace (in https://github.com/sulsoltanoff/corpspace/docs)

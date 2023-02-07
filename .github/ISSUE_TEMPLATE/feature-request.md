@@ -1,20 +1,30 @@
 ---
-name: Feature Request
-about: Suggest an idea for this project
+name: "Feature Request/Idea 🚀"
+about: Suggest a new feature or improvement (this does not mean you have to implement
+it)
 title: ''
-labels: 'Type: Enhancement :rocket:'
+labels: Issue-Feature
 assignees: ''
 
 ---
 
-**Is your feature request related to a problem? Please describe.**
-A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+<!-- 
+🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨
+I ACKNOWLEDGE THE FOLLOWING BEFORE PROCEEDING:
+1. If I delete this entire template and go my own path, the core team may close my issue without further explanation or engagement.
+2. If I file something completely blank in the body, the core team may close my issue without further explanation or engagement.
+All good? Then proceed!
+-->
 
-**Describe the solution you'd like**
+# Description of the new feature/enhancement
+
+<!-- 
+A clear and concise description of what the problem is that the new feature would solve.
+Describe why and how a user would use this new functionality (if applicable).
+-->
+
+# Proposed technical implementation details (optional)
+
+<!-- 
 A clear and concise description of what you want to happen.
-
-**Describe alternatives you've considered**
-A clear and concise description of any alternative solutions or features you've considered.
-
-**Additional context**
-Add any other context or screenshots about the feature request here.
+-->
