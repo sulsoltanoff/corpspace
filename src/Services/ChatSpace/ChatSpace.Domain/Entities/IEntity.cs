@@ -14,16 +14,12 @@
 // limitations under the License.
 #endregion
 
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+namespace ChatSpace.Domain.Entities;
 
-namespace ChatSpace.Domain.Entities.SeedWork;
-
-public abstract class EntityBase<TKey>
+/// <summary>
+/// A shortcut of <see cref="IEntity{TPrimaryKey}"/> for most used primary key type (<see cref="int"/>).
+/// </summary>
+public interface IEntity : IEntity<int>
 {
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public TKey Id { get; set; }
-    public DateTime CreateAt { get; protected set; } = DateTime.UtcNow;
-    public DateTime? UpdateAt { get; protected set; }
+
 }

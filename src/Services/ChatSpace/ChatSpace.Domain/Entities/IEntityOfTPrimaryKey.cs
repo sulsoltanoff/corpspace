@@ -14,17 +14,22 @@
 // limitations under the License.
 #endregion
 
-using ChatSpace.Domain.Entities.SeedWork;
+namespace ChatSpace.Domain.Entities;
 
-namespace ChatSpace.Domain.Entities.Messages;
-
-public class MessageMetadata : Entity<Guid>
+/// <summary>
+/// Defines interface for base entity type. All entities in the system must implement this interface.
+/// </summary>
+/// <typeparam name="TPrimaryKey">Type of the primary key of the entity</typeparam>
+public interface IEntity<TPrimaryKey>
 {
-    public List<string> Embeds { get; set; }
-    public List<string> Emojis { get; set; }
-    public List<FileInfo> Files { get; set; }
-    public Dictionary<string, MessageImage> Images { get; set; }
-    public List<string> Reactions { get; set; }
-    public string Priority { get; set; }
-    public List<string> Acknowledgements { get; set; }
+    /// <summary>
+    /// Unique identifier for this entity.
+    /// </summary>
+    TPrimaryKey Id { get; set; }
+
+    /// <summary>
+    /// Checks if this entity is transient (not persisted to database and it has not an <see cref="Id"/>).
+    /// </summary>
+    /// <returns>True, if this entity is transient</returns>
+    bool IsTransient();
 }

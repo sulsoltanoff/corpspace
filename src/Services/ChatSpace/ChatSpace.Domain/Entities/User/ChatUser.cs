@@ -18,7 +18,7 @@ using ChatSpace.Domain.Entities.SeedWork;
 
 namespace ChatSpace.Domain.Entities.User;
 
-public class ChatUser : EntityBase<Guid>
+public class ChatUser : Entity<Guid>
 {
     public string Username { get; set; }
     
