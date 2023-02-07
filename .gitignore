@@ -279,4 +279,4 @@ src/**/inf.yaml
 
 # Project specificate
 .env
-
+.sonarqube/
