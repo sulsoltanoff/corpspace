@@ -15,7 +15,7 @@
 // limitations under the License.
 #endregion
 
-namespace ChatSpace.Domain.Entities;
+namespace Corpspace.Commons.Domain.Entities;
 
 /// <summary>
 /// Defines interface for base entity type. All entities in the system must implement this interface.

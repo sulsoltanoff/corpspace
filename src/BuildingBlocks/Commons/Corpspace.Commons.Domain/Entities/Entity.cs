@@ -17,7 +17,7 @@
 
 using System.Reflection;
 
-namespace ChatSpace.Domain.Entities;
+namespace Corpspace.Commons.Domain.Entities;
 
 /// <summary>
 /// A shortcut of <see cref="Entity{TPrimaryKey}"/> for most used primary key type (<see cref="int"/>).
