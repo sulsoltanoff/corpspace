@@ -12,6 +12,9 @@
 *.sln.docstates
 .vscode/
 
+# Python
+__pycache__/
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
