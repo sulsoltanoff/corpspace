@@ -15,25 +15,17 @@
 // limitations under the License.
 #endregion
 
+using System.ComponentModel.DataAnnotations;
 using Corpspace.Commons.Domain.Entities;
 using Corpspace.Commons.Domain.Entities.Auditing;
 
 namespace ChatSpace.Domain.Entities.Messages;
 
-public class Threads : Entity<Guid>, IHasModificationTime
+public class Image : Entity<Guid>, IHasModificationTime
 {
-    public long Total { get; set; }
-    
-    public long TotalUnreadThreads { get; set; }
-    
-    public long TotalUnreadMentions { get; set; }
-    
-    public long TotalUnreadUrgentMentions { get; set; }
-    
-    public List<ThreadResponse> ThreadResponses { get; set; }
-    
     public DateTime ModificationTime { get; set; }
     
+    [Required]
     public DateTime CreationTime { get; set; }
     
     public DateTime? DeletionTime { get; set; }

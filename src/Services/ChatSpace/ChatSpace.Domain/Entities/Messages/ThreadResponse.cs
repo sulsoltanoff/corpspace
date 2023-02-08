@@ -15,12 +15,13 @@
 // limitations under the License.
 #endregion
 
-using ChatSpace.Domain.Entities.SeedWork;
 using ChatSpace.Domain.Entities.User;
+using Corpspace.Commons.Domain.Entities;
+using Corpspace.Commons.Domain.Entities.Auditing;
 
 namespace ChatSpace.Domain.Entities.Messages;
 
-public class ThreadResponse : Entity<Guid>
+public class ThreadResponse : Entity<Guid>, IHasModificationTime
 {
     public string MessageId { get; set; }
     
@@ -32,13 +33,19 @@ public class ThreadResponse : Entity<Guid>
     
     public List<ChatUser> Participants { get; set; }
     
-    public MessagePost MessagePost { get; set; }
+    public Message Message { get; set; }
     
     public long UnreadReplies { get; set; }
     
     public long UnreadMentions { get; set; }
     
     public bool IsUrgent { get; set; }
+
+    public DateTime ModificationTime { get; set; }
     
-    public long DeleteAt { get; set; }
+    public DateTime CreationTime { get; set; }
+    
+    public DateTime? DeletionTime { get; set; }
+    
+    public bool IsDeleted { get; set; }
 }

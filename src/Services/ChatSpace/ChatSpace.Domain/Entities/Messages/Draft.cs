@@ -15,17 +15,24 @@
 // limitations under the License.
 #endregion
 
-using ChatSpace.Domain.Entities.SeedWork;
+using Corpspace.Commons.Domain.Entities;
+using Corpspace.Commons.Domain.Entities.Auditing;
 
 namespace ChatSpace.Domain.Entities.Messages;
 
-public class MessageMetadata : Entity<Guid>
+public class Draft : Entity<Guid>, IHasModificationTime
 {
-    public List<string> Embeds { get; set; }
-    public List<string> Emojis { get; set; }
-    public List<FileInfo> Files { get; set; }
-    public Dictionary<string, MessageImage> Images { get; set; }
-    public List<string> Reactions { get; set; }
-    public string Priority { get; set; }
-    public List<string> Acknowledgements { get; set; }
+    public Guid UserId { get; set; }
+    
+    public Guid ChannelId { get; set; }
+    
+    public string Content { get; set; }
+    
+    public DateTime ModificationTime { get; set; }
+    
+    public DateTime CreationTime { get; set; }
+    
+    public DateTime? DeletionTime { get; set; }
+    
+    public bool IsDeleted { get; set; }
 }

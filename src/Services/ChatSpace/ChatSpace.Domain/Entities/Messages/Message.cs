@@ -15,35 +15,55 @@
 // limitations under the License.
 #endregion
 
-using ChatSpace.Domain.Entities.SeedWork;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using ChatSpace.Domain.Entities.User;
+using ChatSpace.Domain.Constants;
+using Corpspace.Commons.Domain.Entities;
+using Corpspace.Commons.Domain.Entities.Auditing;
 
 namespace ChatSpace.Domain.Entities.Messages;
 
-public class MessagePost : Entity<Guid>
+[Table("MessagePosts")]
+public class Message : Entity<Guid>, IHasModificationTime
 {
-    public long EditAt { get; set; }
-    public long DeleteAt { get; set; }
-    public bool IsPinned { get; set; }
-    public string UserId { get; set; }
-    public string ChannelId { get; set; }
-    public string RootId { get; set; }
-    public string OriginalId { get; set; }
+    [Required]
+    public Guid UserId { get; set; }
+    
+    [Required]
+    public Guid ChannelId { get; set; }
+    
+    public Guid OriginalId { get; set; }
 
-    public string Message { get; set; }
-    public string MessageSource { get; set; }
+    public bool IsPinned { get; set; }
+
+    [Required]
+    [StringLength(GeneralConstants.MaxMessageLength)]
+    public string Content { get; set; }
 
     public string Type { get; set; }
+    
     public Dictionary<string, object> Props { get; set; }
+    
     public string Hashtags { get; set; }
+    
     public List<string> FileIds { get; set; }
-    public string PendingPostId { get; set; }
+
     public bool HasReactions { get; set; }
-    public string RemoteId { get; set; }
 
     public long ReplyCount { get; set; }
-    public long LastReplyAt { get; set; }
+
     public List<ChatUser> Participants { get; set; }
+    
     public bool? IsFollowing { get; set; }
-    public MessageMetadata Metadata { get; set; }
+    
+    public Metadata Metadata { get; set; }
+
+    public DateTime ModificationTime { get; set; }
+    
+    public DateTime CreationTime { get; set; }
+    
+    public DateTime? DeletionTime { get; set; }
+    
+    public bool IsDeleted { get; set; }
 }

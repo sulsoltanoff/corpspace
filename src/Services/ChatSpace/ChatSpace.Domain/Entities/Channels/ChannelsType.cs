@@ -15,11 +15,12 @@
 // limitations under the License.
 #endregion
 
-using ChatSpace.Domain.Entities.SeedWork;
+namespace ChatSpace.Domain.Entities.Channels;
 
-namespace ChatSpace.Domain.Entities.Messages;
-
-public class MessageImage : Entity<Guid>
+public enum ChannelsType
 {
-    
+    Open,
+    Private,
+    Group,
+    Direct
 }

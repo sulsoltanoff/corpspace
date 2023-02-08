@@ -15,7 +15,7 @@
 // limitations under the License.
 #endregion
 
-using ChatSpace.Domain.Entities.SeedWork;
+using Corpspace.Commons.Domain.Entities;
 
 namespace ChatSpace.Domain.Entities.Team;
 

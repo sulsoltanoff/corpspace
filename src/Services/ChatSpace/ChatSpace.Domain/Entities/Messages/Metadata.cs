@@ -20,17 +20,21 @@ using Corpspace.Commons.Domain.Entities.Auditing;
 
 namespace ChatSpace.Domain.Entities.Messages;
 
-public class Threads : Entity<Guid>, IHasModificationTime
+public class Metadata : Entity<Guid>, IHasModificationTime
 {
-    public long Total { get; set; }
+    public List<string> Embeds { get; set; }
     
-    public long TotalUnreadThreads { get; set; }
+    public List<string> Emojis { get; set; }
     
-    public long TotalUnreadMentions { get; set; }
+    public List<FileInfo> Files { get; set; }
     
-    public long TotalUnreadUrgentMentions { get; set; }
+    public Dictionary<string, Image> Images { get; set; }
     
-    public List<ThreadResponse> ThreadResponses { get; set; }
+    public List<string> Reactions { get; set; }
+    
+    public string Priority { get; set; }
+    
+    public List<string> Acknowledgements { get; set; }
     
     public DateTime ModificationTime { get; set; }
     

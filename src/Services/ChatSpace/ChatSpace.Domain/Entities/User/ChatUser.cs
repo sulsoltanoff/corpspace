@@ -15,11 +15,12 @@
 // limitations under the License.
 #endregion
 
-using ChatSpace.Domain.Entities.SeedWork;
+using Corpspace.Commons.Domain.Entities;
+using Corpspace.Commons.Domain.Entities.Auditing;
 
 namespace ChatSpace.Domain.Entities.User;
 
-public class ChatUser : Entity<Guid>
+public class ChatUser : Entity<Guid>, IHasModificationTime
 {
     public string Username { get; set; }
     
@@ -40,9 +41,7 @@ public class ChatUser : Entity<Guid>
     public string Position { get; set; }
     
     public string Roles { get; set; }
-    
-    public DateTime DeleteAt { get; set; }
-    
+
     public Dictionary<string, string> Props { get; set; }
     
     public Dictionary<string, string> NotifyProps { get; set; }
@@ -62,6 +61,12 @@ public class ChatUser : Entity<Guid>
     public string BotDescription { get; set; }
     
     public long BotLastIconUpdate { get; set; }
+
+    public DateTime ModificationTime { get; set; }
     
+    public DateTime CreationTime { get; set; }
     
+    public DateTime? DeletionTime { get; set; }
+    
+    public bool IsDeleted { get; set; }
 }

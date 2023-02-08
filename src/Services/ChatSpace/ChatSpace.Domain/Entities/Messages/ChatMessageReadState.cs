@@ -19,6 +19,6 @@ namespace ChatSpace.Domain.Entities.Messages;
 
 public enum ChatMessageReadState
 {
-    UNREAD,
-    READ
+    Unread,
+    Read
 }

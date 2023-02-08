@@ -15,25 +15,38 @@
 // limitations under the License.
 #endregion
 
+using System.ComponentModel.DataAnnotations;
+using ChatSpace.Domain.Constants;
 using Corpspace.Commons.Domain.Entities;
 using Corpspace.Commons.Domain.Entities.Auditing;
 
-namespace ChatSpace.Domain.Entities.Messages;
+namespace ChatSpace.Domain.Entities.Channels;
 
-public class Threads : Entity<Guid>, IHasModificationTime
+public class Channel : Entity<Guid>, IHasModificationTime
 {
-    public long Total { get; set; }
+    [Required]
+    public Guid TeamId { get; set; }
     
-    public long TotalUnreadThreads { get; set; }
+    [Required]
+    public ChannelsType ChannelsType { get; set; }
     
-    public long TotalUnreadMentions { get; set; }
+    [Required]
+    public string DisplayName { get; set; }
     
-    public long TotalUnreadUrgentMentions { get; set; }
+    public string Description { get; set; }
     
-    public List<ThreadResponse> ThreadResponses { get; set; }
+    [Required]
+    [StringLength(GeneralConstants.ChannelNameMaxLenght)]
+    public string Name { get; set; }
     
+    public DateTime LastPostAt { get; set; }
+
+    [Required]
+    public Guid CreatorId { get; set; }
+
     public DateTime ModificationTime { get; set; }
     
+    [Required]
     public DateTime CreationTime { get; set; }
     
     public DateTime? DeletionTime { get; set; }
