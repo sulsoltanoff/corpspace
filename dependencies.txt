@@ -2,10 +2,7 @@ AutoMapper
 MIT License
 Copyright © Jimmy Bogard
 
-[Additional Library 1]
-[License 1]
-Copyright © [Author 1]
+Diagrams
+MIT License
+Copyright © MinJae Kwon
 
-[Additional Library 2]
-[License 2]
-Copyright © [Author 2]

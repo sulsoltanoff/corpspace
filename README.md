@@ -63,6 +63,8 @@ So, if you're looking for an open-source project that will help you and your tea
 ## About the Project
 
 ### Platform architecture
+Draft scheme architecture. We're using [diagrams](https://github.com/mingrammer/diagrams) for this creating.
+![](./docs/platform-architecture/microservice_architecture.png)
 
 ### Installations
 1. Clone git repository
