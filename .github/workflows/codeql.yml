@@ -40,6 +40,12 @@ jobs:
       
       - name: Autobuild
         uses: github/codeql-action/autobuild@v2
+
+      - name: Restore the solution
+        run: dotnet restore src/Corpspace.sln
+
+      - name: Build the solution
+        run: dotnet build src/Corpspace.sln
       
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v2

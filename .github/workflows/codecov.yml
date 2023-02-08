@@ -1,15 +1,39 @@
-name: codecov
+name: Codecov
 
 on:
   push:
-    branches: ["main"]
+    branches: [ "main" ]
   pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ "main" ]
+  schedule:
+    - cron: '36 16 * * 6'
 
 jobs:
-  build:
+  coverage:
+    name: Coverage
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v3
-      - name: Upload coverage reports to Codecov
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup .NET Core SDK
+        uses: actions/setup-dotnet@v3.0.3
+        with:
+          dotnet-version: 7 # optional
+
+      - name: Restore the solution
+        run: dotnet restore src/Corpspace.sln
+
+      - name: Build the solution
+        run: dotnet build src/Corpspace.sln
+
+      - name: Test the solution
+        run: dotnet test src/Corpspace.sln /p:CollectCoverage=true /p:CoverletOutputFormat=lcov /p:CoverletOutput=./lcov.info
+
+      - name: Upload Coverage to Codecov
         uses: codecov/codecov-action@v3
+        with:
+          flags: unittests
+          fail_ci_if_error: true
+          tokens: ${{ secrets.CODECOV_TOKEN }}
