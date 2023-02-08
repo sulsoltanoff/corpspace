@@ -24,7 +24,6 @@ public class ExternalController : Controller
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly IIdentityServerInteractionService _interaction;
-    private readonly IClientStore _clientStore;
     private readonly IEventService _events;
     private readonly ILogger<ExternalController> _logger;
 
@@ -32,14 +31,12 @@ public class ExternalController : Controller
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
         IIdentityServerInteractionService interaction,
-        IClientStore clientStore,
         IEventService events,
         ILogger<ExternalController> logger)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _interaction = interaction;
-        _clientStore = clientStore;
         _events = events;
         _logger = logger;
     }

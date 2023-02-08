@@ -80,28 +80,19 @@ public class AccountController : Controller
         // the user clicked the "cancel" button
         if (button != "login")
         {
-            if (context != null)
-            {
-                // if the user cancels, send a result back into IdentityServer as if they 
-                // denied the consent (even if this client does not require consent).
-                // this will send back an access denied OIDC error response to the client.
-                await _interaction.DenyAuthorizationAsync(context, AuthorizationError.AccessDenied);
+            if (context == null) return Redirect("~/");
+            // if the user cancels, send a result back into IdentityServer as if they 
+            // denied the consent (even if this client does not require consent).
+            // this will send back an access denied OIDC error response to the client.
+            await _interaction.DenyAuthorizationAsync(context, AuthorizationError.AccessDenied);
 
-                // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
-                if (context.IsNativeClient())
-                {
-                    // The client is native, so this change in how to
-                    // return the response is for better UX for the end user.
-                    return this.LoadingPage("Redirect", model.ReturnUrl);
-                }
+            // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
+            return context.IsNativeClient() ?
+                // The client is native, so this change in how to
+                // return the response is for better UX for the end user.
+                this.LoadingPage("Redirect", model.ReturnUrl) : Redirect(model.ReturnUrl);
 
-                return Redirect(model.ReturnUrl);
-            }
-            else
-            {
-                // since we don't have a valid context, then we just go back to the home page
-                return Redirect("~/");
-            }
+            // since we don't have a valid context, then we just go back to the home page
         }
 
         if (ModelState.IsValid)
@@ -110,38 +101,31 @@ public class AccountController : Controller
             if (result.Succeeded)
             {
                 var user = await _userManager.FindByNameAsync(model.Username);
-                await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id, user.UserName, clientId: context?.Client.ClientId));
+                await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id, user.UserName,
+                    clientId: context?.Client.ClientId));
 
                 if (context != null)
-                {
-                    if (context.IsNativeClient())
-                    {
+                    return context.IsNativeClient()
+                        ?
                         // The client is native, so this change in how to
                         // return the response is for better UX for the end user.
-                        return this.LoadingPage("Redirect", model.ReturnUrl);
-                    }
-
-                    // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
-                    return Redirect(model.ReturnUrl);
-                }
+                        this.LoadingPage("Redirect", model.ReturnUrl)
+                        :
+                        // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
+                        Redirect(model.ReturnUrl);
+                
+                if (Url.IsLocalUrl(model.ReturnUrl)) return Redirect(model.ReturnUrl);
+                return string.IsNullOrEmpty(model.ReturnUrl)
+                    ? Redirect("~/")
+                    : throw
+                        // user might have clicked on a malicious link - should be logged
+                        new Exception("invalid return URL");
 
                 // request for a local page
-                if (Url.IsLocalUrl(model.ReturnUrl))
-                {
-                    return Redirect(model.ReturnUrl);
-                }
-                else if (string.IsNullOrEmpty(model.ReturnUrl))
-                {
-                    return Redirect("~/");
-                }
-                else
-                {
-                    // user might have clicked on a malicious link - should be logged
-                    throw new Exception("invalid return URL");
-                }
             }
 
-            await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "invalid credentials", clientId:context?.Client.ClientId));
+            await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "invalid credentials",
+                clientId: context?.Client.ClientId));
             ModelState.AddModelError(string.Empty, AccountOptions.InvalidCredentialsErrorMessage);
         }
 

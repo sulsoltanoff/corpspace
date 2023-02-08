@@ -43,6 +43,7 @@ public class DeviceController : Controller
     [HttpGet]
     public async Task<IActionResult> Index()
     {
+        _logger.LogDebug("Get Device index");
         string userCodeParamName = _options.Value.UserInteraction.DeviceVerificationUserCodeParameter;
         string userCode = Request.Query[userCodeParamName];
         if (string.IsNullOrWhiteSpace(userCode)) return View("UserCodeCapture");
@@ -85,19 +86,18 @@ public class DeviceController : Controller
 
         ConsentResponse grantedConsent = null;
 
-        // user clicked 'no' - send back the standard 'access_denied' response
-        if (model.Button == "no")
+        switch (model.Button)
         {
-            grantedConsent = new ConsentResponse { Error = AuthorizationError.AccessDenied };
+            // user clicked 'no' - send back the standard 'access_denied' response
+            case "no":
+                grantedConsent = new ConsentResponse { Error = AuthorizationError.AccessDenied };
 
-            // emit event
-            await _events.RaiseAsync(new ConsentDeniedEvent(User.GetSubjectId(), request.Client.ClientId, request.ValidatedResources.RawScopeValues));
-        }
-        // user clicked 'yes' - validate the data
-        else if (model.Button == "yes")
-        {
+                // emit event
+                await _events.RaiseAsync(new ConsentDeniedEvent(User.GetSubjectId(), request.Client.ClientId, request.ValidatedResources.RawScopeValues));
+                break;
+            // user clicked 'yes' - validate the data
             // if the user consented to some scope, build the response model
-            if (model.ScopesConsented != null && model.ScopesConsented.Any())
+            case "yes" when model.ScopesConsented != null && model.ScopesConsented.Any():
             {
                 var scopes = model.ScopesConsented;
                 if (ConsentOptions.EnableOfflineAccess == false)
@@ -114,20 +114,19 @@ public class DeviceController : Controller
 
                 // emit event
                 await _events.RaiseAsync(new ConsentGrantedEvent(User.GetSubjectId(), request.Client.ClientId, request.ValidatedResources.RawScopeValues, grantedConsent.ScopesValuesConsented, grantedConsent.RememberConsent));
+                break;
             }
-            else
-            {
+            case "yes":
                 result.ValidationError = ConsentOptions.MustChooseOneErrorMessage;
-            }
-        }
-        else
-        {
-            result.ValidationError = ConsentOptions.InvalidSelectionErrorMessage;
+                break;
+            default:
+                result.ValidationError = ConsentOptions.InvalidSelectionErrorMessage;
+                break;
         }
 
         if (grantedConsent != null)
         {
-            // communicate outcome of consent back to identityserver
+            // communicate outcome of consent back to identity server
             await _interaction.HandleRequestAsync(model.UserCode, grantedConsent);
 
             // indicate that's it ok to redirect back to authorization endpoint
@@ -146,12 +145,7 @@ public class DeviceController : Controller
     private async Task<DeviceAuthorizationViewModel> BuildViewModelAsync(string userCode, DeviceAuthorizationInputModel model = null)
     {
         var request = await _interaction.GetAuthorizationContextAsync(userCode);
-        if (request != null)
-        {
-            return CreateConsentViewModel(userCode, model, request);
-        }
-
-        return null;
+        return request != null ? CreateConsentViewModel(userCode, model, request) : null;
     }
 
     private DeviceAuthorizationViewModel CreateConsentViewModel(string userCode, DeviceAuthorizationInputModel model, DeviceFlowAuthorizationRequest request)
@@ -172,16 +166,11 @@ public class DeviceController : Controller
 
         vm.IdentityScopes = request.ValidatedResources.Resources.IdentityResources.Select(x => CreateScopeViewModel(x, vm.ScopesConsented.Contains(x.Name) || model == null)).ToArray();
 
-        var apiScopes = new List<ScopeViewModel>();
-        foreach (var parsedScope in request.ValidatedResources.ParsedScopes)
-        {
-            var apiScope = request.ValidatedResources.Resources.FindApiScope(parsedScope.ParsedName);
-            if (apiScope != null)
-            {
-                var scopeVm = CreateScopeViewModel(parsedScope, apiScope, vm.ScopesConsented.Contains(parsedScope.RawValue) || model == null);
-                apiScopes.Add(scopeVm);
-            }
-        }
+        var apiScopes = (from parsedScope in request.ValidatedResources.ParsedScopes 
+            let apiScope = request.ValidatedResources.Resources.FindApiScope(parsedScope.ParsedName) 
+            where apiScope != null select CreateScopeViewModel(parsedScope, apiScope, 
+                vm.ScopesConsented.Contains(parsedScope.RawValue) || model == null)).ToList();
+        
         if (ConsentOptions.EnableOfflineAccess && request.ValidatedResources.Resources.OfflineAccess)
         {
             apiScopes.Add(GetOfflineAccessScope(vm.ScopesConsented.Contains(IdentityServerConstants.StandardScopes.OfflineAccess) || model == null));

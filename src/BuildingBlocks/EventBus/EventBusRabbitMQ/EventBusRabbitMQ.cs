@@ -256,35 +256,37 @@ public class EventBusRabbitMq : IEventBus, IDisposable
     {
         _logger.LogTrace("Processing RabbitMQ event: {EventName}", eventName);
 
-        if (_subsManager.HasSubscriptionsForEvent(eventName))
+        if (!_subsManager.HasSubscriptionsForEvent(eventName))
+        {
+            _logger.LogWarning("No subscription for RabbitMQ event: {EventName}", eventName);
+        }
+        else
         {
             await using var scope = _autofac.BeginLifetimeScope(AutofacScopeName);
             var subscriptions = _subsManager.GetHandlersForEvent(eventName);
             foreach (var subscription in subscriptions)
             {
-                if (subscription.IsDynamic)
-                {
-                    if (scope.ResolveOptional(subscription.HandlerType) is not IDynamicIntegrationEventHandler handler) continue;
-                    using dynamic eventData = JsonDocument.Parse(message);
-                    await Task.Yield();
-                    await handler.Handle(eventData);
-                }
-                else
+                if (!subscription.IsDynamic)
                 {
                     var handler = scope.ResolveOptional(subscription.HandlerType);
                     if (handler == null) continue;
                     var eventType = _subsManager.GetEventTypeByName(eventName);
-                    var integrationEvent = JsonSerializer.Deserialize(message, eventType, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+                    var integrationEvent = JsonSerializer.Deserialize(message, eventType,
+                        new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
                     var concreteType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);
 
                     await Task.Yield();
                     await (Task)concreteType.GetMethod("Handle").Invoke(handler, new object[] { integrationEvent });
                 }
+                else
+                {
+                    if (scope.ResolveOptional(subscription.HandlerType) is not IDynamicIntegrationEventHandler handler)
+                        continue;
+                    using dynamic eventData = JsonDocument.Parse(message);
+                    await Task.Yield();
+                    await handler.Handle(eventData);
+                }
             }
-        }
-        else
-        {
-            _logger.LogWarning("No subscription for RabbitMQ event: {EventName}", eventName);
         }
     }
 }

@@ -30,10 +30,12 @@ public class HttpClientAuthorizationDelegatingHandler : DelegatingHandler
 
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
+        _logger.LogDebug("SendAsync");
+        
         request.Version = new Version(2, 0);
         request.Method = HttpMethod.Get;
 
-        var authorizationHeader = _httpContextAccessor.HttpContext
+        var authorizationHeader = _httpContextAccessor.HttpContext!
             .Request.Headers["Authorization"];
 
         if (!string.IsNullOrEmpty(authorizationHeader))
@@ -53,9 +55,10 @@ public class HttpClientAuthorizationDelegatingHandler : DelegatingHandler
 
     async Task<string> GetToken()
     {
+        _logger.LogDebug("Getting token");
         const string accessToken = "access_token";
 
-        return await _httpContextAccessor.HttpContext
+        return await _httpContextAccessor.HttpContext!
             .GetTokenAsync(accessToken);
     }
 }

@@ -134,7 +134,7 @@ internal static class ServiceExtensions
             options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             options.Authority = identityUrl;
             options.SignedOutRedirectUri = callBackUrl;
-            options.ClientId = "webhooksclient";
+            options.ClientId = "webhooks-client";
             options.ClientSecret = "secret";
             options.ResponseType = "code";
             options.SaveTokens = true;
@@ -151,7 +151,7 @@ internal static class ServiceExtensions
     {
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         services.AddTransient<HttpClientAuthorizationDelegatingHandler>();
-        services.AddHttpClient("extendedhandlerlifetime").SetHandlerLifetime(Timeout.InfiniteTimeSpan);
+        services.AddHttpClient("extended-handler-lifetime").SetHandlerLifetime(Timeout.InfiniteTimeSpan);
 
         //add http client services
         services.AddHttpClient("GrantClient")
