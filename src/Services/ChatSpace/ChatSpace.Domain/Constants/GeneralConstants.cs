@@ -17,11 +17,12 @@
 
 namespace ChatSpace.Domain.Constants;
 
-public static class Constants
+public static class GeneralConstants
 {
-    // Regex for acceptable logins
-    public const string LoginRegex = "^[_.@A-Za-z0-9-]*$";
+    public const string LoginRegex = "^[_.@A-Za-z0-9-]*$";  // Regex for acceptable logins
     public const string SystemAccount = "system";
     public const string AnonymousUser = "anonymoususer";
     public const string DefaultLangKey = "en";
+    public const int MaxMessageLength = 2 * 1024; // 2KB
+    public const int ChannelNameMaxLenght = 76;
 }
