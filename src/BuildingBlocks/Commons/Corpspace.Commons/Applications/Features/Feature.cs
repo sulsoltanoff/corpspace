@@ -15,12 +15,12 @@
 // limitations under the License.
 #endregion
 
-namespace Corpspace.Commons.Domain.Entities;
+namespace Corpspace.Commons.Applications.Features;
 
 /// <summary>
-/// A shortcut of <see cref="IEntity{TPrimaryKey}"/> for most used primary key type (<see cref="int"/>).
+/// Represents a features in the app that can be activated or deactivated.
 /// </summary>
-public interface IEntity : IEntity<int>
+public class Feature
 {
-
+    
 }

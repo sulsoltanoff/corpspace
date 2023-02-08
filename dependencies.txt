@@ -6,3 +6,6 @@ Diagrams
 MIT License
 Copyright © MinJae Kwon
 
+ASP.NET Boilerplate
+MIT License
+Copyright © 2013-2021 Volosoft (https://volosoft.com)s

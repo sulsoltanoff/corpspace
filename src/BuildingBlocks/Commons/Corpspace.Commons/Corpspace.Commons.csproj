@@ -4,12 +4,11 @@
         <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <RootNamespace>Corpspace.Commons.Domain</RootNamespace>
+        <RootNamespace>Corpspace.Commons</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Repositories" />
-      <Folder Include="UnitOfWork" />
+      <Folder Include="Domain" />
     </ItemGroup>
 
 </Project>

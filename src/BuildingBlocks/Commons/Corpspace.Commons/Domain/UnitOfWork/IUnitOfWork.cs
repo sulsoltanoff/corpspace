@@ -17,7 +17,7 @@
 
 using System.Linq.Expressions;
 
-namespace ChatSpace.Domain.Entities.SeedWork;
+namespace Corpspace.Commons.Domain.UnitOfWork;
 
 public interface IUnitOfWork : IDisposable
 {

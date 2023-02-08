@@ -15,7 +15,7 @@
 // limitations under the License.
 #endregion
 
-namespace ChatSpace.Domain.Entities.SeedWork;
+namespace Corpspace.Commons.Domain.Entities;
 
 public interface IAggregateRoot
 {

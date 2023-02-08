@@ -15,9 +15,12 @@
 // limitations under the License.
 #endregion
 
-namespace ChatSpace.Domain.Entities.SeedWork;
+namespace Corpspace.Commons.Domain.Entities;
 
-public interface IRepository<T>
+/// <summary>
+/// A shortcut of <see cref="IEntity{TPrimaryKey}"/> for most used primary key type (<see cref="long"/>).
+/// </summary>
+public interface IEntity : IEntity<long>
 {
-    IUnitOfWork UnitOfWork { get; }
+
 }

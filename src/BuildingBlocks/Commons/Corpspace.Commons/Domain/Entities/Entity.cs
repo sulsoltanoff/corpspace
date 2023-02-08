@@ -20,10 +20,10 @@ using System.Reflection;
 namespace Corpspace.Commons.Domain.Entities;
 
 /// <summary>
-/// A shortcut of <see cref="Entity{TPrimaryKey}"/> for most used primary key type (<see cref="int"/>).
+/// A shortcut of <see cref="Entity{TPrimaryKey}"/> for most used primary key type (<see cref="long"/>).
 /// </summary>
 [Serializable]
-public abstract class Entity : Entity<int>, IEntity
+public abstract class Entity : Entity<long>, IEntity
 {
 
 }
