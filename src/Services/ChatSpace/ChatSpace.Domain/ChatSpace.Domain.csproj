@@ -6,4 +6,8 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\BuildingBlocks\Commons\Corpspace.Commons\Corpspace.Commons.csproj" />
+    </ItemGroup>
+
 </Project>
