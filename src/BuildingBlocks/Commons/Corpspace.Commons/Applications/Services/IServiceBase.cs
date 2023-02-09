@@ -15,9 +15,14 @@
 // limitations under the License.
 #endregion
 
+using Corpspace.Commons.Domain.UnitOfWork;
+using Serilog;
+
 namespace Corpspace.Commons.Applications.Services;
 
-public class IServiceBase
+public interface IServiceBase
 {
+    public IUnitOfWork UnitOfWork { get; set; }
     
+    public ILogger Logger { protected get; set; }
 }

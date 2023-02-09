@@ -19,5 +19,7 @@ namespace Corpspace.Commons.Applications.Features;
 
 public interface IFeatureChecker
 {
+    Task<bool> IsEnabledAsync(string featureName);
     
+    bool IsEnabled(string featureName);
 }

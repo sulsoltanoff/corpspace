@@ -15,9 +15,40 @@
 // limitations under the License.
 #endregion
 
+using Corpspace.Commons.Applications.Features;
+using Corpspace.Commons.Authorization;
+using Corpspace.Commons.Domain.UnitOfWork;
+using Serilog;
+
 namespace Corpspace.Commons.Applications.Services;
 
-public class ApplicationService
+public abstract class ApplicationService : IApplicationService, IServiceBase
 {
+    public IUnitOfWork UnitOfWork { get; set; }
     
+    public ILogger Logger { get; set; }
+    
+    public IPermissionChecker PermissionChecker { protected get; set; }
+    
+    public IFeatureChecker FeatureChecker { get; set; }
+
+    protected virtual Task<bool> IsEnabledAsync(string featureName)
+    {
+        return FeatureChecker.IsEnabledAsync(featureName);
+    }
+    
+    protected virtual bool IsEnabled(string featureName)
+    {
+        return FeatureChecker.IsEnabled(featureName);
+    }
+    
+    protected virtual Task<bool> IsGrantedAsync(string permissionName)
+    {
+        return PermissionChecker.IsGrantedAsync(permissionName);
+    }
+    
+    protected virtual bool IsGranted(string permissionName)
+    {
+        return PermissionChecker.IsGranted(permissionName);
+    }
 }
