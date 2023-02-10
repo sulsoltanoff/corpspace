@@ -6,4 +6,8 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\ChatSpace.Domain\ChatSpace.Domain.csproj" />
+    </ItemGroup>
+
 </Project>

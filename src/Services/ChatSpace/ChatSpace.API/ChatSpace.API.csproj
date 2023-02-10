@@ -7,8 +7,14 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.2"/>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.2" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\ChatSpace.Application\ChatSpace.Application.csproj" />
+      <ProjectReference Include="..\ChatSpace.Domain\ChatSpace.Domain.csproj" />
+      <ProjectReference Include="..\ChatSpace.Infrastructure\ChatSpace.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>
