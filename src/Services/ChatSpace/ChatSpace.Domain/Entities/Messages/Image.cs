@@ -16,19 +16,30 @@
 #endregion
 
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using ChatSpace.Domain.Constants;
 using Corpspace.Commons.Domain.Entities;
 using Corpspace.Commons.Domain.Entities.Auditing;
 
 namespace ChatSpace.Domain.Entities.Messages;
 
+[Table($"{GeneralConstants.ServiceName}_Image")]
 public class Image : Entity<Guid>, IHasModificationTime
 {
-    public DateTime ModificationTime { get; set; }
+    public Image(DateTime modificationAt, DateTime creationAt, DateTime? deletionAt, bool isDeleted)
+    {
+        ModificationAt = modificationAt;
+        CreationAt = creationAt;
+        DeletionAt = deletionAt;
+        IsDeleted = isDeleted;
+    }
+
+    public DateTime ModificationAt { get; set; }
     
     [Required]
-    public DateTime CreationTime { get; set; }
+    public DateTime CreationAt { get; set; }
     
-    public DateTime? DeletionTime { get; set; }
+    public DateTime? DeletionAt { get; set; }
     
     public bool IsDeleted { get; set; }
 }

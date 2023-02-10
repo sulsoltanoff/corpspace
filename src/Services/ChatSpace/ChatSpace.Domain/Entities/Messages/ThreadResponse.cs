@@ -15,14 +15,36 @@
 // limitations under the License.
 #endregion
 
+using System.ComponentModel.DataAnnotations.Schema;
+using ChatSpace.Domain.Constants;
 using ChatSpace.Domain.Entities.User;
 using Corpspace.Commons.Domain.Entities;
 using Corpspace.Commons.Domain.Entities.Auditing;
 
 namespace ChatSpace.Domain.Entities.Messages;
 
+[Table($"{GeneralConstants.ServiceName}_ThreadResponse")]
 public class ThreadResponse : Entity<Guid>, IHasModificationTime
 {
+    public ThreadResponse(string messageId, long replyCount, long lastReplyAt, long lastViewedAt, 
+        List<ChatUser> participants, Message message, long unreadReplies, long unreadMentions, bool isUrgent, 
+        DateTime modificationAt, DateTime creationAt, DateTime? deletionAt, bool isDeleted)
+    {
+        MessageId = messageId;
+        ReplyCount = replyCount;
+        LastReplyAt = lastReplyAt;
+        LastViewedAt = lastViewedAt;
+        Participants = participants;
+        Message = message;
+        UnreadReplies = unreadReplies;
+        UnreadMentions = unreadMentions;
+        IsUrgent = isUrgent;
+        ModificationAt = modificationAt;
+        CreationAt = creationAt;
+        DeletionAt = deletionAt;
+        IsDeleted = isDeleted;
+    }
+
     public string MessageId { get; set; }
     
     public long ReplyCount { get; set; }
@@ -41,11 +63,11 @@ public class ThreadResponse : Entity<Guid>, IHasModificationTime
     
     public bool IsUrgent { get; set; }
 
-    public DateTime ModificationTime { get; set; }
+    public DateTime ModificationAt { get; set; }
     
-    public DateTime CreationTime { get; set; }
+    public DateTime CreationAt { get; set; }
     
-    public DateTime? DeletionTime { get; set; }
+    public DateTime? DeletionAt { get; set; }
     
     public bool IsDeleted { get; set; }
 }

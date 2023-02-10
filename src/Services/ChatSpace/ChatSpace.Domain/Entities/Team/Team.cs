@@ -15,11 +15,46 @@
 // limitations under the License.
 #endregion
 
+using System.ComponentModel.DataAnnotations.Schema;
+using ChatSpace.Domain.Constants;
+using ChatSpace.Domain.Entities.User;
 using Corpspace.Commons.Domain.Entities;
+using Corpspace.Commons.Domain.Entities.Auditing;
 
 namespace ChatSpace.Domain.Entities.Team;
 
-public class Team : Entity<Guid>
+[Table($"{GeneralConstants.ServiceName}_Team")]
+public class Team : Entity<Guid>, IHasModificationTime
 {
+    public Team(string name, string displayName, string description, List<ChatUser> members, List<ChatUser> admins,
+        DateTime modificationAt, DateTime creationAt, DateTime? deletionAt, bool isDeleted)
+    {
+        Name = name;
+        DisplayName = displayName;
+        Description = description;
+        Members = members;
+        Admins = admins;
+        ModificationAt = modificationAt;
+        CreationAt = creationAt;
+        DeletionAt = deletionAt;
+        IsDeleted = isDeleted;
+    }
+
+    public string Name { get; set; }
     
+    public string DisplayName { get; set; }
+    
+    public string Description { get; set; }
+
+    public List<ChatUser> Members { get; set; }
+    
+    public List<ChatUser> Admins { get; set; }
+
+    public DateTime ModificationAt { get; set; }
+    
+    public DateTime CreationAt { get; set; }
+    
+    public DateTime? DeletionAt { get; set; }
+    
+    public bool IsDeleted { get; set; }
 }

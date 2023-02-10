@@ -16,14 +16,32 @@
 #endregion
 
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using ChatSpace.Domain.Constants;
 using Corpspace.Commons.Domain.Entities;
 using Corpspace.Commons.Domain.Entities.Auditing;
 
 namespace ChatSpace.Domain.Entities.Channels;
 
+[Table($"{GeneralConstants.ServiceName}_Channel")]
 public class Channel : Entity<Guid>, IHasModificationTime
 {
+    public Channel(Guid teamId, ChannelsType channelsType, string displayName, string description, 
+        string name, DateTime lastPostAt, Guid creatorId, DateTime modificationAt, DateTime creationAt, DateTime? deletionAt, bool isDeleted)
+    {
+        TeamId = teamId;
+        ChannelsType = channelsType;
+        DisplayName = displayName;
+        Description = description;
+        Name = name;
+        LastPostAt = lastPostAt;
+        CreatorId = creatorId;
+        ModificationAt = modificationAt;
+        CreationAt = creationAt;
+        DeletionAt = deletionAt;
+        IsDeleted = isDeleted;
+    }
+
     [Required]
     public Guid TeamId { get; set; }
     
@@ -44,12 +62,12 @@ public class Channel : Entity<Guid>, IHasModificationTime
     [Required]
     public Guid CreatorId { get; set; }
 
-    public DateTime ModificationTime { get; set; }
+    public DateTime ModificationAt { get; set; }
     
     [Required]
-    public DateTime CreationTime { get; set; }
+    public DateTime CreationAt { get; set; }
     
-    public DateTime? DeletionTime { get; set; }
+    public DateTime? DeletionAt { get; set; }
     
     public bool IsDeleted { get; set; }
 }

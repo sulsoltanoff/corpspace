@@ -15,13 +15,30 @@
 // limitations under the License.
 #endregion
 
+using System.ComponentModel.DataAnnotations.Schema;
+using ChatSpace.Domain.Constants;
 using Corpspace.Commons.Domain.Entities;
 using Corpspace.Commons.Domain.Entities.Auditing;
 
 namespace ChatSpace.Domain.Entities.Messages;
 
+[Table($"{GeneralConstants.ServiceName}_Threads")]
 public class Threads : Entity<Guid>, IHasModificationTime
 {
+    public Threads(long total, long totalUnreadThreads, long totalUnreadMentions, long totalUnreadUrgentMentions, 
+        List<ThreadResponse> threadResponses, DateTime modificationAt, DateTime creationAt, DateTime? deletionAt, bool isDeleted)
+    {
+        Total = total;
+        TotalUnreadThreads = totalUnreadThreads;
+        TotalUnreadMentions = totalUnreadMentions;
+        TotalUnreadUrgentMentions = totalUnreadUrgentMentions;
+        ThreadResponses = threadResponses;
+        ModificationAt = modificationAt;
+        CreationAt = creationAt;
+        DeletionAt = deletionAt;
+        IsDeleted = isDeleted;
+    }
+
     public long Total { get; set; }
     
     public long TotalUnreadThreads { get; set; }
@@ -32,11 +49,11 @@ public class Threads : Entity<Guid>, IHasModificationTime
     
     public List<ThreadResponse> ThreadResponses { get; set; }
     
-    public DateTime ModificationTime { get; set; }
+    public DateTime ModificationAt { get; set; }
     
-    public DateTime CreationTime { get; set; }
+    public DateTime CreationAt { get; set; }
     
-    public DateTime? DeletionTime { get; set; }
+    public DateTime? DeletionAt { get; set; }
     
     public bool IsDeleted { get; set; }
 }

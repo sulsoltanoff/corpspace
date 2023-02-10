@@ -24,9 +24,34 @@ using Corpspace.Commons.Domain.Entities.Auditing;
 
 namespace ChatSpace.Domain.Entities.Messages;
 
-[Table("MessagePosts")]
+[Table($"{GeneralConstants.ServiceName}_Message")]
 public class Message : Entity<Guid>, IHasModificationTime
 {
+    public Message(Guid userId, Guid channelId, Guid originalId, bool isPinned, 
+        string content, string type, Dictionary<string, object> props, string hashtags, 
+        List<string> fileIds, bool hasReactions, long replyCount, List<ChatUser> participants, 
+        bool? isFollowing, Metadata metadata, DateTime modificationAt, DateTime creationAt, DateTime? deletionAt, bool isDeleted)
+    {
+        UserId = userId;
+        ChannelId = channelId;
+        OriginalId = originalId;
+        IsPinned = isPinned;
+        Content = content;
+        Type = type;
+        Props = props;
+        Hashtags = hashtags;
+        FileIds = fileIds;
+        HasReactions = hasReactions;
+        ReplyCount = replyCount;
+        Participants = participants;
+        IsFollowing = isFollowing;
+        Metadata = metadata;
+        ModificationAt = modificationAt;
+        CreationAt = creationAt;
+        DeletionAt = deletionAt;
+        IsDeleted = isDeleted;
+    }
+
     [Required]
     public Guid UserId { get; set; }
     
@@ -59,11 +84,11 @@ public class Message : Entity<Guid>, IHasModificationTime
     
     public Metadata Metadata { get; set; }
 
-    public DateTime ModificationTime { get; set; }
+    public DateTime ModificationAt { get; set; }
     
-    public DateTime CreationTime { get; set; }
+    public DateTime CreationAt { get; set; }
     
-    public DateTime? DeletionTime { get; set; }
+    public DateTime? DeletionAt { get; set; }
     
     public bool IsDeleted { get; set; }
 }

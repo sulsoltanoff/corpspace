@@ -15,24 +15,39 @@
 // limitations under the License.
 #endregion
 
+using System.ComponentModel.DataAnnotations.Schema;
+using ChatSpace.Domain.Constants;
 using Corpspace.Commons.Domain.Entities;
 using Corpspace.Commons.Domain.Entities.Auditing;
 
 namespace ChatSpace.Domain.Entities.Messages;
 
+[Table($"{GeneralConstants.ServiceName}_Draft")]
 public class Draft : Entity<Guid>, IHasModificationTime
 {
+    public Draft(Guid userId, Guid channelId, string content, DateTime modificationAt, 
+        DateTime creationAt, DateTime? deletionAt, bool isDeleted)
+    {
+        UserId = userId;
+        ChannelId = channelId;
+        Content = content;
+        ModificationAt = modificationAt;
+        CreationAt = creationAt;
+        DeletionAt = deletionAt;
+        IsDeleted = isDeleted;
+    }
+
     public Guid UserId { get; set; }
     
     public Guid ChannelId { get; set; }
     
     public string Content { get; set; }
     
-    public DateTime ModificationTime { get; set; }
+    public DateTime ModificationAt { get; set; }
     
-    public DateTime CreationTime { get; set; }
+    public DateTime CreationAt { get; set; }
     
-    public DateTime? DeletionTime { get; set; }
+    public DateTime? DeletionAt { get; set; }
     
     public bool IsDeleted { get; set; }
 }

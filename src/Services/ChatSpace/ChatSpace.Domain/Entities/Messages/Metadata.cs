@@ -15,13 +15,33 @@
 // limitations under the License.
 #endregion
 
+using System.ComponentModel.DataAnnotations.Schema;
+using ChatSpace.Domain.Constants;
 using Corpspace.Commons.Domain.Entities;
 using Corpspace.Commons.Domain.Entities.Auditing;
 
 namespace ChatSpace.Domain.Entities.Messages;
 
+[Table($"{GeneralConstants.ServiceName}_Metadata")]
 public class Metadata : Entity<Guid>, IHasModificationTime
 {
+    public Metadata(List<string> embeds, List<string> emojis, List<FileInfo> files, Dictionary<string, Image> images, 
+        List<string> reactions, string priority, List<string> acknowledgements, DateTime modificationAt, 
+        DateTime creationAt, DateTime? deletionAt, bool isDeleted)
+    {
+        Embeds = embeds;
+        Emojis = emojis;
+        Files = files;
+        Images = images;
+        Reactions = reactions;
+        Priority = priority;
+        Acknowledgements = acknowledgements;
+        ModificationAt = modificationAt;
+        CreationAt = creationAt;
+        DeletionAt = deletionAt;
+        IsDeleted = isDeleted;
+    }
+
     public List<string> Embeds { get; set; }
     
     public List<string> Emojis { get; set; }
@@ -36,11 +56,11 @@ public class Metadata : Entity<Guid>, IHasModificationTime
     
     public List<string> Acknowledgements { get; set; }
     
-    public DateTime ModificationTime { get; set; }
+    public DateTime ModificationAt { get; set; }
     
-    public DateTime CreationTime { get; set; }
+    public DateTime CreationAt { get; set; }
     
-    public DateTime? DeletionTime { get; set; }
+    public DateTime? DeletionAt { get; set; }
     
     public bool IsDeleted { get; set; }
 }
