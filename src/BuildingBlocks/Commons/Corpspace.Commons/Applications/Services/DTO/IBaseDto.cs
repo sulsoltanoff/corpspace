@@ -17,12 +17,12 @@
 
 namespace Corpspace.Commons.Applications.Services.DTO;
 
-public interface IEntityDto : IEntityDto<long>
+public interface IBaseDto : IBaseDto<long>
 {
     
 }
 
-public interface IEntityDto<TPrimaryKey>
+public interface IBaseDto<TPrimaryKey>
 {
     /// <summary>
     /// Id of the entity.

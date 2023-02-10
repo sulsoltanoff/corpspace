@@ -18,7 +18,7 @@
 namespace Corpspace.Commons.Applications.Services.DTO;
 
 [Serializable]
-public class BaseDto : EntityDto<long>, IEntityDto
+public class BaseDto : BaseDto<long>, IBaseDto
 {
     public BaseDto()
     {
@@ -29,13 +29,13 @@ public class BaseDto : EntityDto<long>, IEntityDto
 }
 
 [Serializable]
-public class EntityDto<TPrimaryKey> : IEntityDto<TPrimaryKey>
+public class BaseDto<TPrimaryKey> : IBaseDto<TPrimaryKey>
 {
     public TPrimaryKey Id { get; set; }
     
-    public EntityDto() {}
+    public BaseDto() {}
     
-    public EntityDto(TPrimaryKey id)
+    public BaseDto(TPrimaryKey id)
     {
         Id = id;
     }
