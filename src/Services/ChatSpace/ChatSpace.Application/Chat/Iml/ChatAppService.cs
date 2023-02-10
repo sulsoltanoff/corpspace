@@ -15,7 +15,6 @@
 // limitations under the License.
 #endregion
 
-using AutoMapper.Internal.Mappers;
 using ChatSpace.Application.Chat.DTO;
 using ChatSpace.Domain.Entities.Messages;
 using Corpspace.Commons.Domain.Repositories;
@@ -31,28 +30,37 @@ public class ChatAppService : ChatAppServiceBase, IChatAppService
         _messageRepository = messageRepository;
     }
 
-    public async Task<List<MessageDto>> GetMessages()
-    {
-        var messages = await _messageRepository.GetAllListAsync();
-        return messages.Select(m => ObjectMapper<Message, MessageDto>.Map(m)).ToList();
-    }
-
-    public Task SendMessage(string message, Guid userId)
+    public Task<MessageDto> CreateMessage()
     {
         throw new NotImplementedException();
     }
 
-    public Task MarkMessageAsRead(Guid messageId)
+    public Task<MessageDto> GetMessageById(Guid messageId)
     {
         throw new NotImplementedException();
     }
 
-    public Task MarkMessageAsUnread(Guid messageId)
+    public Task<List<MessageDto>> GetMessagesByIds(List<Guid> messageIds)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<List<MessageDto>> GetMessagesByChannelId(Guid chatId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<List<MessageDto>> GetMessagesByChannelIds(List<Guid> chatIds)
     {
         throw new NotImplementedException();
     }
 
     public Task DeleteMessage(Guid messageId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<MessageDto> UpdateMessage(Guid messageId)
     {
         throw new NotImplementedException();
     }

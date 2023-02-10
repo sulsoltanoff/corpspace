@@ -22,14 +22,17 @@ namespace ChatSpace.Application.Chat;
 
 public interface IChatAppService : IApplicationService
 {
-    Task<List<MessageDto>> GetMessages();
+    Task<MessageDto> CreateMessage();
     
-    Task SendMessage(string message, Guid userId);
+    Task<MessageDto> GetMessageById(Guid messageId);
     
-    Task MarkMessageAsRead(Guid messageId);
+    Task<List<MessageDto>> GetMessagesByIds(List<Guid> messageIds);
     
-    Task MarkMessageAsUnread(Guid messageId);
+    Task<List<MessageDto>> GetMessagesByChannelId(Guid chatId);
     
+    Task<List<MessageDto>> GetMessagesByChannelIds(List<Guid> chatIds);
+
     Task DeleteMessage(Guid messageId);
     
+    Task<MessageDto> UpdateMessage(Guid messageId);
 }
