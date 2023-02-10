@@ -73,6 +73,10 @@ public interface IRepository<TEntity, in TPrimaryKey> : IRepository where TEntit
     #region Delete operations
     void Delete(TEntity entity);
     
+    void Delete(TPrimaryKey entity);
+    
+    Task DeleteAsync(TPrimaryKey key);
+    
     Task DeleteAsync(TEntity entity);
     #endregion
 
