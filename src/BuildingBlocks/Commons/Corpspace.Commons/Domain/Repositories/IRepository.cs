@@ -50,9 +50,13 @@ public interface IRepository<TEntity, in TPrimaryKey> : IRepository where TEntit
     
     Task<List<TEntity>> GetAllListAsync();
     
+    Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate);
+    
     TEntity Get(TPrimaryKey id);
     
     Task<TEntity> GetAsync(TPrimaryKey id);
+
+    public Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate);
     #endregion
     
     
