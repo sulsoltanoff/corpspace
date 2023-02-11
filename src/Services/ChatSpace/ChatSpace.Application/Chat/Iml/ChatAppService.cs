@@ -15,8 +15,10 @@
 // limitations under the License.
 #endregion
 
+using AutoMapper.Internal.Mappers;
 using ChatSpace.Application.Chat.DTO;
 using ChatSpace.Domain.Entities.Messages;
+using ChatSpace.Domain.Exceptions;
 using Corpspace.Commons.Domain.Repositories;
 
 namespace ChatSpace.Application.Chat.Iml;
@@ -30,38 +32,107 @@ public class ChatAppService : ChatAppServiceBase, IChatAppService
         _messageRepository = messageRepository;
     }
 
-    public Task<MessageDto> CreateMessage()
+public async Task<MessageDto> CreateMessage(CreateMessageDto input)
+{
+    var message = new Message
     {
-        throw new NotImplementedException();
+        Content = input.Content,
+        ChannelId = input.ChannelId,
+        UserId = input.UserId
+    };
+
+    await _messageRepository.InsertAsync(message);
+
+    return new MessageDto
+    {
+        Id = message.Id,
+        Content = message.Content,
+        ChannelId = message.ChannelId,
+        UserId = input.UserId
+    };
+}
+
+public async Task<MessageDto> GetMessageById(Guid messageId)
+{
+    var message = await _messageRepository.FirstOrDefaultAsync(messageId);
+
+    if (message == null)
+    {
+        throw new EntityNotFoundException(nameof(Message), messageId);
     }
 
-    public Task<MessageDto> GetMessageById(Guid messageId)
+    return new MessageDto
     {
-        throw new NotImplementedException();
+        Id = message.Id,
+        Content = message.Content,
+        ChannelId = message.ChannelId,
+        UserId = message.UserId,
+    };
+}
+
+public async Task<List<MessageDto>> GetMessagesByIds(List<Guid> messageIds)
+{
+    var messages = await _messageRepository.GetListAsync(m => messageIds.Contains(m.Id));
+
+    return messages.Select(m => new MessageDto
+    {
+        Id = m.Id,
+        Content = m.Content,
+        ChannelId = m.ChannelId,
+        UserId = m.UserId,
+    }).ToList();
+}
+
+public async Task<List<MessageDto>> GetMessagesByChannelId(Guid channelId)
+{
+    var messages = await _messageRepository.GetListAsync(m => m.ChannelId == channelId);
+
+    return messages.Select(m => new MessageDto
+    {
+        Id = m.Id,
+        Content = m.Content,
+        ChannelId = m.ChannelId,
+        UserId = m.UserId,
+    }).ToList();
+}
+
+public async Task<List<MessageDto>> GetMessagesByChannelIds(List<Guid> channelIds)
+{
+    var messages = await _messageRepository.GetListAsync(m => channelIds.Contains(m.ChannelId));
+
+    return messages.Select(m => new MessageDto
+    {
+        Id = m.Id,
+        Content = m.Content,
+        ChannelId = m.ChannelId,
+        UserId = m.UserId,
+    }).ToList();
+}
+
+public async Task DeleteMessage(Guid messageId)
+{
+    var message = await _messageRepository.FirstOrDefaultAsync(messageId);
+
+    if (message == null)
+    {
+        throw new EntityNotFoundException(nameof(Message), messageId);
     }
 
-    public Task<List<MessageDto>> GetMessagesByIds(List<Guid> messageIds)
+    await _messageRepository.DeleteAsync(message);
+}
+public async Task<MessageDto> UpdateMessage(Guid messageId)
+{
+    var message = await _messageRepository.FirstOrDefaultAsync(messageId);
+
+    if (message == null)
     {
-        throw new NotImplementedException();
+        throw new EntityNotFoundException(nameof(Message), messageId);
     }
 
-    public Task<List<MessageDto>> GetMessagesByChannelId(Guid chatId)
-    {
-        throw new NotImplementedException();
-    }
+    // Update message properties here
 
-    public Task<List<MessageDto>> GetMessagesByChannelIds(List<Guid> chatIds)
-    {
-        throw new NotImplementedException();
-    }
+    await _messageRepository.UpdateAsync(message);
 
-    public Task DeleteMessage(Guid messageId)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<MessageDto> UpdateMessage(Guid messageId)
-    {
-        throw new NotImplementedException();
-    }
+    return ObjectMapper.Map<MessageDto>(message);
+}
 }

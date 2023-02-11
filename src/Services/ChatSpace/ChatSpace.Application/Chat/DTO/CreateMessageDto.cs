@@ -15,24 +15,15 @@
 // limitations under the License.
 #endregion
 
-using ChatSpace.Application.Chat.DTO;
-using Corpspace.Commons.Applications.Services;
+using Corpspace.Commons.Applications.Services.DTO;
 
-namespace ChatSpace.Application.Chat;
+namespace ChatSpace.Application.Chat.DTO;
 
-public interface IChatAppService : IApplicationService
+public class CreateMessageDto : BaseDto<Guid>
 {
-    Task<MessageDto> CreateMessage(CreateMessageDto input);
+    public string Content { get; set; }
     
-    Task<MessageDto> GetMessageById(Guid messageId);
+    public Guid ChannelId { get; set; }
     
-    Task<List<MessageDto>> GetMessagesByIds(List<Guid> messageIds);
-    
-    Task<List<MessageDto>> GetMessagesByChannelId(Guid chatId);
-    
-    Task<List<MessageDto>> GetMessagesByChannelIds(List<Guid> chatIds);
-
-    Task DeleteMessage(Guid messageId);
-    
-    Task<MessageDto> UpdateMessage(Guid messageId);
+    public Guid UserId { get; set; }
 }
