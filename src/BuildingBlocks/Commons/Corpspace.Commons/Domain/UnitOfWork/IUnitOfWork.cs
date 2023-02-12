@@ -23,7 +23,4 @@ public interface IUnitOfWork : IDisposable
 {
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default);
-    void AddOrUpdateGraph<TEntity>(TEntity entity, ICollection<Type> entitiesToBeUpdated = null) where TEntity : class;
-    void SetEntityStateModified<TEntity, TProperty>(TEntity entity, Expression<Func<TEntity, TProperty>> propertyExpression) where TEntity : class where TProperty : class;
-    void RemoveNavigationProperty<TEntity, TOwnerEntity>(TOwnerEntity ownerEntity, object id) where TEntity : class where TOwnerEntity : class;
 }
