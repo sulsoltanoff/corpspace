@@ -16,6 +16,7 @@
 #endregion
 
 using System.Reflection;
+using MediatR;
 
 namespace Corpspace.Commons.Domain.Entities;
 
@@ -36,6 +37,28 @@ public abstract class Entity : Entity<long>, IEntity
 [Serializable]
 public abstract class Entity<TPrimaryKey> : IEntity<TPrimaryKey>
 {
+    private int? _requestedHashCode;
+    
+    private List<INotification> _domainEvents;
+    
+    public IReadOnlyCollection<INotification> DomainEvents => _domainEvents?.AsReadOnly();
+    
+    public void AddDomainEvent(INotification eventItem)
+    {
+        _domainEvents = _domainEvents ?? new List<INotification>();
+        _domainEvents.Add(eventItem);
+    }
+
+    public void RemoveDomainEvent(INotification eventItem)
+    {
+        _domainEvents?.Remove(eventItem);
+    }
+
+    public void ClearDomainEvents()
+    {
+        _domainEvents?.Clear();
+    }
+    
     /// <summary>
     /// Unique identifier for this entity.
     /// </summary>
@@ -101,5 +124,18 @@ public abstract class Entity<TPrimaryKey> : IEntity<TPrimaryKey>
     public override string ToString()
     {
         return $"[{GetType().Name} {Id}]";
+    }
+    
+    public override int GetHashCode()
+    {
+        if (!IsTransient())
+        {
+            _requestedHashCode ??= this.Id.GetHashCode() ^ 31;
+
+            return _requestedHashCode.Value;
+        }
+        else
+            return base.GetHashCode();
+
     }
 }
