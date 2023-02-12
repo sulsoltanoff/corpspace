@@ -15,28 +15,121 @@
 // limitations under the License.
 #endregion
 
-var builder = WebApplication.CreateBuilder(args);
+using System.Net;
+using Azure.Core;
+using Azure.Identity;
+using Corpspace.ChatSpace.API;
+using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Serilog;
 
-// Add services to the container.
+var configuration = GetConfiguration();
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+Log.Logger = CreateSerilogLogger(configuration);
 
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+try
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    Log.Information("Configuring web host ({ApplicationContext})...", Corpspace.ChatSpace.API.Program.AppName);
+    var host = BuildWebHost(configuration, args);
+
+    // Log.Information("Applying migrations ({ApplicationContext})...", Corpspace.ChatSpace.API.Program.AppName);
+    // host.MigrateDbContext<ChatAppContext>((context, services) =>
+    // {
+    //     var env = services.GetService<IWebHostEnvironment>()!;
+    //     var logger = services.GetService<ILogger<ChatAppContextSeed>>()!;
+    //
+    //     new ChatAppContextSeed()
+    //         .SeedAsync(context, env, logger)
+    //         .Wait();
+    // })
+    // .MigrateDbContext<IntegrationEventLogContext>((_, __) => { });
+
+    Log.Information("Starting web host ({ApplicationContext})...", Corpspace.ChatSpace.API.Program.AppName);
+    host.Run();
+
+    return 0;
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Program terminated unexpectedly ({ApplicationContext})!", Corpspace.ChatSpace.API.Program.AppName);
+    return 1;
+}
+finally
+{
+    Log.CloseAndFlush();
 }
 
-app.UseHttpsRedirection();
+IWebHost BuildWebHost(IConfiguration configuration, string[] args) =>
+    WebHost.CreateDefaultBuilder(args)
+        .CaptureStartupErrors(false)
+        .ConfigureKestrel(options =>
+        {
+            var ports = GetDefinedPorts(configuration);
+            options.Listen(IPAddress.Any, ports.httpPort, listenOptions =>
+            {
+                listenOptions.Protocols = HttpProtocols.Http1AndHttp2;
+            });
 
-app.UseAuthorization();
+            options.Listen(IPAddress.Any, ports.grpcPort, listenOptions =>
+            {
+                listenOptions.Protocols = HttpProtocols.Http2;
+            });
 
-app.MapControllers();
+        })
+        .ConfigureAppConfiguration(x => x.AddConfiguration(configuration))
+        .UseStartup<Startup>()
+        .UseContentRoot(Directory.GetCurrentDirectory())
+        .UseSerilog()
+        .Build();
 
-app.Run();
+Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
+{
+    var seqServerUrl = configuration["Serilog:SeqServerUrl"];
+    var logstashUrl = configuration["Serilog:LogstashgUrl"];
+    return new LoggerConfiguration()
+        .MinimumLevel.Verbose()
+        .Enrich.WithProperty("ApplicationContext", Corpspace.ChatSpace.API.Program.AppName)
+        .Enrich.FromLogContext()
+        .WriteTo.Console()
+        .WriteTo.Seq(string.IsNullOrWhiteSpace(seqServerUrl) ? "http://seq" : seqServerUrl)
+        .WriteTo.Http(string.IsNullOrWhiteSpace(logstashUrl) ? "http://logstash:8080" : logstashUrl,null)
+        .ReadFrom.Configuration(configuration)
+        .CreateLogger();
+}
+
+IConfiguration GetConfiguration()
+{
+    var builder = new ConfigurationBuilder()
+        .SetBasePath(Directory.GetCurrentDirectory())
+        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+        .AddEnvironmentVariables();
+
+    var config = builder.Build();
+
+    if (config.GetValue<bool>("UseVault", false))
+    {
+        TokenCredential credential = new ClientSecretCredential(
+            config["Vault:TenantId"],
+            config["Vault:ClientId"],
+            config["Vault:ClientSecret"]);
+        builder.AddAzureKeyVault(new Uri($"https://{config["Vault:Name"]}.vault.azure.net/"), credential);
+    }
+
+    return builder.Build();
+}
+
+(int httpPort, int grpcPort) GetDefinedPorts(IConfiguration config)
+{
+    var grpcPort = config.GetValue("GRPC_PORT", 5001);
+    var port = config.GetValue("PORT", 80);
+    return (port, grpcPort);
+}
+
+namespace Corpspace.ChatSpace.API
+{
+    public static partial class Program
+    {
+        private static string Namespace = typeof(Startup).Namespace!;
+        public static string AppName = Namespace.Substring(Namespace.LastIndexOf('.', Namespace.LastIndexOf('.') - 1) + 1);
+    }
+}
