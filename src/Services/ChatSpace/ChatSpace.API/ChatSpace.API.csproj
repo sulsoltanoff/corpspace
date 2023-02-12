@@ -4,17 +4,68 @@
         <TargetFramework>net7.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <RootNamespace>Corpspace.ChatSpace.API</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.2" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+        <PackageReference Include="AspNetCore.HealthChecks.AzureServiceBus" Version="6.1.0" />
+        <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="6.0.2" />
+        <PackageReference Include="AspNetCore.HealthChecks.Rabbitmq" Version="6.0.2" />
+        <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.5" />
+        <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
+        <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.2.2" />
+        <PackageReference Include="Azure.Identity" Version="1.9.0-beta.1" />
+        <PackageReference Include="Dapper" Version="2.0.123" />
+        <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.2" />
+        <PackageReference Include="Google.Protobuf" Version="3.21.12" />
+        <PackageReference Include="Grpc.AspNetCore.Server" Version="2.51.0" />
+        <PackageReference Include="Grpc.Tools" Version="2.51.0" PrivateAssets="All" />
+        <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+        <PackageReference Include="MediatR" Version="11.1.0" />
+        <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.22.0-beta1" />
+        <PackageReference Include="Microsoft.ApplicationInsights.DependencyCollector" Version="2.22.0-beta1" />
+        <PackageReference Include="Microsoft.ApplicationInsights.Kubernetes" Version="6.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.2" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="7.0.2" />
+        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.HealthChecks" Version="2.2.0" />
+        <PackageReference Include="Microsoft.AspNetCore.HealthChecks" Version="1.0.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.2">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="7.0.2" />
+        <PackageReference Include="Microsoft.NETCore.Platforms" Version="7.0.0" />
+        <PackageReference Include="Polly" Version="7.2.3" />
+        <PackageReference Include="Serilog.AspNetCore" Version="6.1.0" />
+        <PackageReference Include="Serilog.Enrichers.Environment" Version="2.2.1-dev-00787" />
+        <PackageReference Include="Serilog.Settings.Configuration" Version="3.5.0-dev-00359" />
+        <PackageReference Include="Serilog.Sinks.Console" Version="4.1.1-dev-00896" />
+        <PackageReference Include="Serilog.Sinks.Http" Version="8.0.0" />
+        <PackageReference Include="Serilog.Sinks.Seq" Version="5.2.3-dev-00260" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.5.0" />
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\BuildingBlocks\Commons\WebHost.Customization\WebHost.Customization.csproj" />
+      <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBusRabbitMQ\EventBusRabbitMQ.csproj" />
+      <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBusServiceBus\EventBusServiceBus.csproj" />
+      <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\IntegrationEventLogEF\IntegrationEventLogEF.csproj" />
       <ProjectReference Include="..\ChatSpace.Application\ChatSpace.Application.csproj" />
       <ProjectReference Include="..\ChatSpace.Domain\ChatSpace.Domain.csproj" />
       <ProjectReference Include="..\ChatSpace.Infrastructure\ChatSpace.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\..\..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Infrastructure\IntegrationEventMigrations" />
+      <Folder Include="Infrastructure\Migrations" />
     </ItemGroup>
 
 </Project>
