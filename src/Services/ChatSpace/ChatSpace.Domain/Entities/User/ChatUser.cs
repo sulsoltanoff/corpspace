@@ -25,34 +25,6 @@ namespace ChatSpace.Domain.Entities.User;
 [Table($"{GeneralConstants.ServiceName}_User")]
 public class ChatUser : Entity<Guid>, IHasModificationTime
 {
-    public ChatUser(string username, string email, bool emailVerified, string firstName, 
-        string lastName, string position, string roles, Dictionary<string, string> props, Dictionary<string, string> 
-            notifyProps, DateTime lastPictureUpdate, int failedAttempts, string locale, DateTime lastActivityAt, 
-        bool isBot, string botDescription, long botLastIconUpdate, DateTime modificationAt, DateTime creationAt, 
-        DateTime? deletionAt, bool isDeleted)
-    {
-        Username = username;
-        Email = email;
-        EmailVerified = emailVerified;
-        FirstName = firstName;
-        LastName = lastName;
-        Position = position;
-        Roles = roles;
-        Props = props;
-        NotifyProps = notifyProps;
-        LastPictureUpdate = lastPictureUpdate;
-        FailedAttempts = failedAttempts;
-        Locale = locale;
-        LastActivityAt = lastActivityAt;
-        IsBot = isBot;
-        BotDescription = botDescription;
-        BotLastIconUpdate = botLastIconUpdate;
-        ModificationAt = modificationAt;
-        CreationAt = creationAt;
-        DeletionAt = deletionAt;
-        IsDeleted = isDeleted;
-    }
-
     public string Username { get; set; }
     
     public string Email { get; set; }
@@ -66,6 +38,8 @@ public class ChatUser : Entity<Guid>, IHasModificationTime
     public string Position { get; set; }
     
     public string Roles { get; set; }
+    
+    public Guid ChannelId { get; set; }
 
     public Dictionary<string, string> Props { get; set; }
     

@@ -26,20 +26,6 @@ namespace ChatSpace.Domain.Entities.Team;
 [Table($"{GeneralConstants.ServiceName}_Team")]
 public class Team : Entity<Guid>, IHasModificationTime
 {
-    public Team(string name, string displayName, string description, List<ChatUser> members, List<ChatUser> admins,
-        DateTime modificationAt, DateTime creationAt, DateTime? deletionAt, bool isDeleted)
-    {
-        Name = name;
-        DisplayName = displayName;
-        Description = description;
-        Members = members;
-        Admins = admins;
-        ModificationAt = modificationAt;
-        CreationAt = creationAt;
-        DeletionAt = deletionAt;
-        IsDeleted = isDeleted;
-    }
-
     public string Name { get; set; }
     
     public string DisplayName { get; set; }

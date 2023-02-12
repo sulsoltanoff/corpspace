@@ -15,16 +15,24 @@
 // limitations under the License.
 #endregion
 
+using System.ComponentModel.DataAnnotations.Schema;
+using ChatSpace.Domain.Constants;
+using ChatSpace.Domain.Entities.User;
 using Corpspace.Commons.Domain.Entities;
 using Corpspace.Commons.Domain.Entities.Auditing;
 
 namespace ChatSpace.Domain.Entities.Channels;
 
+[Table($"{GeneralConstants.ServiceName}_ChannelMembers")]
 public class ChannelMember : Entity<Guid>, IHasModificationTime
 {
+    public AppChannel Channel { get; set; }
+    
     public Guid ChannelId { get; set; }
     
-    public Guid UserId { get; set; }
+    public ChatUser ChatUser { get; set; }
+    
+    public Guid ChatUserId { get; set; }
     
     public DateTime ModificationAt { get; set; }
     

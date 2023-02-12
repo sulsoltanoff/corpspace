@@ -18,6 +18,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using ChatSpace.Domain.Constants;
+using ChatSpace.Domain.Entities.User;
 using Corpspace.Commons.Domain.Entities;
 using Corpspace.Commons.Domain.Entities.Auditing;
 
@@ -26,7 +27,6 @@ namespace ChatSpace.Domain.Entities.Channels;
 [Table($"{GeneralConstants.ServiceName}_Channel")]
 public class AppChannel : Entity<Guid>, IHasModificationTime
 {
-
     [Required]
     public Guid TeamId { get; set; }
     
