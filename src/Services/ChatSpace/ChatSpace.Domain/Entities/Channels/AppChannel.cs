@@ -24,7 +24,7 @@ using Corpspace.Commons.Domain.Entities.Auditing;
 namespace ChatSpace.Domain.Entities.Channels;
 
 [Table($"{GeneralConstants.ServiceName}_Channel")]
-public class Channel : Entity<Guid>, IHasModificationTime
+public class AppChannel : Entity<Guid>, IHasModificationTime
 {
 
     [Required]
