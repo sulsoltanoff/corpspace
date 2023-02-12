@@ -59,6 +59,13 @@ public abstract class Entity<TPrimaryKey> : IEntity<TPrimaryKey>
         _domainEvents?.Clear();
     }
     
+    public static IEnumerable<T> GetAll<T>() =>
+        typeof(T).GetFields(BindingFlags.Public |
+                            BindingFlags.Static |
+                            BindingFlags.DeclaredOnly)
+            .Select(f => f.GetValue(null))
+            .Cast<T>();
+    
     /// <summary>
     /// Unique identifier for this entity.
     /// </summary>
