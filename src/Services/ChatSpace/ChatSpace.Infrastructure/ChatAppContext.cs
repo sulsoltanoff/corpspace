@@ -18,6 +18,7 @@
 using ChatSpace.Domain.Entities.Messages;
 using ChatSpace.Domain.Entities.Team;
 using ChatSpace.Domain.Entities.User;
+using Corpspace.ChatSpace.Infrastructure.EntityConfiguration;
 using Corpspace.Commons.Domain.UnitOfWork;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -40,7 +41,7 @@ public class ChatAppContext : DbContext, IUnitOfWork
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ChatAppContext).Assembly);
+        modelBuilder.ApplyConfiguration(new ChatUserTypeConfiguration());
     }
 
     public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default)
