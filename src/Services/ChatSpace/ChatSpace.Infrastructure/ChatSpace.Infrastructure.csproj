@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\BuildingBlocks\Commons\WebHost.Customization\WebHost.Customization.csproj" />
       <ProjectReference Include="..\ChatSpace.Domain\ChatSpace.Domain.csproj" />
     </ItemGroup>
 

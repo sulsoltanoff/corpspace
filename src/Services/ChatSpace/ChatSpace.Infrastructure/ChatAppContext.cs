@@ -15,6 +15,7 @@
 // limitations under the License.
 #endregion
 
+using ChatSpace.Domain.Entities.Channels;
 using ChatSpace.Domain.Entities.Messages;
 using ChatSpace.Domain.Entities.Team;
 using ChatSpace.Domain.Entities.User;
@@ -22,12 +23,16 @@ using Corpspace.ChatSpace.Infrastructure.EntityConfiguration;
 using Corpspace.Commons.Domain.UnitOfWork;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 
 namespace Corpspace.ChatSpace.Infrastructure;
 
 public class ChatAppContext : DbContext, IUnitOfWork
 {
     private readonly IMediator _mediator;
+
+    public ChatAppContext(DbContextOptions<ChatAppContext> options) : base(options) { }
+    
     public ChatAppContext(DbContextOptions<ChatAppContext> options, IMediator mediator) : base(options)
     {
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
@@ -37,6 +42,13 @@ public class ChatAppContext : DbContext, IUnitOfWork
     public DbSet<ChatUser> ChatUsers { get; set; }
     public DbSet<Team> Teams { get; set; }
     public DbSet<Message> Messages { get; set; }
+    public DbSet<AppChannel> AppChannels { get; set; }
+    public DbSet<Metadata> Metadatas { get; set; }
+    public DbSet<Draft> Drafts { get; set; }
+    public DbSet<Image> Images { get; set; }
+    public DbSet<Threads> Threads { get; set; }
+    public DbSet<ThreadResponse> ThreadResponses { get; set; }
+    public DbSet<ChannelMember> ChannelMembers { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -48,5 +60,49 @@ public class ChatAppContext : DbContext, IUnitOfWork
     {
         await _mediator.DispatchDomainEventsAsync(this);
         return await base.SaveChangesAsync(cancellationToken) > 0;
+    }
+    
+    public class ChatAppContextDesignFactory : IDesignTimeDbContextFactory<ChatAppContext>
+    {
+        public ChatAppContext CreateDbContext(string[] args)
+        {
+            var optionsBuilder = new DbContextOptionsBuilder<ChatAppContext>()
+                .UseNpgsql("Database=Corpspace.Services.ChatSpace;User Id=corpspace;Password=corpspace;Host=localhost;Port=5432;sslmode=disable;");
+
+            return new ChatAppContext(optionsBuilder.Options, new NoMediator());
+        }
+
+        class NoMediator : IMediator
+        {
+            public IAsyncEnumerable<TResponse> CreateStream<TResponse>(IStreamRequest<TResponse> request, CancellationToken cancellationToken = default)
+            {
+                return default(IAsyncEnumerable<TResponse>);
+            }
+
+            public IAsyncEnumerable<object?> CreateStream(object request, CancellationToken cancellationToken = default)
+            {
+                return default(IAsyncEnumerable<object?>);
+            }
+
+            public Task Publish<TNotification>(TNotification notification, CancellationToken cancellationToken = default) where TNotification : INotification
+            {
+                return Task.CompletedTask;
+            }
+
+            public Task Publish(object notification, CancellationToken cancellationToken = default)
+            {
+                return Task.CompletedTask;
+            }
+
+            public Task<TResponse> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default)
+            {
+                return Task.FromResult<TResponse>(default(TResponse));
+            }
+
+            public Task<object> Send(object request, CancellationToken cancellationToken = default)
+            {
+                return Task.FromResult(default(object));
+            }
+        }
     }
 }
