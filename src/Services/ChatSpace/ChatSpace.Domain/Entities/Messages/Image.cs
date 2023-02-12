@@ -26,14 +26,6 @@ namespace ChatSpace.Domain.Entities.Messages;
 [Table($"{GeneralConstants.ServiceName}_Image")]
 public class Image : Entity<Guid>, IHasModificationTime
 {
-    public Image(DateTime modificationAt, DateTime creationAt, DateTime? deletionAt, bool isDeleted)
-    {
-        ModificationAt = modificationAt;
-        CreationAt = creationAt;
-        DeletionAt = deletionAt;
-        IsDeleted = isDeleted;
-    }
-
     public DateTime ModificationAt { get; set; }
     
     [Required]

@@ -25,23 +25,6 @@ namespace ChatSpace.Domain.Entities.Messages;
 [Table($"{GeneralConstants.ServiceName}_Metadata")]
 public class Metadata : Entity<Guid>, IHasModificationTime
 {
-    public Metadata(List<string> embeds, List<string> emojis, List<FileInfo> files, Dictionary<string, Image> images, 
-        List<string> reactions, string priority, List<string> acknowledgements, DateTime modificationAt, 
-        DateTime creationAt, DateTime? deletionAt, bool isDeleted)
-    {
-        Embeds = embeds;
-        Emojis = emojis;
-        Files = files;
-        Images = images;
-        Reactions = reactions;
-        Priority = priority;
-        Acknowledgements = acknowledgements;
-        ModificationAt = modificationAt;
-        CreationAt = creationAt;
-        DeletionAt = deletionAt;
-        IsDeleted = isDeleted;
-    }
-
     public List<string> Embeds { get; set; }
     
     public List<string> Emojis { get; set; }

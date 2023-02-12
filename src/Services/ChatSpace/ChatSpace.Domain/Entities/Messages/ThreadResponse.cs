@@ -26,25 +26,6 @@ namespace ChatSpace.Domain.Entities.Messages;
 [Table($"{GeneralConstants.ServiceName}_ThreadResponse")]
 public class ThreadResponse : Entity<Guid>, IHasModificationTime
 {
-    public ThreadResponse(string messageId, long replyCount, long lastReplyAt, long lastViewedAt, 
-        List<ChatUser> participants, Message message, long unreadReplies, long unreadMentions, bool isUrgent, 
-        DateTime modificationAt, DateTime creationAt, DateTime? deletionAt, bool isDeleted)
-    {
-        MessageId = messageId;
-        ReplyCount = replyCount;
-        LastReplyAt = lastReplyAt;
-        LastViewedAt = lastViewedAt;
-        Participants = participants;
-        Message = message;
-        UnreadReplies = unreadReplies;
-        UnreadMentions = unreadMentions;
-        IsUrgent = isUrgent;
-        ModificationAt = modificationAt;
-        CreationAt = creationAt;
-        DeletionAt = deletionAt;
-        IsDeleted = isDeleted;
-    }
-
     public string MessageId { get; set; }
     
     public long ReplyCount { get; set; }
