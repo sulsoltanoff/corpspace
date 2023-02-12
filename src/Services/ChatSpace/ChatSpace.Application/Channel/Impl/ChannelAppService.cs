@@ -15,40 +15,46 @@
 // limitations under the License.
 #endregion
 
-using AutoMapper.Internal.Mappers;
+using AutoMapper;
 using ChatSpace.Application.Channel.DTO;
 using ChatSpace.Application.Chat.DTO;
 using ChatSpace.Domain.Entities.Channels;
 using ChatSpace.Domain.Exceptions;
 using Corpspace.Commons.Domain.Repositories;
 
-namespace ChatSpace.Application.Channel.Iml;
+namespace ChatSpace.Application.Channel.Impl;
 
 public class ChannelAppService : ChannelServiceBase, IChannelService
 {
-    private readonly IRepository<Domain.Entities.Channels.Channel, Guid> _channelRepository;
+    private readonly IRepository<AppChannel, Guid> _channelRepository;
+    private readonly IRepository<ChannelMember, Guid> _chatMemberRepository;
+    private readonly IMapper _mapper;
 
-    public ChannelAppService(IRepository<Domain.Entities.Channels.Channel, Guid> channelRepository)
+    public ChannelAppService(IRepository<AppChannel, Guid> channelRepository, 
+        IMapper mapper, IRepository<ChannelMember, Guid> chatMemberRepository)
     {
         _channelRepository = channelRepository;
+        _mapper = mapper;
+        _chatMemberRepository = chatMemberRepository;
     }
 
     public async Task<ChannelDto> GetChannelByIdAsync(Guid id)
     {
         var channel = await _channelRepository.GetAsync(id);
-        return ObjectMapper.Map<ChannelDto>(channel);
+        return _mapper.Map<ChannelDto>(channel);
+        // return ObjectMapper.Map<ChannelDto>(channel);
     }
 
     public ChannelDto GetChannelById(Guid id)
     {
         var channel = _channelRepository.Get(id);
-        return ObjectMapper.Map<ChannelDto>(channel);
+        return _mapper.Map<ChannelDto>(channel);
     }
 
     public async Task<ChannelDto> GetDirectChannelAsync(Guid userId1, Guid userId2)
     {
         var channel = await _channelRepository.FirstOrDefaultAsync(x => x.ChannelsType == ChannelsType.Direct && (x.CreatorId == userId1 || x.CreatorId == userId2));
-        return ObjectMapper.Map<ChannelDto>(channel);
+        return _mapper.Map<ChannelDto>(channel);
     }
 
     public async Task<UserDto> GetChannelMemberAsync(Guid channelId, Guid userId)
@@ -66,23 +72,23 @@ public class ChannelAppService : ChannelServiceBase, IChannelService
     public async Task<List<ChannelDto>> GetListChannelAsync()
     {
         var channels = await _channelRepository.GetAllListAsync();
-        return ObjectMapper.Map<List<ChannelDto>>(channels);
+        return _mapper.Map<List<ChannelDto>>(channels);
     }
 
     public async Task<ChannelDto> CreateChannelAsync(CreateChannelDto input)
     {
-        var channel = ObjectMapper<Domain.Entities.Channels.Channel, ChannelDto>.Map<Domain.Entities.Channels.Channel>(input);
+        var channel = _mapper.Map<AppChannel>(input);
         channel.Id = Guid.NewGuid();
         channel.CreationAt = DateTime.Now;
         channel.ModificationAt = DateTime.Now;
         await _channelRepository.InsertAsync(channel);
-        return ObjectMapper.Map<ChannelDto>(channel);
+        return _mapper.Map<ChannelDto>(channel);
     }
 
     public async Task UpdateChannelAsync(Guid id, UpdateChannelDto input)
     {
         var channel = await _channelRepository.GetAsync(id);
-        ObjectMapper.Map(input, channel);
+        _mapper.Map(input, channel);
         channel.ModificationAt = DateTime.Now;
         await _channelRepository.UpdateAsync(channel);
     }
@@ -97,14 +103,17 @@ public class ChannelAppService : ChannelServiceBase, IChannelService
 
     public async Task<List<ChannelDto>> AddUserChannel(Guid channelId, Guid userId)
     {
+        var channelMember = await _chatMemberRepository.GetAsync(userId);
         var channel = await _channelRepository.GetAsync(channelId);
         if (channel == null)
         {
-            throw new EntityNotFoundException($"{nameof(Domain.Entities.Channels.Channel)} with id: {channelId} could not be found.");
+            throw new EntityNotFoundException($"{nameof(AppChannel)} with id: {channelId} could not be found.");
         }
-
-        // Add the user to the channel's members list. 
-        channel.ChannelMembers.Add(userId);
+        
+        var isUserAlreadyAMember = channel.ChannelMembers.Any(x => x.Id == userId);
+        if (isUserAlreadyAMember) return await GetListChannelAsync();
+        
+        channel.ChannelMembers.Add(channelMember);
 
         await _channelRepository.UpdateAsync(channel);
 
@@ -113,14 +122,15 @@ public class ChannelAppService : ChannelServiceBase, IChannelService
 
     public async Task<List<ChannelDto>> RemoveUserChannel(Guid channelId, Guid userId)
     {
+        var channelMember = await _chatMemberRepository.GetAsync(userId);
         var channel = await _channelRepository.GetAsync(channelId);
         if (channel == null)
         {
-            throw new EntityNotFoundException($"{nameof(Domain.Entities.Channels.Channel)} with id: {channelId} could not be found.");
+            throw new EntityNotFoundException($"{nameof(AppChannel)} with id: {channelId} could not be found.");
         }
 
         // Remove the user from the channel's members list. TODO: Need to implement a service that takes an `id` and returns an entity
-        channel.ChannelMembers.Remove(userId);
+        channel.ChannelMembers.Remove(channelMember);
 
         await _channelRepository.UpdateAsync(channel);
 

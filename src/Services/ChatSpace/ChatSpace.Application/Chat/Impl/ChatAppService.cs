@@ -15,21 +15,23 @@
 // limitations under the License.
 #endregion
 
-using AutoMapper.Internal.Mappers;
+using AutoMapper;
 using ChatSpace.Application.Chat.DTO;
 using ChatSpace.Domain.Entities.Messages;
 using ChatSpace.Domain.Exceptions;
 using Corpspace.Commons.Domain.Repositories;
 
-namespace ChatSpace.Application.Chat.Iml;
+namespace ChatSpace.Application.Chat.Impl;
 
 public class ChatAppService : ChatAppServiceBase, IChatAppService
 {
     private readonly IRepository<Message, Guid> _messageRepository;
+    private  readonly IMapper _mapper;
 
-    public ChatAppService(IRepository<Message, Guid> messageRepository)
+    public ChatAppService(IRepository<Message, Guid> messageRepository, IMapper mapper)
     {
         _messageRepository = messageRepository;
+        _mapper = mapper;
     }
 
 public async Task<MessageDto> CreateMessage(CreateMessageDto input)
@@ -54,11 +56,11 @@ public async Task<MessageDto> CreateMessage(CreateMessageDto input)
 
 public async Task<MessageDto> GetMessageById(Guid messageId)
 {
-    var message = await _messageRepository.FirstOrDefaultAsync(messageId);
+    var message = await _messageRepository.FirstOrDefaultAsync(m => m.Id == messageId);
 
     if (message == null)
     {
-        throw new EntityNotFoundException(nameof(Message), messageId);
+        throw new EntityNotFoundException($"{nameof(Message)}, {messageId}");
     }
 
     return new MessageDto
@@ -111,28 +113,28 @@ public async Task<List<MessageDto>> GetMessagesByChannelIds(List<Guid> channelId
 
 public async Task DeleteMessage(Guid messageId)
 {
-    var message = await _messageRepository.FirstOrDefaultAsync(messageId);
+    var message = await _messageRepository.FirstOrDefaultAsync(m => m.Id == messageId);
 
     if (message == null)
     {
-        throw new EntityNotFoundException(nameof(Message), messageId);
+        throw new EntityNotFoundException($"{nameof(Message)}, {messageId}");
     }
 
     await _messageRepository.DeleteAsync(message);
 }
 public async Task<MessageDto> UpdateMessage(Guid messageId)
 {
-    var message = await _messageRepository.FirstOrDefaultAsync(messageId);
+    var message = await _messageRepository.FirstOrDefaultAsync(m => m.Id == messageId);
 
     if (message == null)
     {
-        throw new EntityNotFoundException(nameof(Message), messageId);
+        throw new EntityNotFoundException($"{nameof(Message)}, {messageId}");
     }
 
     // Update message properties here
 
     await _messageRepository.UpdateAsync(message);
 
-    return ObjectMapper.Map<MessageDto>(message);
+    return _mapper.Map<MessageDto>(message);
 }
 }
