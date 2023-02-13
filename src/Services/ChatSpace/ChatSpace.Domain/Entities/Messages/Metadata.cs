@@ -29,9 +29,9 @@ public class Metadata : Entity<Guid>, IHasModificationTime
     
     public List<string> Emojis { get; set; }
     
-    public List<FileInfo> Files { get; set; }
+    // public List<FileInfo> Files { get; set; }
     
-    public Dictionary<string, Image> Images { get; set; }
+    // public Dictionary<string, Image> Images { get; set; }
     
     public List<string> Reactions { get; set; }
     

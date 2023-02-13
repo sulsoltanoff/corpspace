@@ -26,7 +26,7 @@ namespace ChatSpace.Domain.Entities.Messages;
 [Table($"{GeneralConstants.ServiceName}_ThreadResponse")]
 public class ThreadResponse : Entity<Guid>, IHasModificationTime
 {
-    public string MessageId { get; set; }
+    public Guid MessageId { get; set; }
     
     public long ReplyCount { get; set; }
     
@@ -36,8 +36,12 @@ public class ThreadResponse : Entity<Guid>, IHasModificationTime
     
     public List<ChatUser> Participants { get; set; }
     
-    public Message Message { get; set; }
+    public Guid ThreadsId { get; set; }
     
+    public Threads AppThreads { get; set; }
+    
+    public Message Message { get; set; }
+
     public long UnreadReplies { get; set; }
     
     public long UnreadMentions { get; set; }

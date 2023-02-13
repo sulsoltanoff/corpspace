@@ -43,7 +43,7 @@ public class Message : Entity<Guid>, IHasModificationTime
 
     public string Type { get; set; }
     
-    public Dictionary<string, object> Props { get; set; }
+    // public Dictionary<string, object> Props { get; set; }
     
     public string Hashtags { get; set; }
     
