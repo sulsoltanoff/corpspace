@@ -1,4 +1,4 @@
-Copyright © $CREATED_YEAR$ The Corpspace Technologies. All rights reserved.
+Copyright © $CREATED_YEAR$ Sultan Soltanov. All rights reserved.
 Author: $USER_NAME$
 
 Licensed under the Apache License, Version 2.0 (the "License");
