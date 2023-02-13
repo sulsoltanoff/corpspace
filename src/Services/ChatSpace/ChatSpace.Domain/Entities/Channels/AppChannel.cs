@@ -56,4 +56,6 @@ public class AppChannel : Entity<Guid>, IHasModificationTime
     public DateTime? DeletionAt { get; set; }
     
     public bool IsDeleted { get; set; }
+    
+    public bool IsPublic { get; set; }
 }
