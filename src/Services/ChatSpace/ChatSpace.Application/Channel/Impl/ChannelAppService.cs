@@ -85,20 +85,24 @@ public class ChannelAppService : ChannelServiceBase, IChannelService
         return _mapper.Map<ChannelDto>(channel);
     }
 
-    public async Task UpdateChannelAsync(Guid id, UpdateChannelDto input)
+    public async Task<AppChannel> UpdateChannelAsync(Guid id, UpdateChannelDto input)
     {
         var channel = await _channelRepository.GetAsync(id);
         _mapper.Map(input, channel);
         channel.ModificationAt = DateTime.Now;
-        await _channelRepository.UpdateAsync(channel);
+        return await _channelRepository.UpdateAsync(channel);
     }
 
-    public async Task DeleteChannelAsync(Guid id)
+    public async Task<bool> DeleteChannelAsync(Guid id)
     {
         var channel = await _channelRepository.GetAsync(id);
+        if (channel == null) return false;
+
         channel.IsDeleted = true;
         channel.DeletionAt = DateTime.Now;
         await _channelRepository.UpdateAsync(channel);
+
+        return true;
     }
 
     public async Task<List<ChannelDto>> AddUserChannel(Guid channelId, Guid userId)
@@ -135,5 +139,27 @@ public class ChannelAppService : ChannelServiceBase, IChannelService
         await _channelRepository.UpdateAsync(channel);
 
         return await GetListChannelAsync();
+    }
+
+    public async Task<List<ChannelDto>> SearchChannelsAsync(SearchChannelDto searchDto)
+    {
+        var channels = await _channelRepository.GetAllListAsync();
+
+        if (!string.IsNullOrEmpty(searchDto.Name))
+        {
+            channels = channels.Where(c => c.Name.Contains(searchDto.Name, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+
+        if (!string.IsNullOrEmpty(searchDto.Description))
+        {
+            channels = channels.Where(c => c.Description.Contains(searchDto.Description, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+
+        if (searchDto.IsPublic.HasValue)
+        {
+            channels = channels.Where(c => c.IsPublic == searchDto.IsPublic).ToList();
+        }
+
+        return _mapper.Map<List<ChannelDto>>(channels);
     }
 }

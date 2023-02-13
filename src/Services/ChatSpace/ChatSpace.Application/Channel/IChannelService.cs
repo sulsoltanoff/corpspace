@@ -17,6 +17,7 @@
 
 using ChatSpace.Application.Channel.DTO;
 using ChatSpace.Application.Chat.DTO;
+using ChatSpace.Domain.Entities.Channels;
 using Corpspace.Commons.Applications.Services;
 
 namespace ChatSpace.Application.Channel;
@@ -37,11 +38,13 @@ public interface IChannelService : IApplicationService
     
     Task<ChannelDto> CreateChannelAsync(CreateChannelDto input);
     
-    Task UpdateChannelAsync(Guid id, UpdateChannelDto input);
+    Task<AppChannel> UpdateChannelAsync(Guid id, UpdateChannelDto input);
     
-    Task DeleteChannelAsync(Guid id);
+    Task<bool> DeleteChannelAsync(Guid id);
     
     Task<List<ChannelDto>> AddUserChannel(Guid channelId, Guid userId);
     
     Task<List<ChannelDto>> RemoveUserChannel(Guid channelId, Guid userId);
+    
+    Task<List<ChannelDto>> SearchChannelsAsync(SearchChannelDto searchDto);
 }
