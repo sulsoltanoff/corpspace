@@ -18,9 +18,14 @@
 using System.Net;
 using Azure.Core;
 using Azure.Identity;
+using Corpspace.BuildingBlocks.IntegrationEventLogEF;
 using Corpspace.ChatSpace.API;
+using Corpspace.ChatSpace.API.Infrastructure;
+using Corpspace.ChatSpace.Infrastructure;
+using Corpspace.WebHost.Customization;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.Extensions.Options;
 using Serilog;
 
 var configuration = GetConfiguration();
@@ -32,17 +37,18 @@ try
     Log.Information("Configuring web host ({ApplicationContext})...", Corpspace.ChatSpace.API.Program.AppName);
     var host = BuildWebHost(configuration, args);
 
-    // Log.Information("Applying migrations ({ApplicationContext})...", Corpspace.ChatSpace.API.Program.AppName);
-    // host.MigrateDbContext<ChatAppContext>((context, services) =>
-    // {
-    //     var env = services.GetService<IWebHostEnvironment>()!;
-    //     var logger = services.GetService<ILogger<ChatAppContextSeed>>()!;
-    //
-    //     new ChatAppContextSeed()
-    //         .SeedAsync(context, env, logger)
-    //         .Wait();
-    // })
-    // .MigrateDbContext<IntegrationEventLogContext>((_, __) => { });
+    Log.Information("Applying migrations ({ApplicationContext})...", Corpspace.ChatSpace.API.Program.AppName);
+    host.MigrateDbContext<ChatAppContext>((context, services) =>
+    {
+        var env = services.GetService<IWebHostEnvironment>()!;
+        var settings = services.GetService<IOptions<ChatAppSettings>>();
+        var logger = services.GetService<ILogger<ChatAppContextSeed>>()!;
+    
+        new ChatAppContextSeed()
+            .SeedAsync(context, env, settings!, logger)
+            .Wait();
+    })
+    .MigrateDbContext<IntegrationEventLogContext>((_, __) => { });
 
     Log.Information("Starting web host ({ApplicationContext})...", Corpspace.ChatSpace.API.Program.AppName);
     host.Run();
