@@ -20,35 +20,19 @@ using Corpspace.Commons.Applications.Services.DTO;
 
 namespace ChatSpace.Application.Chat.DTO;
 
-public class MessageDto : BaseDto<Guid>
+public class MetadataDto : BaseDto<Guid>
 {
-    public Guid UserId { get; set; }
+    public List<string> Embeds { get; set; }
     
-    public Guid ChannelId { get; set; }
+    public List<string> Emojis { get; set; }
     
-    public Guid OriginalId { get; set; }
+    public Dictionary<string, ImageDto> Images { get; set; }
     
-    public bool IsPinned { get; set; }
+    public List<string> Reactions { get; set; }
     
-    public string Content { get; set; }
+    public string Priority { get; set; }
     
-    public string Type { get; set; }
-    
-    public Dictionary<string, object> Props { get; set; }
-    
-    public string Hashtags { get; set; }
-    
-    public List<string> FileIds { get; set; }
-    
-    public bool HasReactions { get; set; }
-    
-    public long ReplyCount { get; set; }
-    
-    public List<UserDto> Participants { get; set; }
-    
-    public bool? IsFollowing { get; set; }
-    
-    public MetadataDto Metadata { get; set; }
+    public List<string> Acknowledgements { get; set; }
     
     public DateTime ModificationAt { get; set; }
     
