@@ -53,7 +53,16 @@ public class ChatAppContext : DbContext, IUnitOfWork
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        modelBuilder.ApplyConfiguration(new AppChannelTypeConfiguration());
+        modelBuilder.ApplyConfiguration(new ChannelMemberConfiguration());
         modelBuilder.ApplyConfiguration(new ChatUserTypeConfiguration());
+        modelBuilder.ApplyConfiguration(new DraftTypeConfiguration());
+        modelBuilder.ApplyConfiguration(new ImageTypeConfiguration());
+        modelBuilder.ApplyConfiguration(new MessageTypeConfiguration());
+        modelBuilder.ApplyConfiguration(new MetadataTypeConfiguration());
+        modelBuilder.ApplyConfiguration(new TeamTypeConfiguration());
+        modelBuilder.ApplyConfiguration(new ThreadResponseTypeConfiguration());
+        modelBuilder.ApplyConfiguration(new ThreadsTypeConfiguration());
     }
 
     public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default)
