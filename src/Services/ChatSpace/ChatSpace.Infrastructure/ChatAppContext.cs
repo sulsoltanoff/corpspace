@@ -24,6 +24,7 @@ using Corpspace.Commons.Domain.UnitOfWork;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Npgsql;
 
 namespace Corpspace.ChatSpace.Infrastructure;
 
@@ -31,11 +32,17 @@ public class ChatAppContext : DbContext, IUnitOfWork
 {
     private readonly IMediator _mediator;
 
-    public ChatAppContext(DbContextOptions<ChatAppContext> options) : base(options) { }
+    public ChatAppContext(DbContextOptions<ChatAppContext> options) : base(options)
+    {
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+        AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
+    }
     
     public ChatAppContext(DbContextOptions<ChatAppContext> options, IMediator mediator) : base(options)
     {
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+        AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
         System.Diagnostics.Debug.WriteLine("ChatAppContext::ctor ->" + GetHashCode());
     }
 
