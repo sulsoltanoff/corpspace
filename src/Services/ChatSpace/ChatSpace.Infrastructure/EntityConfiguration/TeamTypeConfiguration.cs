@@ -35,16 +35,16 @@ public class TeamTypeConfiguration : IEntityTypeConfiguration<Team>
         
         builder.Property(team => team.Description).HasMaxLength(512);
         
-        builder.Property(team => team.ModificationAt).HasDefaultValueSql("GETDATE()");
+        builder.Property(team => team.ModificationAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
         
-        builder.Property(team => team.CreationAt).HasDefaultValueSql("GETDATE()");
+        builder.Property(team => team.CreationAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
         
         builder.Property(team => team.DeletionAt).IsRequired(false);
         
         builder.Property(team => team.IsDeleted).IsRequired().HasDefaultValue(false);
 
-        builder.HasMany(team => team.Members).WithOne().HasForeignKey("TeamId");
+        builder.HasMany(team => team.Members).WithOne().HasForeignKey(member => member.TeamId);
         
-        builder.HasMany(team => team.Admins).WithOne().HasForeignKey("TeamId");
+        builder.HasMany(team => team.Admins).WithOne().HasForeignKey(admin => admin.TeamId);
     }
 }

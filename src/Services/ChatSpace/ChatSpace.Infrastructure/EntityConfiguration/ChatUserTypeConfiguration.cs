@@ -28,64 +28,58 @@ public class ChatUserTypeConfiguration : IEntityTypeConfiguration<ChatUser>
         builder.ToTable("ChatUsers");
         
         builder.HasKey(chatUser => chatUser.Id);
+        
+        builder.Property(chatUser => chatUser.Username).IsRequired().HasMaxLength(64);
+        
+        builder.Property(chatUser => chatUser.Email).IsRequired().HasMaxLength(256);
+        
+        builder.Property(chatUser => chatUser.EmailVerified).IsRequired().HasDefaultValue(false);
+        
+        builder.Property(chatUser => chatUser.FirstName).HasMaxLength(32);
+        
+        builder.Property(chatUser => chatUser.LastName).HasMaxLength(32);
+        
+        builder.Property(chatUser => chatUser.Position).HasMaxLength(128);
+        
+        builder.Property(chatUser => chatUser.Roles).HasMaxLength(256);
+        
+        builder.Property(chatUser => chatUser.ChannelId).IsRequired();
+        
+        builder.Property(chatUser => chatUser.TeamId).IsRequired();
 
-        builder.Property(chatUser => chatUser.Username)
-            .IsRequired()
-            .HasMaxLength(256);
-
-        builder.Property(chatUser => chatUser.Email)
-            .IsRequired()
-            .HasMaxLength(256);
-
-        builder.Property(chatUser => chatUser.EmailVerified)
-            .IsRequired();
-
-        builder.Property(chatUser => chatUser.FirstName)
-            .HasMaxLength(256);
-
-        builder.Property(chatUser => chatUser.LastName)
-            .HasMaxLength(256);
-
-        builder.Property(chatUser => chatUser.Position)
-            .HasMaxLength(256);
-
-        builder.Property(chatUser => chatUser.Roles)
-            .HasMaxLength(256);
-
-        builder.OwnsOne(chatUser => chatUser.Props);
-
-        builder.OwnsOne(chatUser => chatUser.NotifyProps);
-
-        builder.Property(chatUser => chatUser.LastPictureUpdate)
-            .IsRequired();
-
-        builder.Property(chatUser => chatUser.FailedAttempts)
-            .IsRequired();
-
-        builder.Property(chatUser => chatUser.Locale)
-            .HasMaxLength(256);
-
-        builder.Property(chatUser => chatUser.LastActivityAt)
-            .IsRequired();
-
-        builder.Property(chatUser => chatUser.IsBot)
-            .IsRequired();
-
-        builder.Property(chatUser => chatUser.BotDescription)
-            .HasMaxLength(512);
-
-        builder.Property(chatUser => chatUser.BotLastIconUpdate)
-            .IsRequired();
+        builder.HasOne(chatUser => chatUser.Team)
+            .WithMany(team => team.Members)
+            .HasForeignKey(chatUser => chatUser.TeamId)
+            .OnDelete(DeleteBehavior.Restrict);
+        
+        builder.Property(chatUser => chatUser.Props).HasColumnType("jsonb");
+        
+        builder.Property(chatUser => chatUser.NotifyProps).HasColumnType("jsonb");
+        
+        builder.Property(chatUser => chatUser.LastPictureUpdate).IsRequired();
+        
+        builder.Property(chatUser => chatUser.FailedAttempts).HasDefaultValue(0);
+        
+        builder.Property(chatUser => chatUser.Locale).IsRequired().HasMaxLength(5);
+        
+        builder.Property(chatUser => chatUser.LastActivityAt).IsRequired();
+        
+        builder.Property(chatUser => chatUser.IsBot).IsRequired().HasDefaultValue(false);
+        
+        builder.Property(chatUser => chatUser.BotDescription).HasMaxLength(512);
+        
+        builder.Property(chatUser => chatUser.BotLastIconUpdate).HasDefaultValue(0);
         
         builder.Property(chatUser => chatUser.ModificationAt)
-            .IsRequired();
+            .IsRequired()
+            .HasDefaultValueSql("NOW()");
 
         builder.Property(chatUser => chatUser.CreationAt)
-            .IsRequired();
+            .IsRequired()
+            .HasDefaultValueSql("NOW()");
 
-        builder.Property(chatUser => chatUser.DeletionAt);
-
-        builder.Property(chatUser => chatUser.IsDeleted)
-            .IsRequired();
+        builder.Property(chatUser => chatUser.DeletionAt).IsRequired(false);
+        
+        builder.Property(chatUser => chatUser.IsDeleted).IsRequired().HasDefaultValue(false);
     }
 }

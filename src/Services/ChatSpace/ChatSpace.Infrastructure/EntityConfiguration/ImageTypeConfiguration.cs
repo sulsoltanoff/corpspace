@@ -27,7 +27,7 @@ public class ImageTypeConfiguration : IEntityTypeConfiguration<Image>
     {
         builder.HasKey(x => x.Id);
         builder.Property(x => x.CreationAt).IsRequired();
-        builder.Property(x => x.ModificationAt).HasDefaultValueSql("GETDATE()");
+        builder.Property(x => x.ModificationAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
         builder.Property(x => x.DeletionAt);
         builder.Property(x => x.IsDeleted).HasDefaultValue(false);
     }
