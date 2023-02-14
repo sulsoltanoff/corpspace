@@ -26,33 +26,46 @@ using Polly.Retry;
 
 namespace Corpspace.ChatSpace.API.Infrastructure;
 
-public class ChatAppContextSeed
+public class ChatAppContextSeed : IChatAppContextSeed
 {
-    public async Task SeedAsync(ChatAppContext context, IWebHostEnvironment env, IOptions<ChatAppSettings> settings, ILogger<ChatAppContextSeed> logger)
+    private readonly ChatAppContext _context;
+    private readonly ILogger<ChatAppContextSeed> _logger;
+    private readonly IWebHostEnvironment _env;
+    private readonly IOptions<ChatAppSettings> _settings;
+
+    public ChatAppContextSeed(ChatAppContext context, ILogger<ChatAppContextSeed> logger, IWebHostEnvironment env, IOptions<ChatAppSettings> settings)
     {
-        var policy = CreatePolicy(logger, nameof(ChatAppContextSeed));
+        _context = context;
+        _logger = logger;
+        _env = env;
+        _settings = settings;
+    }
+    
+    public async Task SeedAsync()
+    {
+        var policy = CreatePolicy(_logger, nameof(ChatAppContextSeed));
 
         await policy.ExecuteAsync(async () =>
         {
 
-            var useCustomizationData = settings.Value
+            var useCustomizationData = _settings.Value
                 .UseCustomizationData;
 
-            var contentRootPath = env.ContentRootPath;
+            var contentRootPath = _env.ContentRootPath;
 
 
-            using (context)
+            using (_context)
             {
-                context.Database.Migrate();
+                _context.Database.Migrate();
 
-                if (!context.ChatUsers.Any())
+                if (!_context.ChatUsers.Any())
                 {
-                    context.ChatUsers.AddRange(GetPredefinedCardTypes());
+                    _context.ChatUsers.AddRange(GetPredefinedUsers());
 
-                    await context.SaveChangesAsync();
+                    await _context.SaveChangesAsync();
                 }
 
-                await context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
         });
     }
@@ -70,8 +83,62 @@ public class ChatAppContextSeed
             );
     }
     
-    private IEnumerable<ChatUser> GetPredefinedCardTypes()
+    private IEnumerable<ChatUser> GetPredefinedUsers()
     {
-        return Entity.GetAll<ChatUser>();
+        var chatUsers = new List<ChatUser>
+        {
+            new()
+            {
+                Username = "JohnDoe",
+                Email = "johndoe@example.com",
+                EmailVerified = true,
+                FirstName = "John",
+                LastName = "Doe",
+                Position = "Developer",
+                Roles = "user",
+                ChannelId = Guid.NewGuid(),
+                TeamId = Guid.NewGuid(),
+                Props = new Dictionary<string, string>(),
+                NotifyProps = new Dictionary<string, string>(),
+                LastPictureUpdate = DateTime.Now,
+                FailedAttempts = 0,
+                Locale = "en-US",
+                LastActivityAt = DateTime.Now,
+                IsBot = false,
+                BotDescription = null,
+                BotLastIconUpdate = 0,
+                ModificationAt = DateTime.Now,
+                CreationAt = DateTime.Now,
+                DeletionAt = null,
+                IsDeleted = false
+            },
+            new()
+            {
+                Username = "JaneSmith",
+                Email = "janesmith@example.com",
+                EmailVerified = true,
+                FirstName = "Jane",
+                LastName = "Smith",
+                Position = "Designer",
+                Roles = "user",
+                ChannelId = Guid.NewGuid(),
+                TeamId = Guid.NewGuid(),
+                Props = new Dictionary<string, string>(),
+                NotifyProps = new Dictionary<string, string>(),
+                LastPictureUpdate = DateTime.Now,
+                FailedAttempts = 0,
+                Locale = "en-US",
+                LastActivityAt = DateTime.Now,
+                IsBot = false,
+                BotDescription = null,
+                BotLastIconUpdate = 0,
+                ModificationAt = DateTime.Now,
+                CreationAt = DateTime.Now,
+                DeletionAt = null,
+                IsDeleted = false
+            }
+        };
+    
+        return chatUsers;
     }
 }
