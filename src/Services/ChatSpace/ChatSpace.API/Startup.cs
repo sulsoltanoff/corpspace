@@ -27,6 +27,7 @@ using Corpspace.BuildingBlocks.EventBusRabbitMQ;
 using Corpspace.BuildingBlocks.IntegrationEventLogEF;
 using Corpspace.BuildingBlocks.IntegrationEventLogEF.Services;
 using Corpspace.ChatSpace.API.Controllers;
+using Corpspace.ChatSpace.API.Infrastructure;
 using Corpspace.ChatSpace.API.Infrastructure.AutofacModules;
 using Corpspace.ChatSpace.API.Infrastructure.Filters;
 using Corpspace.ChatSpace.API.Infrastructure.Services;
@@ -331,6 +332,7 @@ static class CustomExtensionsMethods
                 };
             };
         });
+        services.AddScoped<IChatAppContextSeed, ChatAppContextSeed>();
 
         return services;
     }

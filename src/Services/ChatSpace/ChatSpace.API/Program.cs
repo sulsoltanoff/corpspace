@@ -38,17 +38,12 @@ try
     var host = BuildWebHost(configuration, args);
 
     Log.Information("Applying migrations ({ApplicationContext})...", Corpspace.ChatSpace.API.Program.AppName);
-    host.MigrateDbContext<ChatAppContext>((context, services) =>
-    {
-        var env = services.GetService<IWebHostEnvironment>()!;
-        var settings = services.GetService<IOptions<ChatAppSettings>>();
-        var logger = services.GetService<ILogger<ChatAppContextSeed>>()!;
-    
-        new ChatAppContextSeed()
-            .SeedAsync(context, env, settings!, logger)
-            .Wait();
-    })
-    .MigrateDbContext<IntegrationEventLogContext>((_, __) => { });
+    // host.MigrateDbContext<ChatAppContext>((context, services) =>
+    // {
+    //     var contextSeed = services.GetRequiredService<IChatAppContextSeed>();
+    //     contextSeed.SeedAsync().Wait();
+    // })
+    // .MigrateDbContext<IntegrationEventLogContext>((_, __) => { });
 
     Log.Information("Starting web host ({ApplicationContext})...", Corpspace.ChatSpace.API.Program.AppName);
     host.Run();
