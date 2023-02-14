@@ -40,6 +40,10 @@ public class ChatUser : Entity<Guid>, IHasModificationTime
     public string Roles { get; set; }
     
     public Guid ChannelId { get; set; }
+    
+    public Guid TeamId { get; set; }
+    
+    public Team.Team Team { get; set; }
 
     public Dictionary<string, string> Props { get; set; }
     
