@@ -3,9 +3,12 @@
     <PropertyGroup>
         <TargetFramework>net7.0</TargetFramework>
         <Nullable>enable</Nullable>
+        <DockerComposeProjectPath>..\..\..\..\docker-compose.dcproj</DockerComposeProjectPath>
         <ImplicitUsings>enable</ImplicitUsings>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <RootNamespace>Corpspace.ChatSpace.API</RootNamespace>
+        <GenerateErrorForMissingTargetingPacks>false</GenerateErrorForMissingTargetingPacks>
+        <IsTransformWebConfigDisabled>true</IsTransformWebConfigDisabled>
     </PropertyGroup>
 
     <ItemGroup>
@@ -65,7 +68,6 @@
 
     <ItemGroup>
       <Folder Include="Infrastructure\IntegrationEventMigrations" />
-      <Folder Include="Infrastructure\Migrations" />
     </ItemGroup>
 
 </Project>
