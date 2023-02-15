@@ -44,7 +44,5 @@ public class TeamTypeConfiguration : IEntityTypeConfiguration<Team>
         builder.Property(team => team.IsDeleted).IsRequired().HasDefaultValue(false);
 
         builder.HasMany(team => team.Members).WithOne().HasForeignKey(member => member.TeamId);
-        
-        builder.HasMany(team => team.Admins).WithOne().HasForeignKey(admin => admin.TeamId);
     }
 }
