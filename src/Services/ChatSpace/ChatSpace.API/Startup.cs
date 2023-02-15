@@ -20,7 +20,11 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using ChatSpace.Application.Channel;
+using ChatSpace.Application.Channel.Impl;
+using ChatSpace.Application.Channel.Repository;
 using ChatSpace.Application.Chat.Impl;
+using ChatSpace.Domain.Entities.Channels;
 using Corpspace.BuildingBlocks.EventBus;
 using Corpspace.BuildingBlocks.EventBus.Abstractions;
 using Corpspace.BuildingBlocks.EventBusRabbitMQ;
@@ -32,7 +36,9 @@ using Corpspace.ChatSpace.API.Infrastructure.AutofacModules;
 using Corpspace.ChatSpace.API.Infrastructure.Filters;
 using Corpspace.ChatSpace.API.Infrastructure.Services;
 using Corpspace.ChatSpace.Infrastructure;
+using Corpspace.Commons.Domain.Repositories;
 using HealthChecks.UI.Client;
+using MediatR;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -333,6 +339,11 @@ static class CustomExtensionsMethods
             };
         });
         services.AddScoped<IChatAppContextSeed, ChatAppContextSeed>();
+        services.AddScoped<IChannelService, ChannelAppService>();
+        services.AddScoped<IRepository<AppChannel, Guid>, AppChannelRepository>();
+        services.AddScoped<IRepository<ChannelMember, Guid>, ChannelMemberRepository>();
+        services.AddMediatR(typeof(Startup).Assembly);
+        services.AddAutoMapper(typeof(Startup));
 
         return services;
     }

@@ -16,6 +16,7 @@
 #endregion
 
 using System.Net;
+using ChatSpace.Application.Channel;
 using ChatSpace.Application.Channel.DTO;
 using ChatSpace.Application.Channel.Impl;
 using MediatR;
@@ -44,7 +45,7 @@ public class ChannelsController : Controller
     /// <summary>
     /// ChannelAppService is a service for managing channels.
     /// </summary>
-    private readonly ChannelAppService _channelAppService;
+    private readonly IChannelService _channelAppService;
 
     /// <summary>
     /// ChannelsController constructor.
@@ -52,7 +53,7 @@ public class ChannelsController : Controller
     /// <param name="mediator">IMediator instance for sending commands and publishing events.</param>
     /// <param name="logger">ILogger<ChannelsController> instance for logging messages.</param>
     /// <param name="channelAppService">ChannelAppService instance for managing channels.</param>
-    public ChannelsController(IMediator mediator, ILogger<ChannelsController> logger, ChannelAppService channelAppService)
+    public ChannelsController(IMediator mediator, ILogger<ChannelsController> logger, IChannelService channelAppService)
     {
         _mediator = mediator;
         _logger = logger;

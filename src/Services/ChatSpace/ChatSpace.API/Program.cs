@@ -38,10 +38,10 @@ try
     var host = BuildWebHost(configuration, args);
 
     Log.Information("Applying migrations ({ApplicationContext})...", Corpspace.ChatSpace.API.Program.AppName);
-    host.MigrateDbContext<ChatAppContext>((context, services) =>
+    host.MigrateDbContext<ChatAppContext>((_, __) =>
     {
-        var contextSeed = services.GetRequiredService<IChatAppContextSeed>();
-        contextSeed.SeedAsync().Wait();
+        // var contextSeed = services.GetRequiredService<IChatAppContextSeed>();
+        // contextSeed.SeedAsync().Wait();
     })
     .MigrateDbContext<IntegrationEventLogContext>((_, __) => { });
 
