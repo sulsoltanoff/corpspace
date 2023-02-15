@@ -47,10 +47,10 @@ public class ChatUserTypeConfiguration : IEntityTypeConfiguration<ChatUser>
         
         builder.Property(chatUser => chatUser.TeamId).IsRequired();
 
-        builder.HasOne(chatUser => chatUser.Team)
-            .WithMany(team => team.Members)
-            .HasForeignKey(chatUser => chatUser.TeamId)
-            .OnDelete(DeleteBehavior.Restrict);
+        // builder.HasOne(chatUser => chatUser.Team)
+        //     .WithMany(team => team.Members)
+        //     .HasForeignKey(chatUser => chatUser.TeamId)
+        //     .OnDelete(DeleteBehavior.Restrict);
         
         builder.Property(chatUser => chatUser.Props).HasColumnType("jsonb");
         

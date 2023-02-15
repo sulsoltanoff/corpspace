@@ -33,13 +33,13 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("CreationAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("CreatorId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("DeletionAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -58,10 +58,10 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<DateTime>("LastPostAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("ModificationAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -90,11 +90,11 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
 
                     b.Property<DateTime>("CreationAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<DateTime?>("DeletionAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -103,7 +103,7 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
 
                     b.Property<DateTime>("ModificationAt")
                         .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.HasKey("Id");
@@ -130,16 +130,16 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                         .HasColumnType("character varying(1024)");
 
                     b.Property<DateTime>("CreationAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("DeletionAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
                     b.Property<DateTime>("ModificationAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -156,10 +156,10 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreationAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("DeletionAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -168,7 +168,7 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
 
                     b.Property<DateTime>("ModificationAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.HasKey("Id");
@@ -191,10 +191,10 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                         .HasColumnType("character varying(2048)");
 
                     b.Property<DateTime>("CreationAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("DeletionAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<List<string>>("FileIds")
                         .IsRequired()
@@ -223,7 +223,7 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("ModificationAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("OriginalId")
                         .HasColumnType("uuid");
@@ -257,11 +257,11 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                         .HasColumnName("Acknowledgements");
 
                     b.Property<DateTime>("CreationAt")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreationAt");
 
                     b.Property<DateTime?>("DeletionAt")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("DeletionAt");
 
                     b.Property<List<string>>("Embeds")
@@ -279,7 +279,7 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                         .HasColumnName("IsDeleted");
 
                     b.Property<DateTime>("ModificationAt")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("ModificationAt");
 
                     b.Property<string>("Priority")
@@ -304,10 +304,10 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreationAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("DeletionAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
@@ -326,7 +326,7 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("ModificationAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long>("ReplyCount")
                         .HasColumnType("bigint");
@@ -357,16 +357,16 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreationAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("DeletionAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
                     b.Property<DateTime>("ModificationAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<long>("Total")
                         .HasColumnType("bigint");
@@ -393,11 +393,11 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
 
                     b.Property<DateTime>("CreationAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<DateTime?>("DeletionAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -416,7 +416,7 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
 
                     b.Property<DateTime>("ModificationAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<string>("Name")
@@ -450,11 +450,11 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
 
                     b.Property<DateTime>("CreationAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasDefaultValueSql("NOW()");
 
                     b.Property<DateTime?>("DeletionAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -487,7 +487,7 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                         .HasDefaultValue(false);
 
                     b.Property<DateTime>("LastActivityAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -495,7 +495,7 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                         .HasColumnType("character varying(32)");
 
                     b.Property<DateTime>("LastPictureUpdate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Locale")
                         .IsRequired()
@@ -507,7 +507,7 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
 
                     b.Property<DateTime>("ModificationAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasDefaultValueSql("NOW()");
 
                     b.Property<Dictionary<string, string>>("NotifyProps")
@@ -531,9 +531,6 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                     b.Property<Guid>("TeamId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("TeamId1")
-                        .HasColumnType("uuid");
-
                     b.Property<Guid?>("ThreadResponseId")
                         .HasColumnType("uuid");
 
@@ -547,8 +544,6 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                     b.HasIndex("MessageId");
 
                     b.HasIndex("TeamId");
-
-                    b.HasIndex("TeamId1");
 
                     b.HasIndex("ThreadResponseId");
 
@@ -611,22 +606,14 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                         .HasForeignKey("MessageId");
 
                     b.HasOne("ChatSpace.Domain.Entities.Team.Team", null)
-                        .WithMany("Admins")
-                        .HasForeignKey("TeamId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("ChatSpace.Domain.Entities.Team.Team", "Team")
                         .WithMany("Members")
-                        .HasForeignKey("TeamId1")
+                        .HasForeignKey("TeamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ChatSpace.Domain.Entities.Messages.ThreadResponse", null)
                         .WithMany("Participants")
                         .HasForeignKey("ThreadResponseId");
-
-                    b.Navigation("Team");
                 });
 
             modelBuilder.Entity("ChatSpace.Domain.Entities.Channels.AppChannel", b =>
@@ -651,8 +638,6 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
 
             modelBuilder.Entity("ChatSpace.Domain.Entities.Team.Team", b =>
                 {
-                    b.Navigation("Admins");
-
                     b.Navigation("Members");
                 });
 #pragma warning restore 612, 618
