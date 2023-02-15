@@ -8,11 +8,18 @@
 
     <ItemGroup>
       <ProjectReference Include="..\ChatSpace.Domain\ChatSpace.Domain.csproj" />
+      <ProjectReference Include="..\ChatSpace.Infrastructure\ChatSpace.Infrastructure.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="AutoMapper" Version="12.0.1" />
       <PackageReference Include="AutoMapper.Collection" Version="9.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Microsoft.EntityFrameworkCore">
+        <HintPath>..\..\..\..\..\..\..\.nuget\packages\microsoft.entityframeworkcore\7.0.2\lib\net6.0\Microsoft.EntityFrameworkCore.dll</HintPath>
+      </Reference>
     </ItemGroup>
     
 
