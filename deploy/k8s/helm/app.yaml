@@ -27,7 +27,7 @@ app:                                                    # app global settings
       orderingsignalrhub: ordering-signalrhub           # service name for orderingsignalrhub
       identity: identity-api                            # service name for identity api
       mvc: webmvc                                       # service name for web mvc
-      spa: webspa                                       # service name for web spa
+      spa: webangular                                       # service name for web spa
       status: webstatus                                 # service name for web status
       webshoppingapigw: webshoppingapigw                # service name for web shopping Agw
       mobileshoppingapigw: mobileshoppingapigw          # service name for mobile shopping Agw

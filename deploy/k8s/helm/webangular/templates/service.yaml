@@ -3,8 +3,8 @@ kind: Service
 metadata:
   name: {{ .Values.app.svc.spa }}
   labels:
-    app: {{ template "webspa.name" . }}
-    chart: {{ template "webspa.chart" . }}
+    app: {{ template "webangular.name" . }}
+    chart: {{ template "webangular.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
@@ -15,5 +15,5 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app: {{ template "webspa.name" . }}
+    app: {{ template "webangular.name" . }}
     release: {{ .Release.Name }}

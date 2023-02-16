@@ -1,4 +1,4 @@
-name: Deploy webspa
+name: Deploy webangular
 
 on:
   workflow_dispatch:
@@ -6,12 +6,12 @@ on:
     types:
     - deploy
   workflow_run:
-    workflows: ["webspa"]
+    workflows: ["webangular"]
     branches: [dev]
     types: [completed]
 
 env:
-  CHART: webspa
+  CHART: webangular
   NAMESPACE: eshop
   CHART_ROOT: deploy/k8s/helm
 

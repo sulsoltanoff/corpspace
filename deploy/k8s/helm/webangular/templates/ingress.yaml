@@ -5,10 +5,10 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ template "webspa.fullname" . }}
+  name: {{ template "webangular.fullname" . }}
   labels:
-    app: {{ template "webspa.name" . }}
-    chart: {{ template "webspa.chart" . }}
+    app: {{ template "webangular.name" . }}
+    chart: {{ template "webangular.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 {{- with .Values.ingress.annotations }}

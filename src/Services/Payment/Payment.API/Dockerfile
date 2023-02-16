@@ -23,7 +23,7 @@ COPY "Services/Payment/Payment.API/Payment.API.csproj" "Services/Payment/Payment
 COPY "Services/Webhooks/Webhooks.API/Webhooks.API.csproj" "Services/Webhooks/Webhooks.API/Webhooks.API.csproj"
 COPY "Tests/Services/Application.FunctionalTests/Application.FunctionalTests.csproj" "Tests/Services/Application.FunctionalTests/Application.FunctionalTests.csproj"
 COPY "Web/WebhookClient/WebhookClient.csproj" "Web/WebhookClient/WebhookClient.csproj"
-COPY "Web/WebSPA/WebSPA.csproj" "Web/WebSPA/WebSPA.csproj"
+COPY "Web/WebAngular/WebAngular.csproj" "Web/WebAngular/WebAngular.csproj"
 COPY "Web/WebStatus/WebStatus.csproj" "Web/WebStatus/WebStatus.csproj"
 
 COPY "docker-compose.dcproj" "docker-compose.dcproj"

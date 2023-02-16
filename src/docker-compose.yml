@@ -76,7 +76,7 @@ services:
     image: ${REGISTRY:-csp}/angular:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
-      dockerfile: Web/WebSPA/Dockerfile
+      dockerfile: Web/WebAngular/Dockerfile
       args:
         NODE_IMAGE: ${NODE_IMAGE:-node:12.0}
     depends_on:

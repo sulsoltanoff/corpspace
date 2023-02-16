@@ -158,7 +158,7 @@ fi
 
 if [[ $push_images ]]; then
   echo "#################### Pushing images to the container registry ####################"
-  services=(basket.api catalog.api identity.api ordering.api payment.api webmvc webspa webstatus)
+  services=(basket.api catalog.api identity.api ordering.api payment.api webmvc webangular webstatus)
 
   if [[ -z "$(docker image ls -q --filter=reference=eshop/$service:$image_tag)" ]]; then
     image_tag=linux-$image_tag
@@ -225,7 +225,7 @@ fi
 
 echo "#################### Begin $app_name installation using Helm ####################"
 infras=(sql-data nosql-data rabbitmq keystore-data basket-data)
-charts=(eshop-common basket-api catalog-api identity-api mobileshoppingagg ordering-api ordering-backgroundtasks ordering-signalrhub payment-api webmvc webshoppingagg webspa webstatus webhooks-api webhooks-web)
+charts=(eshop-common basket-api catalog-api identity-api mobileshoppingagg ordering-api ordering-backgroundtasks ordering-signalrhub payment-api webmvc webshoppingagg webangular webstatus webhooks-api webhooks-web)
 gateways=(apigwms apigwws)
 
 if [[ !$skip_infrastructure ]]; then

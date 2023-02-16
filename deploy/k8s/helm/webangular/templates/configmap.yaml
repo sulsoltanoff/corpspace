@@ -1,4 +1,4 @@
-{{- $name := include "webspa.fullname" . -}}
+{{- $name := include "webangular.fullname" . -}}
 {{- $identity := include "url-of" (list .Values.app.ingress.entries.identity .) -}}
 {{- $webshoppingapigw := include "url-of" (list .Values.app.ingress.entries.webshoppingapigw .) -}}
 {{- $spa := include "url-of" (list .Values.app.ingress.entries.spa .) -}}
@@ -10,13 +10,13 @@ kind: ConfigMap
 metadata:
   name: "cfg-{{ $name }}"
   labels:
-    app: {{ template "webspa.name" . }}
-    chart: {{ template "webspa.chart" .}}
+    app: {{ template "webangular.name" . }}
+    chart: {{ template "webangular.chart" .}}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 data:
   all__InstrumentationKey: "{{ .Values.inf.appinsights.key }}"
-  webspa__keystore: {{ .Values.inf.redis.keystore.constr }}
+  webangular__keystore: {{ .Values.inf.redis.keystore.constr }}
   internalurls__apigwws: http://{{ .Values.app.svc.webshoppingapigw }}
   internalurls__identity__hc: http://{{ .Values.app.svc.identity }}/hc
   urls__apigwws: {{ $protocol }}://{{ $webshoppingapigw }}

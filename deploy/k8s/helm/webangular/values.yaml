@@ -3,7 +3,7 @@ clusterName: eshop-aks
 pathBase: /
 
 image:
-  repository: eshop/webspa
+  repository: eshop/webangular
   tag: latest
   pullPolicy: IfNotPresent
 
@@ -33,7 +33,7 @@ env:
     - name: ApplicationInsights__InstrumentationKey
       key: all__InstrumentationKey
     - name: DPConnectionString
-      key: webspa__keystore
+      key: webangular__keystore
     - name: PurchaseUrl
       key: urls__apigwws
     - name: CallBackUrl

@@ -25,7 +25,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Identity", "Identity", "{24
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.API", "Services\Identity\Identity.API\Identity.API.csproj", "{A579E108-5445-403D-A407-339AC4D1611B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebSPA", "Web\WebSPA\WebSPA.csproj", "{F16E3C6A-1C94-4EAB-BE91-099618060B68}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAngular", "Web\WebAngular\WebAngular.csproj", "{F16E3C6A-1C94-4EAB-BE91-099618060B68}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildingBlocks", "BuildingBlocks", "{DB0EFB20-B024-4E5E-A75C-52143C131D25}"
 EndProject

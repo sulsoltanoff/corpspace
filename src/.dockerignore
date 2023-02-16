@@ -16,7 +16,7 @@ LICENSE
 **/wwwroot/lib/
 global.json
 **/appsettings.localhost.json
-Web/WebSPA/wwwroot/
+Web/WebAngular/wwwroot/
 packages/
 test-results/
 TestResults/

@@ -1,25 +1,25 @@
-{{- $name := include "webspa.fullname" . -}}
+{{- $name := include "webangular.fullname" . -}}
 {{- $cfgname := printf "%s-%s" "cfg" $name -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "webspa.fullname" . }}
+  name: {{ template "webangular.fullname" . }}
   labels:
     ufo: {{ $cfgname}}
-    app: {{ template "webspa.name" . }}
-    chart: {{ template "webspa.chart" . }}
+    app: {{ template "webangular.name" . }}
+    chart: {{ template "webangular.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: {{ template "webspa.name" . }}
+      app: {{ template "webangular.name" . }}
       release: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: {{ template "webspa.name" . }}
+        app: {{ template "webangular.name" . }}
         release: {{ .Release.Name }}
       {{ if .Values.inf.mesh.enabled -}}
       annotations:

@@ -19,7 +19,7 @@ data:
   webstatus__keystore: {{ .Values.inf.redis.keystore.constr }}
   name__mvc__hc: WebMVC HTTP Check
   internalurls__mvc__hc: http://{{ .Values.app.svc.mvc }}/hc
-  name__spa__hc: WebSPA HTTP Check
+  name__spa__hc: WebAngular HTTP Check
   internalurls__spa__hc: http://{{ .Values.app.svc.spa }}/hc
   name__apigwws__hc: Web Shopping API GW HTTP Check
   internalurls__apigwws__hc: http://{{ .Values.app.svc.webshoppingapigw }}:8001/ready

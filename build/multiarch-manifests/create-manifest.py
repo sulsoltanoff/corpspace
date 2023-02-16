@@ -13,7 +13,7 @@ def main(registry):
 
     services = ["identity.api", "payment.api",
                 "webhooks.api", "mobiles-agg", "web-agg",
-                "webstatus", "webspa", "webhooks.client"]
+                "webstatus", "webangular", "webhooks.client"]
 
     for svc in services:
         print("Creating manifest for {} and tags :latest, :main, and :develop".format(svc))

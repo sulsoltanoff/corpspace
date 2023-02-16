@@ -6,7 +6,7 @@ def queue_all(acr_name=None, git_user=None, repo_name="corpspace", git_branch="m
     services = [
         {"Name": "corpspace-identity", "Image": "corpspace/identity.api", "File": "src/Services/Identity/Identity.API"
                                                                                   "/Dockerfile"},
-        {"Name": "corpspace-spa", "Image": "corpspace/webspa", "File": "src/Web/WebSPA/Dockerfile"},
+        {"Name": "corpspace-spa", "Image": "corpspace/webangular", "File": "src/Web/WebAngular/Dockerfile"},
         {"Name": "corpspace-webstatus", "Image": "corpspace/webstatus", "File": "src/Web/WebStatus/Dockerfile"},
         {"Name": "corpspace-payment", "Image": "corpspace/payment.api", "File": "src/Services/Payment/Payment.API"
                                                                                 "/Dockerfile"},

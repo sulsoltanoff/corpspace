@@ -1,4 +1,4 @@
-name: webspa
+name: webangular
 
 on:
   workflow_dispatch:
@@ -8,8 +8,8 @@ on:
 
     paths:
     - src/BuildingBlocks/**
-    - src/Web/WebSPA/**
-    - .github/workflows/webspa.yml
+    - src/Web/webangular/**
+    - .github/workflows/webangular.yml
   
   pull_request:
     branches:
@@ -17,11 +17,11 @@ on:
     
     paths:
     - src/BuildingBlocks/**
-    - src/Web/WebSPA/**
-    - .github/workflows/webspa.yml
+    - src/Web/WebAngular/**
+    - .github/workflows/webangular.yml
 env:
-  SERVICE: webspa
-  IMAGE: webspa
+  SERVICE: webangular
+  IMAGE: webangular
 
 jobs:
 
