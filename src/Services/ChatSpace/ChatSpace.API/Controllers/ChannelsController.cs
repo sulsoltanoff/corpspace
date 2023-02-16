@@ -77,6 +77,23 @@ public class ChannelsController : Controller
     }
     
     /// <summary>
+    /// Gets all channels list.
+    /// </summary>
+    /// <returns>HTTP status code OK (200) with the channel data on success, HTTP status code Not Found (404) if the channel was not found.</returns>
+    [Route("all/")]
+    [HttpGet]
+    [ProducesResponseType((int)HttpStatusCode.OK)]
+    [ProducesResponseType((int)HttpStatusCode.NotFound)]
+    public async Task<IActionResult> GetAllChannels()
+    {
+        var channel = await _channelAppService.GetListChannelAsync();
+        if (channel == null) return NotFound();
+
+        return Ok(channel);
+    }
+    
+    
+    /// <summary>
     /// Gets a channel by its ID.
     /// </summary>
     /// <param name="id">ID of the channel to get.</param>
