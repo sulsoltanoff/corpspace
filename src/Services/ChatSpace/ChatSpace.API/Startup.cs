@@ -34,6 +34,7 @@ using Corpspace.BuildingBlocks.IntegrationEventLogEF.Services;
 using Corpspace.ChatSpace.API.Controllers;
 using Corpspace.ChatSpace.API.Infrastructure;
 using Corpspace.ChatSpace.API.Infrastructure.AutofacModules;
+using Corpspace.ChatSpace.API.Infrastructure.AutoMapper;
 using Corpspace.ChatSpace.API.Infrastructure.Filters;
 using Corpspace.ChatSpace.API.Infrastructure.Services;
 using Corpspace.ChatSpace.Infrastructure;
@@ -45,7 +46,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
-using RabbitMQ.Client;
 
 namespace Corpspace.ChatSpace.API;
 
@@ -345,6 +345,7 @@ static class CustomExtensionsMethods
         services.AddScoped<IRepository<ChatUser, Guid>, ChannelMemberRepository>();
         services.AddMediatR(typeof(Startup).Assembly);
         services.AddAutoMapper(typeof(Startup));
+        services.AddAutoMapper(typeof(MappingProfile));
 
         return services;
     }

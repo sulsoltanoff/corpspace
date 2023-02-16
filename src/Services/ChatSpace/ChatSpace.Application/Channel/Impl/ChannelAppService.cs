@@ -43,7 +43,6 @@ public class ChannelAppService : ChannelServiceBase, IChannelService
     {
         var channel = await _channelRepository.GetAsync(id);
         return _mapper.Map<ChannelDto>(channel);
-        // return ObjectMapper.Map<ChannelDto>(channel);
     }
 
     public ChannelDto GetChannelById(Guid id)
