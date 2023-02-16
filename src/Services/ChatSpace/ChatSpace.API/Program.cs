@@ -25,7 +25,6 @@ using Corpspace.ChatSpace.Infrastructure;
 using Corpspace.WebHost.Customization;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
-using Microsoft.Extensions.Options;
 using Serilog;
 
 var configuration = GetConfiguration();
@@ -38,10 +37,10 @@ try
     var host = BuildWebHost(configuration, args);
 
     Log.Information("Applying migrations ({ApplicationContext})...", Corpspace.ChatSpace.API.Program.AppName);
-    host.MigrateDbContext<ChatAppContext>((_, __) =>
+    host.MigrateDbContext<ChatAppContext>((context, services) =>
     {
-        // var contextSeed = services.GetRequiredService<IChatAppContextSeed>();
-        // contextSeed.SeedAsync().Wait();
+        var contextSeed = services.GetRequiredService<IChatAppContextSeed>();
+        contextSeed.SeedAsync().Wait();
     })
     .MigrateDbContext<IntegrationEventLogContext>((_, __) => { });
 
@@ -60,12 +59,12 @@ finally
     Log.CloseAndFlush();
 }
 
-IWebHost BuildWebHost(IConfiguration configuration, string[] args) =>
+IWebHost BuildWebHost(IConfiguration config, string[] args) =>
     WebHost.CreateDefaultBuilder(args)
         .CaptureStartupErrors(false)
         .ConfigureKestrel(options =>
         {
-            var ports = GetDefinedPorts(configuration);
+            var ports = GetDefinedPorts(config);
             options.Listen(IPAddress.Any, ports.httpPort, listenOptions =>
             {
                 listenOptions.Protocols = HttpProtocols.Http1AndHttp2;
@@ -77,16 +76,16 @@ IWebHost BuildWebHost(IConfiguration configuration, string[] args) =>
             });
 
         })
-        .ConfigureAppConfiguration(x => x.AddConfiguration(configuration))
+        .ConfigureAppConfiguration(x => x.AddConfiguration(config))
         .UseStartup<Startup>()
         .UseContentRoot(Directory.GetCurrentDirectory())
         .UseSerilog()
         .Build();
 
-Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
+Serilog.ILogger CreateSerilogLogger(IConfiguration config)
 {
-    var seqServerUrl = configuration["Serilog:SeqServerUrl"];
-    var logstashUrl = configuration["Serilog:LogstashgUrl"];
+    var seqServerUrl = config["Serilog:SeqServerUrl"];
+    var logstashUrl = config["Serilog:LogstashgUrl"];
     return new LoggerConfiguration()
         .MinimumLevel.Verbose()
         .Enrich.WithProperty("ApplicationContext", Corpspace.ChatSpace.API.Program.AppName)
@@ -94,7 +93,7 @@ Serilog.ILogger CreateSerilogLogger(IConfiguration configuration)
         .WriteTo.Console()
         .WriteTo.Seq(string.IsNullOrWhiteSpace(seqServerUrl) ? "http://seq" : seqServerUrl)
         .WriteTo.Http(string.IsNullOrWhiteSpace(logstashUrl) ? "http://logstash:8080" : logstashUrl,null)
-        .ReadFrom.Configuration(configuration)
+        .ReadFrom.Configuration(config)
         .CreateLogger();
 }
 

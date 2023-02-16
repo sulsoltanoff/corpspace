@@ -69,14 +69,14 @@ public class ChatAppContextSeed : IChatAppContextSeed
                 if (!_context.AppChannels.Any())
                 {
                     _context.AppChannels.AddRange(GetPredefinedChannels(_context));
-
+                
                     await _context.SaveChangesAsync();
                 }
                 
                 if (!_context.ChatUsers.Any())
                 {
                     _context.ChatUsers.AddRange(GetPredefinedUsers(_context));
-
+                
                     await _context.SaveChangesAsync();
                 }
 
@@ -120,7 +120,6 @@ public class ChatAppContextSeed : IChatAppContextSeed
     private IEnumerable<AppChannel> GetPredefinedChannels(ChatAppContext context)
     {
         var teamId = context.Set<Team>().First().Id;
-        var creatorId = context.Set<ChatUser>().First().Id;
         
         var channels = new List<AppChannel>
         {
@@ -132,7 +131,7 @@ public class ChatAppContextSeed : IChatAppContextSeed
                 Description = "General channel",
                 Name = "general",
                 LastPostAt = DateTime.Now,
-                CreatorId = creatorId,
+                CreatorId = Guid.Empty,
                 ChannelMembers = new List<ChatUser>(),
                 ModificationAt = DateTime.Now,
                 CreationAt = DateTime.Now,
