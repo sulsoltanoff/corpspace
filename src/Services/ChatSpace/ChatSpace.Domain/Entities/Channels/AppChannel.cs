@@ -18,6 +18,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using ChatSpace.Domain.Constants;
+using ChatSpace.Domain.Entities.User;
 using Corpspace.Commons.Domain.Entities;
 using Corpspace.Commons.Domain.Entities.Auditing;
 
@@ -46,7 +47,7 @@ public class AppChannel : Entity<Guid>, IHasModificationTime
     [Required]
     public Guid CreatorId { get; set; }
     
-    public List<ChannelMember> ChannelMembers { get; set; }
+    public List<ChatUser> ChannelMembers { get; set; }
 
     public DateTime ModificationAt { get; set; }
     

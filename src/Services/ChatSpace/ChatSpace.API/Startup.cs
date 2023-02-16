@@ -25,6 +25,7 @@ using ChatSpace.Application.Channel.Impl;
 using ChatSpace.Application.Channel.Repository;
 using ChatSpace.Application.Chat.Impl;
 using ChatSpace.Domain.Entities.Channels;
+using ChatSpace.Domain.Entities.User;
 using Corpspace.BuildingBlocks.EventBus;
 using Corpspace.BuildingBlocks.EventBus.Abstractions;
 using Corpspace.BuildingBlocks.EventBusRabbitMQ;
@@ -341,7 +342,7 @@ static class CustomExtensionsMethods
         services.AddScoped<IChatAppContextSeed, ChatAppContextSeed>();
         services.AddScoped<IChannelService, ChannelAppService>();
         services.AddScoped<IRepository<AppChannel, Guid>, AppChannelRepository>();
-        services.AddScoped<IRepository<ChannelMember, Guid>, ChannelMemberRepository>();
+        services.AddScoped<IRepository<ChatUser, Guid>, ChannelMemberRepository>();
         services.AddMediatR(typeof(Startup).Assembly);
         services.AddAutoMapper(typeof(Startup));
 

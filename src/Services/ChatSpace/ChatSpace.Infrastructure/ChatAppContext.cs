@@ -55,13 +55,11 @@ public class ChatAppContext : DbContext, IUnitOfWork
     public DbSet<Image> Images { get; set; }
     public DbSet<Threads> Threads { get; set; }
     public DbSet<ThreadResponse> ThreadResponses { get; set; }
-    public DbSet<ChannelMember> ChannelMembers { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfiguration(new AppChannelTypeConfiguration());
-        modelBuilder.ApplyConfiguration(new ChannelMemberConfiguration());
         modelBuilder.ApplyConfiguration(new ChatUserTypeConfiguration());
         modelBuilder.ApplyConfiguration(new DraftTypeConfiguration());
         modelBuilder.ApplyConfiguration(new ImageTypeConfiguration());

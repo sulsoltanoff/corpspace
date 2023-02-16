@@ -133,7 +133,7 @@ public class ChatAppContextSeed : IChatAppContextSeed
                 Name = "general",
                 LastPostAt = DateTime.Now,
                 CreatorId = creatorId,
-                ChannelMembers = new List<ChannelMember>(),
+                ChannelMembers = new List<ChatUser>(),
                 ModificationAt = DateTime.Now,
                 CreationAt = DateTime.Now,
                 DeletionAt = null,

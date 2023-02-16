@@ -52,7 +52,7 @@ public class AppChannelTypeConfiguration : IEntityTypeConfiguration<AppChannel>
             .IsRequired();
 
         builder.HasMany(appChannel => appChannel.ChannelMembers)
-            .WithOne(member => member.Channel)
+            .WithOne(member => member.AppChannel)
             .HasForeignKey(cm => cm.ChannelId)
             .OnDelete(DeleteBehavior.Cascade);
 

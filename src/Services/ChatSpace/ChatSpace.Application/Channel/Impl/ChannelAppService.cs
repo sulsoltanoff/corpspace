@@ -19,6 +19,7 @@ using AutoMapper;
 using ChatSpace.Application.Channel.DTO;
 using ChatSpace.Application.Chat.DTO;
 using ChatSpace.Domain.Entities.Channels;
+using ChatSpace.Domain.Entities.User;
 using ChatSpace.Domain.Exceptions;
 using Corpspace.Commons.Domain.Repositories;
 
@@ -27,11 +28,11 @@ namespace ChatSpace.Application.Channel.Impl;
 public class ChannelAppService : ChannelServiceBase, IChannelService
 {
     private readonly IRepository<AppChannel, Guid> _channelRepository;
-    private readonly IRepository<ChannelMember, Guid> _chatMemberRepository;
+    private readonly IRepository<ChatUser, Guid> _chatMemberRepository;
     private readonly IMapper _mapper;
 
     public ChannelAppService(IRepository<AppChannel, Guid> channelRepository, 
-        IMapper mapper, IRepository<ChannelMember, Guid> chatMemberRepository)
+        IMapper mapper, IRepository<ChatUser, Guid> chatMemberRepository)
     {
         _channelRepository = channelRepository;
         _mapper = mapper;

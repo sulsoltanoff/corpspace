@@ -16,15 +16,14 @@
 #endregion
 
 using System.Linq.Expressions;
-using ChatSpace.Application.Channel.Impl;
-using ChatSpace.Domain.Entities.Channels;
+using ChatSpace.Domain.Entities.User;
 using Corpspace.ChatSpace.Infrastructure;
 using Corpspace.Commons.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace ChatSpace.Application.Channel.Repository;
 
-public class ChannelMemberRepository : IRepository<ChannelMember, Guid>
+public class ChannelMemberRepository : IRepository<ChatUser, Guid>
 {
     private readonly ChatAppContext _dbContext;
 
@@ -33,109 +32,109 @@ public class ChannelMemberRepository : IRepository<ChannelMember, Guid>
         _dbContext = dbContext;
     }
 
-    public IQueryable<ChannelMember> GetAll()
+    public IQueryable<ChatUser> GetAll()
     {
-        return _dbContext.ChannelMembers;
+        return _dbContext.AppChannels.SelectMany(ac => ac.ChannelMembers);
     }
 
-    public List<ChannelMember> GetAllList()
+    public List<ChatUser> GetAllList()
     {
-        return _dbContext.ChannelMembers.ToList();
+        return _dbContext.AppChannels.SelectMany(ac => ac.ChannelMembers).ToList();
     }
 
-    public async Task<List<ChannelMember>> GetAllListAsync()
+    public async Task<List<ChatUser>> GetAllListAsync()
     {
-        return await _dbContext.ChannelMembers.ToListAsync();
+        return await _dbContext.AppChannels.SelectMany(ac => ac.ChannelMembers).ToListAsync();
     }
 
-    public async Task<List<ChannelMember>> GetListAsync(Expression<Func<ChannelMember, bool>> predicate)
+    public async Task<List<ChatUser>> GetListAsync(Expression<Func<ChatUser, bool>> predicate)
     {
-        return await _dbContext.ChannelMembers.Where(predicate).ToListAsync();
+        return await _dbContext.ChatUsers.Where(predicate).ToListAsync();
     }
 
-    public ChannelMember Get(Guid id)
+    public ChatUser Get(Guid id)
     {
-        return _dbContext.ChannelMembers.Find(id) ?? throw new InvalidOperationException();
+        return _dbContext.ChatUsers.Find(id) ?? throw new InvalidOperationException();
     }
 
-    public async Task<ChannelMember> GetAsync(Guid id)
+    public async Task<ChatUser> GetAsync(Guid id)
     {
-        return await _dbContext.ChannelMembers.FindAsync(id) ?? throw new InvalidOperationException();
+        return await _dbContext.ChatUsers.FindAsync(id) ?? throw new InvalidOperationException();
     }
 
-    public async Task<ChannelMember> FirstOrDefaultAsync(Expression<Func<ChannelMember, bool>> predicate)
+    public async Task<ChatUser> FirstOrDefaultAsync(Expression<Func<ChatUser, bool>> predicate)
     {
-        return await _dbContext.ChannelMembers.FirstOrDefaultAsync(predicate) ?? throw new InvalidOperationException();
+        return await _dbContext.ChatUsers.FirstOrDefaultAsync(predicate) ?? throw new InvalidOperationException();
     }
 
-    public ChannelMember Insert(ChannelMember entity)
+    public ChatUser Insert(ChatUser entity)
     {
-        return _dbContext.ChannelMembers.Add(entity).Entity;
+        return _dbContext.ChatUsers.Add(entity).Entity;
     }
 
-    public async Task<ChannelMember> InsertAsync(ChannelMember entity)
+    public async Task<ChatUser> InsertAsync(ChatUser entity)
     {
-        await _dbContext.ChannelMembers.AddAsync(entity);
+        await _dbContext.ChatUsers.AddAsync(entity);
         return entity;
     }
 
-    public ChannelMember Update(ChannelMember entity)
+    public ChatUser Update(ChatUser entity)
     {
         _dbContext.Entry(entity).State = EntityState.Modified;
         _dbContext.SaveChanges();
         return entity;
     }
 
-    public async Task<ChannelMember> UpdateAsync(ChannelMember entity)
+    public async Task<ChatUser> UpdateAsync(ChatUser entity)
     {
         _dbContext.Entry(entity).State = EntityState.Modified;
         await _dbContext.SaveChangesAsync();
         return entity;
     }
 
-    public void Delete(ChannelMember entity)
+    public void Delete(ChatUser entity)
     {
-        _dbContext.ChannelMembers.Remove(entity);
+        _dbContext.ChatUsers.Remove(entity);
         _dbContext.SaveChanges();
     }
 
     public void Delete(Guid id)
     {
-        var entity = _dbContext.ChannelMembers.Find(id);
-        _dbContext.ChannelMembers.Remove(entity);
+        var entity = _dbContext.ChatUsers.Find(id);
+        _dbContext.ChatUsers.Remove(entity);
         _dbContext.SaveChanges();
     }
 
     public async Task DeleteAsync(Guid id)
     {
-        var entity = await _dbContext.ChannelMembers.FindAsync(id);
-        _dbContext.ChannelMembers.Remove(entity);
+        var entity = await _dbContext.ChatUsers.FindAsync(id);
+        _dbContext.ChatUsers.Remove(entity);
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(ChannelMember entity)
+    public async Task DeleteAsync(ChatUser entity)
     {
-        _dbContext.ChannelMembers.Remove(entity);
+        _dbContext.ChatUsers.Remove(entity);
         await _dbContext.SaveChangesAsync();
     }
 
     public bool Exists(Guid id)
     {
-        return _dbContext.ChannelMembers.Any(e => e.Id == id);
+        return _dbContext.ChatUsers.Any(e => e.Id == id);
     }
 
     public async Task<bool> ExistsAsync(Guid id)
     {
-        return await _dbContext.ChannelMembers.AnyAsync(e => e.Id == id);
+        return await _dbContext.ChatUsers.AnyAsync(e => e.Id == id);
     }
 
-    public ChannelMember Find(Expression<Func<ChannelMember, bool>> predicate)
+    public ChatUser Find(Expression<Func<ChatUser, bool>> predicate)
     {
-        return _dbContext.ChannelMembers.FirstOrDefault(predicate) ?? throw new InvalidOperationException();
+        return _dbContext.ChatUsers.FirstOrDefault(predicate) ?? throw new InvalidOperationException();
     }
 
-    public async Task<ChannelMember> FindAsync(Expression<Func<ChannelMember, bool>> predicate)
+    public async Task<ChatUser> FindAsync(Expression<Func<ChatUser, bool>> predicate)
     {
-        return await _dbContext.ChannelMembers.FirstOrDefaultAsync(predicate) ?? throw new InvalidOperationException();
+        return await _dbContext.ChatUsers.FirstOrDefaultAsync(predicate) ?? throw new InvalidOperationException();
     }
 }
