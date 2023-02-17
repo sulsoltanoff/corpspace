@@ -22,5 +22,5 @@ public enum ChannelsType
     Open,
     Private,
     Group,
-    Direct
+    OneToOne
 }

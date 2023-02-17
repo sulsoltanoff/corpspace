@@ -34,9 +34,9 @@ public class Team : Entity<Guid>, IHasModificationTime
 
     public List<ChatUser> Members { get; set; }
     
-    public DateTime ModificationAt { get; set; }
+    public DateTime? ModificationAt { get; set; }
     
-    public DateTime CreationAt { get; set; }
+    public DateTime? CreationAt { get; set; }
     
     public DateTime? DeletionAt { get; set; }
     

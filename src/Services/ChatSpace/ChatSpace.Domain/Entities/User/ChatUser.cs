@@ -30,7 +30,7 @@ public class ChatUser : Entity<Guid>, IHasModificationTime
     
     public string Email { get; set; }
     
-    public bool EmailVerified { get; set; }
+    public bool? EmailVerified { get; set; }
     
     public string FirstName { get; set; }
     
@@ -40,33 +40,35 @@ public class ChatUser : Entity<Guid>, IHasModificationTime
     
     public string Roles { get; set; }
     
-    public Guid ChannelId { get; set; }
+    public Guid? ChannelId { get; set; }
     
     public AppChannel AppChannel { get; set; }
     
-    public Guid TeamId { get; set; }
+    public Guid? UserTeamId { get; set; }
+    
+    public Team.Team? Team { get; set; }
 
     public Dictionary<string, string> Props { get; set; }
     
     public Dictionary<string, string> NotifyProps { get; set; }
     
-    public DateTime LastPictureUpdate { get; set; }
+    public DateTime? LastPictureUpdate { get; set; }
     
     public int FailedAttempts { get; set; }
     
     public string Locale { get; set; }
     
-    public DateTime LastActivityAt { get; set; }
+    public DateTime? LastActivityAt { get; set; }
     
     public bool IsBot { get; set; }
     
     public string BotDescription { get; set; }
     
-    public long BotLastIconUpdate { get; set; }
+    public DateTime? BotLastIconUpdate { get; set; }
 
-    public DateTime ModificationAt { get; set; }
+    public DateTime? ModificationAt { get; set; }
     
-    public DateTime CreationAt { get; set; }
+    public DateTime? CreationAt { get; set; }
     
     public DateTime? DeletionAt { get; set; }
     

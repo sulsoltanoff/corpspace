@@ -27,32 +27,26 @@ namespace ChatSpace.Domain.Entities.Channels;
 [Table($"{GeneralConstants.ServiceName}_Channel")]
 public class AppChannel : Entity<Guid>, IHasModificationTime
 {
-    [Required]
-    public Guid TeamId { get; set; }
+    public Guid? TeamId { get; set; }
     
-    [Required]
-    public ChannelsType ChannelsType { get; set; }
+    public ChannelsType? ChannelsType { get; set; }
     
-    [Required]
     public string DisplayName { get; set; }
     
     public string Description { get; set; }
     
-    [Required]
     [StringLength(GeneralConstants.ChannelNameMaxLenght)]
     public string Name { get; set; }
     
     public DateTime LastPostAt { get; set; }
-
-    [Required]
-    public Guid CreatorId { get; set; }
+    
+    public Guid? CreatorId { get; set; }
     
     public List<ChatUser> ChannelMembers { get; set; }
 
-    public DateTime ModificationAt { get; set; }
+    public DateTime? ModificationAt { get; set; }
     
-    [Required]
-    public DateTime CreationAt { get; set; }
+    public DateTime? CreationAt { get; set; }
     
     public DateTime? DeletionAt { get; set; }
     

@@ -27,25 +27,22 @@ namespace ChatSpace.Domain.Entities.Messages;
 [Table($"{GeneralConstants.ServiceName}_Message")]
 public class Message : Entity<Guid>, IHasModificationTime
 {
-    [Required]
     public Guid UserId { get; set; }
     
-    [Required]
     public Guid ChannelId { get; set; }
     
     public Guid OriginalId { get; set; }
 
     public bool IsPinned { get; set; }
-
-    [Required]
+    
     [StringLength(GeneralConstants.MaxMessageLength)]
     public string Content { get; set; }
 
     public string Type { get; set; }
     
-    // public Dictionary<string, object> Props { get; set; }
+    public Dictionary<string, object> Props { get; set; }
     
-    public string Hashtags { get; set; }
+    public List<string> Hashtags { get; set; }
     
     public List<string> FileIds { get; set; }
 
@@ -59,9 +56,9 @@ public class Message : Entity<Guid>, IHasModificationTime
     
     public Metadata Metadata { get; set; }
 
-    public DateTime ModificationAt { get; set; }
+    public DateTime? ModificationAt { get; set; }
     
-    public DateTime CreationAt { get; set; }
+    public DateTime? CreationAt { get; set; }
     
     public DateTime? DeletionAt { get; set; }
     

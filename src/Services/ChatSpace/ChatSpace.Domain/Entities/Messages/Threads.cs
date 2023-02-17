@@ -35,9 +35,9 @@ public class Threads : Entity<Guid>, IHasModificationTime
     
     public List<ThreadResponse> ThreadResponses { get; set; }
     
-    public DateTime ModificationAt { get; set; }
+    public DateTime? ModificationAt { get; set; }
     
-    public DateTime CreationAt { get; set; }
+    public DateTime? CreationAt { get; set; }
     
     public DateTime? DeletionAt { get; set; }
     

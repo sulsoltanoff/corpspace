@@ -30,9 +30,9 @@ public class ThreadResponse : Entity<Guid>, IHasModificationTime
     
     public long ReplyCount { get; set; }
     
-    public long LastReplyAt { get; set; }
+    public DateTime? LastReplyAt { get; set; }
     
-    public long LastViewedAt { get; set; }
+    public DateTime? LastViewedAt { get; set; }
     
     public List<ChatUser> Participants { get; set; }
     
@@ -48,9 +48,9 @@ public class ThreadResponse : Entity<Guid>, IHasModificationTime
     
     public bool IsUrgent { get; set; }
 
-    public DateTime ModificationAt { get; set; }
+    public DateTime? ModificationAt { get; set; }
     
-    public DateTime CreationAt { get; set; }
+    public DateTime? CreationAt { get; set; }
     
     public DateTime? DeletionAt { get; set; }
     

@@ -29,9 +29,9 @@ public class Metadata : Entity<Guid>, IHasModificationTime
     
     public List<string> Emojis { get; set; }
     
-    // public List<FileInfo> Files { get; set; }
+    public List<FileInfo> Files { get; set; }
     
-    // public Dictionary<string, Image> Images { get; set; }
+    public Dictionary<string, Image> Images { get; set; }
     
     public List<string> Reactions { get; set; }
     
@@ -39,9 +39,9 @@ public class Metadata : Entity<Guid>, IHasModificationTime
     
     public List<string> Acknowledgements { get; set; }
     
-    public DateTime ModificationAt { get; set; }
+    public DateTime? ModificationAt { get; set; }
     
-    public DateTime CreationAt { get; set; }
+    public DateTime? CreationAt { get; set; }
     
     public DateTime? DeletionAt { get; set; }
     

@@ -25,15 +25,15 @@ namespace ChatSpace.Domain.Entities.Messages;
 [Table($"{GeneralConstants.ServiceName}_Draft")]
 public class Draft : Entity<Guid>, IHasModificationTime
 {
-    public Guid UserId { get; set; }
+    public Guid? UserId { get; set; }
     
-    public Guid ChannelId { get; set; }
+    public Guid? ChannelId { get; set; }
     
     public string Content { get; set; }
     
-    public DateTime ModificationAt { get; set; }
+    public DateTime? ModificationAt { get; set; }
     
-    public DateTime CreationAt { get; set; }
+    public DateTime? CreationAt { get; set; }
     
     public DateTime? DeletionAt { get; set; }
     
