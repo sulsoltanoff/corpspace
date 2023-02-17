@@ -25,6 +25,11 @@ public static class GeneralConstants
     public const string DefaultLangKey = "en";
     public const int MaxMessageLength = 2 * 1024; // 2KB
     public const int ChannelNameMaxLenght = 76;
+    public const int DescriptionMaxLenght = 512;
+    public const int EmailMaxLenght = 256;
+    public const int UserNameMaxLenght = 64;
     public const string ServiceName = "ChatSpace";
     public const int ChannelDescriptionMaxLenght = 256;
+    public const int NameMaxLight = 32;
+    public const int LocaleLenght = 32;
 }
