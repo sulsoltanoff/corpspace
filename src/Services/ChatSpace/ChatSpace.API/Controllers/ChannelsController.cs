@@ -80,7 +80,7 @@ public class ChannelsController : Controller
     /// Gets all channels list.
     /// </summary>
     /// <returns>HTTP status code OK (200) with the channel data on success, HTTP status code Not Found (404) if the channel was not found.</returns>
-    [Route("all/")]
+    [Route("")]
     [HttpGet]
     [ProducesResponseType((int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
@@ -96,16 +96,36 @@ public class ChannelsController : Controller
     /// <summary>
     /// Gets a channel by its ID.
     /// </summary>
-    /// <param name="id">ID of the channel to get.</param>
+    /// <param name="channelId">ID of the channel to get.</param>
     /// <returns>HTTP status code OK (200) with the channel data on success, HTTP status code Not Found (404) if the channel was not found.</returns>
-    [Route("{id:Guid}")]
+    [Route("{channelId:Guid}")]
     [HttpGet]
     [ProducesResponseType((int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
-    public async Task<IActionResult> GetChannelById(Guid id)
+    public async Task<IActionResult> GetChannelById(Guid channelId)
     {
-        var channel = await _channelAppService.GetChannelByIdAsync(id);
+        var channel = await _channelAppService.GetChannelByIdAsync(channelId);
         if (channel == null) return NotFound();
+
+        return Ok(channel);
+    }
+
+    /// <summary>
+    /// Creating a new one-to-one message between two users.
+    /// </summary>
+    /// <param name="channelDto">App channel dto.</param>
+    /// <returns>HTTP status code OK (200) on success, HTTP status code Bad Request (400) on failure.</returns>
+    [Route("one-to-one/")]
+    [HttpPost]
+    [ProducesResponseType(typeof(CreateOneToOneChannelDto), (int)HttpStatusCode.OK)]
+    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+    public async Task<IActionResult> CreateOneToOneChat(CreateOneToOneChannelDto channelDto)
+    {
+        var channel = await _channelAppService.CreateOneToOneChannelAsync(channelDto);
+        if (channel == null)
+        {
+            return BadRequest();
+        }
 
         return Ok(channel);
     }
@@ -133,12 +153,12 @@ public class ChannelsController : Controller
 
 
     /// <summary>
-    /// Retrieves a list of channels based on the search criteria provided in the `searchDto` parameter.
+    /// Gets a list of all channels based on the search criteria specified in the `searchDto` parameter.
     /// </summary>
     /// <param name="searchDto">An instance of `SearchChannelDto` that contains the search criteria for the channels.</param>
     /// <returns>Returns a list of channels that match the search criteria.</returns>
     /// <response code="200">Returns the list of channels.</response>
-    [Route("")]
+    [Route("search/")]
     [HttpGet]
     [ProducesResponseType((int)HttpStatusCode.OK)]
     public async Task<IActionResult> SearchChannels([FromQuery] SearchChannelDto searchDto)
