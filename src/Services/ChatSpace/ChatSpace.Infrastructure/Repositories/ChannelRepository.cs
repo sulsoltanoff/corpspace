@@ -66,6 +66,20 @@ public class ChannelRepository : IRepository<AppChannel, Guid>
         return await GetAll().FirstOrDefaultAsync(predicate) ?? throw new InvalidOperationException();
     }
 
+    public async Task<AppChannel> CreateAsync(AppChannel entity)
+    {
+        var result = await _dbContext.Set<AppChannel>().AddAsync(entity);
+        await _dbContext.SaveChangesAsync();
+        return result.Entity;
+    }
+
+    public AppChannel Create(AppChannel entity)
+    {
+        var result = _dbContext.Set<AppChannel>().Add(entity);
+        _dbContext.SaveChanges();
+        return result.Entity;
+    }
+
     public AppChannel Insert(AppChannel entity)
     {
         entity.CreationAt = DateTime.UtcNow;

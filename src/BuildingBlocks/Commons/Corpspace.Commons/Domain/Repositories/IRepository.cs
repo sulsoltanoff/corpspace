@@ -60,6 +60,16 @@ public interface IRepository<TEntity, in TPrimaryKey> : IRepository where TEntit
     #endregion
     
     
+    
+    #region Create operations
+    Task<TEntity> CreateAsync(TEntity entity);
+    
+    TEntity Create(TEntity entity);
+    
+    #endregion
+
+
+
     #region Insert operations
     TEntity Insert(TEntity entity);
     
