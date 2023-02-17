@@ -29,13 +29,16 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<int>("ChannelsType")
+                    b.Property<int?>("ChannelsType")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("CreationAt")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<DateTime?>("CreationAt")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp without time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                    b.Property<Guid>("CreatorId")
+                    b.Property<Guid?>("CreatorId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("DeletionAt")
@@ -47,12 +50,13 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                         .HasColumnType("character varying(256)");
 
                     b.Property<string>("DisplayName")
-                        .IsRequired()
                         .HasMaxLength(76)
                         .HasColumnType("character varying(76)");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<bool>("IsPublic")
                         .HasColumnType("boolean");
@@ -60,15 +64,17 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                     b.Property<DateTime>("LastPostAt")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime>("ModificationAt")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<DateTime?>("ModificationAt")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp without time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasMaxLength(76)
                         .HasColumnType("character varying(76)");
 
-                    b.Property<Guid>("TeamId")
+                    b.Property<Guid?>("TeamId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
@@ -82,42 +88,20 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("ChannelId")
+                    b.Property<Guid?>("ChannelId")
+                        .IsRequired()
                         .HasColumnType("uuid");
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasMaxLength(1024)
-                        .HasColumnType("character varying(1024)");
+                        .HasMaxLength(2048)
+                        .HasColumnType("character varying(2048)");
 
-                    b.Property<DateTime>("CreationAt")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTime?>("DeletionAt")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTime>("ModificationAt")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Drafts", (string)null);
-                });
-
-            modelBuilder.Entity("ChatSpace.Domain.Entities.Messages.Image", b =>
-                {
-                    b.Property<Guid>("Id")
+                    b.Property<DateTime?>("CreationAt")
+                        .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreationAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp without time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<DateTime?>("DeletionAt")
                         .HasColumnType("timestamp without time zone");
@@ -127,7 +111,43 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                         .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
-                    b.Property<DateTime>("ModificationAt")
+                    b.Property<DateTime?>("ModificationAt")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp without time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<Guid?>("UserId")
+                        .IsRequired()
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ChatSpace_Draft");
+                });
+
+            modelBuilder.Entity("ChatSpace.Domain.Entities.Messages.Image", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("CreationAt")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp without time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<DateTime?>("DeletionAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<DateTime?>("ModificationAt")
+                        .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp without time zone")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
@@ -151,15 +171,18 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                         .HasMaxLength(2048)
                         .HasColumnType("character varying(2048)");
 
-                    b.Property<DateTime>("CreationAt")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<DateTime?>("CreationAt")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp without time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<DateTime?>("DeletionAt")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<List<string>>("FileIds")
+                    b.Property<string>("FileIds")
                         .IsRequired()
-                        .HasColumnType("text[]");
+                        .HasColumnType("text");
 
                     b.Property<bool>("HasReactions")
                         .HasColumnType("boolean");
@@ -169,7 +192,9 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<bool?>("IsFollowing")
                         .HasColumnType("boolean");
@@ -178,16 +203,29 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<bool>("IsRead")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<Guid>("MetadataId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("ModificationAt")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<DateTime?>("ModificationAt")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp without time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<Guid>("OriginalId")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("Participants")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Props")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<long>("ReplyCount")
                         .HasColumnType("bigint");
@@ -201,6 +239,12 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ChannelId");
+
+                    b.HasIndex("CreationAt");
+
+                    b.HasIndex("IsDeleted");
+
                     b.HasIndex("MetadataId");
 
                     b.ToTable("ChatSpace_Message");
@@ -212,50 +256,58 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<List<string>>("Acknowledgements")
+                    b.Property<string>("Acknowledgements")
                         .IsRequired()
-                        .HasColumnType("text[]")
-                        .HasColumnName("Acknowledgements");
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("CreationAt")
+                    b.Property<DateTime?>("CreationAt")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp without time zone")
-                        .HasColumnName("CreationAt");
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<DateTime?>("DeletionAt")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("DeletionAt");
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<List<string>>("Embeds")
+                    b.Property<string>("Embeds")
                         .IsRequired()
-                        .HasColumnType("text[]")
-                        .HasColumnName("Embeds");
+                        .HasColumnType("text");
 
-                    b.Property<List<string>>("Emojis")
+                    b.Property<string>("Emojis")
                         .IsRequired()
-                        .HasColumnType("text[]")
-                        .HasColumnName("Emojis");
+                        .HasColumnType("text");
+
+                    b.Property<string>("Files")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Images")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
-                        .HasColumnName("IsDeleted");
+                        .HasDefaultValue(false);
 
-                    b.Property<DateTime>("ModificationAt")
+                    b.Property<DateTime?>("ModificationAt")
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("timestamp without time zone")
-                        .HasColumnName("ModificationAt");
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<string>("Priority")
                         .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("Priority");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
-                    b.Property<List<string>>("Reactions")
+                    b.Property<string>("Reactions")
                         .IsRequired()
-                        .HasColumnType("text[]")
-                        .HasColumnName("Reactions");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Metadatas", (string)null);
+                    b.ToTable("ChatSpace_Metadata");
                 });
 
             modelBuilder.Entity("ChatSpace.Domain.Entities.Messages.ThreadResponse", b =>
@@ -264,30 +316,43 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("CreationAt")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<DateTime?>("CreationAt")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp without time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<DateTime?>("DeletionAt")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<bool>("IsUrgent")
                         .HasColumnType("boolean");
 
-                    b.Property<long>("LastReplyAt")
-                        .HasColumnType("bigint");
+                    b.Property<DateTime?>("LastReplyAt")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp without time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                    b.Property<long>("LastViewedAt")
-                        .HasColumnType("bigint");
+                    b.Property<DateTime?>("LastViewedAt")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp without time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<Guid>("MessageId")
-                        .HasMaxLength(200)
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("ModificationAt")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<DateTime?>("ModificationAt")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp without time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<long>("ReplyCount")
                         .HasColumnType("bigint");
@@ -308,7 +373,7 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
 
                     b.HasIndex("ThreadsId");
 
-                    b.ToTable("ThreadResponse", (string)null);
+                    b.ToTable("ChatSpace_ThreadResponse");
                 });
 
             modelBuilder.Entity("ChatSpace.Domain.Entities.Messages.Threads", b =>
@@ -317,17 +382,25 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("CreationAt")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<DateTime?>("CreationAt")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp without time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<DateTime?>("DeletionAt")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
-                    b.Property<DateTime>("ModificationAt")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<DateTime?>("ModificationAt")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp without time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<long>("Total")
                         .HasColumnType("bigint");
@@ -343,7 +416,7 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Threads", (string)null);
+                    b.ToTable("ChatSpace_Threads");
                 });
 
             modelBuilder.Entity("ChatSpace.Domain.Entities.Team.Team", b =>
@@ -352,7 +425,8 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("CreationAt")
+                    b.Property<DateTime?>("CreationAt")
+                        .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp without time zone")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
@@ -361,33 +435,34 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(512)
-                        .HasColumnType("character varying(512)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text")
+                        .HasDefaultValue("512");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasMaxLength(76)
+                        .HasColumnType("character varying(76)");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
-                    b.Property<DateTime>("ModificationAt")
+                    b.Property<DateTime?>("ModificationAt")
+                        .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp without time zone")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasMaxLength(76)
+                        .HasColumnType("character varying(76)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Teams", (string)null);
+                    b.ToTable("ChatSpace_Team");
                 });
 
             modelBuilder.Entity("ChatSpace.Domain.Entities.User.ChatUser", b =>
@@ -398,21 +473,21 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
 
                     b.Property<string>("BotDescription")
                         .IsRequired()
-                        .HasMaxLength(512)
-                        .HasColumnType("character varying(512)");
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
-                    b.Property<long>("BotLastIconUpdate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasDefaultValue(0L);
+                    b.Property<DateTime?>("BotLastIconUpdate")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("ChannelId")
+                    b.Property<Guid?>("ChannelId")
+                        .IsRequired()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("CreationAt")
+                    b.Property<DateTime?>("CreationAt")
+                        .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp without time zone")
-                        .HasDefaultValueSql("NOW()");
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<DateTime?>("DeletionAt")
                         .HasColumnType("timestamp without time zone");
@@ -422,7 +497,7 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
-                    b.Property<bool>("EmailVerified")
+                    b.Property<bool?>("EmailVerified")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
                         .HasDefaultValue(false);
@@ -447,7 +522,7 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                         .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
-                    b.Property<DateTime>("LastActivityAt")
+                    b.Property<DateTime?>("LastActivityAt")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("LastName")
@@ -455,21 +530,19 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                         .HasMaxLength(32)
                         .HasColumnType("character varying(32)");
 
-                    b.Property<DateTime>("LastPictureUpdate")
+                    b.Property<DateTime?>("LastPictureUpdate")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Locale")
                         .IsRequired()
-                        .HasMaxLength(5)
-                        .HasColumnType("character varying(5)");
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)");
 
-                    b.Property<Guid?>("MessageId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("ModificationAt")
+                    b.Property<DateTime?>("ModificationAt")
+                        .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp without time zone")
-                        .HasDefaultValueSql("NOW()");
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<Dictionary<string, string>>("NotifyProps")
                         .IsRequired()
@@ -477,8 +550,7 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
 
                     b.Property<string>("Position")
                         .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("text");
 
                     b.Property<Dictionary<string, string>>("Props")
                         .IsRequired()
@@ -486,13 +558,16 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
 
                     b.Property<string>("Roles")
                         .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("text");
 
-                    b.Property<Guid>("TeamId")
+                    b.Property<Guid?>("TeamId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid?>("ThreadResponseId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("UserTeamId")
+                        .IsRequired()
                         .HasColumnType("uuid");
 
                     b.Property<string>("Username")
@@ -504,13 +579,13 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
 
                     b.HasIndex("ChannelId");
 
-                    b.HasIndex("MessageId");
-
                     b.HasIndex("TeamId");
 
                     b.HasIndex("ThreadResponseId");
 
-                    b.ToTable("ChatUsers", (string)null);
+                    b.HasIndex("UserTeamId");
+
+                    b.ToTable("ChatSpace_User");
                 });
 
             modelBuilder.Entity("ChatSpace.Domain.Entities.Messages.Message", b =>
@@ -551,31 +626,28 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ChatSpace.Domain.Entities.Messages.Message", null)
-                        .WithMany("Participants")
-                        .HasForeignKey("MessageId");
-
-                    b.HasOne("ChatSpace.Domain.Entities.Team.Team", null)
-                        .WithMany("Members")
-                        .HasForeignKey("TeamId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("ChatSpace.Domain.Entities.Team.Team", "Team")
+                        .WithMany()
+                        .HasForeignKey("TeamId");
 
                     b.HasOne("ChatSpace.Domain.Entities.Messages.ThreadResponse", null)
                         .WithMany("Participants")
                         .HasForeignKey("ThreadResponseId");
 
+                    b.HasOne("ChatSpace.Domain.Entities.Team.Team", null)
+                        .WithMany("Members")
+                        .HasForeignKey("UserTeamId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("AppChannel");
+
+                    b.Navigation("Team");
                 });
 
             modelBuilder.Entity("ChatSpace.Domain.Entities.Channels.AppChannel", b =>
                 {
                     b.Navigation("ChannelMembers");
-                });
-
-            modelBuilder.Entity("ChatSpace.Domain.Entities.Messages.Message", b =>
-                {
-                    b.Navigation("Participants");
                 });
 
             modelBuilder.Entity("ChatSpace.Domain.Entities.Messages.ThreadResponse", b =>
