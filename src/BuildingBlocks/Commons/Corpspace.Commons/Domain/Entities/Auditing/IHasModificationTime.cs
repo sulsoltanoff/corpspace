@@ -26,12 +26,12 @@ public interface IHasModificationTime
     /// <summary>
     /// The date and time that the object was last modified.
     /// </summary>
-    DateTime ModificationAt { get; set; }
+    DateTime? ModificationAt { get; set; }
 
     /// <summary>
     /// The date and time that the object was created.
     /// </summary>
-    DateTime CreationAt { get; set; }
+    DateTime? CreationAt { get; set; }
 
     /// <summary>
     /// The date and time that the object was deleted.
