@@ -9,6 +9,7 @@
         <RootNamespace>Corpspace.ChatSpace.API</RootNamespace>
         <GenerateErrorForMissingTargetingPacks>false</GenerateErrorForMissingTargetingPacks>
         <IsTransformWebConfigDisabled>true</IsTransformWebConfigDisabled>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>
