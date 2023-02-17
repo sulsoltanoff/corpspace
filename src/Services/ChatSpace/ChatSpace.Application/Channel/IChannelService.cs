@@ -37,7 +37,9 @@ public interface IChannelService : IApplicationService
     Task<List<ChannelDto>> GetListChannelAsync();
     
     Task<ChannelDto> CreateChannelAsync(CreateChannelDto input);
-    
+
+    Task<ChannelDto> CreateOneToOneChannelAsync(CreateOneToOneChannelDto createOneToOneChannel);
+
     Task<AppChannel> UpdateChannelAsync(Guid id, UpdateChannelDto input);
     
     Task<bool> DeleteChannelAsync(Guid id);

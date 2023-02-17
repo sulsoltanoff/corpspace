@@ -53,7 +53,7 @@ public class ChannelAppService : ChannelServiceBase, IChannelService
 
     public async Task<ChannelDto> GetDirectChannelAsync(Guid userId1, Guid userId2)
     {
-        var channel = await _channelRepository.FirstOrDefaultAsync(x => x.ChannelsType == ChannelsType.Direct && (x.CreatorId == userId1 || x.CreatorId == userId2));
+        var channel = await _channelRepository.FirstOrDefaultAsync(x => x.ChannelsType == ChannelsType.OneToOne && (x.CreatorId == userId1 || x.CreatorId == userId2));
         return _mapper.Map<ChannelDto>(channel);
     }
 
@@ -83,6 +83,26 @@ public class ChannelAppService : ChannelServiceBase, IChannelService
         channel.ModificationAt = DateTime.Now;
         await _channelRepository.InsertAsync(channel);
         return _mapper.Map<ChannelDto>(channel);
+    }
+
+
+    public async Task<ChannelDto> CreateOneToOneChannelAsync(CreateOneToOneChannelDto oneToOneChannelDto)
+    {
+        var userOne = await _chatMemberRepository.GetAsync(oneToOneChannelDto.UserIdOne);
+        var userTwo = await _chatMemberRepository.GetAsync(oneToOneChannelDto.UserIdTwo);
+        if (userOne == null || userTwo == null)
+        {
+            throw new ArgumentException("One or both of the specified users do not exist in the system.");
+        }
+        
+        var channel = new AppChannel
+        {
+            ChannelsType = ChannelsType.OneToOne,
+            ChannelMembers = new List<ChatUser> { userOne, userTwo }
+        };
+        var createdChannel = await _channelRepository.CreateAsync(channel);
+        
+        return _mapper.Map<ChannelDto>(createdChannel);
     }
 
     public async Task<AppChannel> UpdateChannelAsync(Guid id, UpdateChannelDto input)

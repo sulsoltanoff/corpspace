@@ -67,6 +67,20 @@ public class ChannelMemberRepository : IRepository<ChatUser, Guid>
         return await _dbContext.ChatUsers.FirstOrDefaultAsync(predicate) ?? throw new InvalidOperationException();
     }
 
+    public async Task<ChatUser> CreateAsync(ChatUser entity)
+    {
+        var result = await _dbContext.Set<ChatUser>().AddAsync(entity);
+        await _dbContext.SaveChangesAsync();
+        return result.Entity;
+    }
+
+    public ChatUser Create(ChatUser entity)
+    {
+        var result = _dbContext.Set<ChatUser>().Add(entity);
+        _dbContext.SaveChanges();
+        return result.Entity;
+    }
+
     public ChatUser Insert(ChatUser entity)
     {
         return _dbContext.ChatUsers.Add(entity).Entity;
