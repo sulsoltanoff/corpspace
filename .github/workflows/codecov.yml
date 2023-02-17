@@ -37,3 +37,4 @@ jobs:
           flags: unittests
           fail_ci_if_error: true
           tokens: ${{ secrets.CODECOV_TOKEN }}
+          version: "v0.1.15"
