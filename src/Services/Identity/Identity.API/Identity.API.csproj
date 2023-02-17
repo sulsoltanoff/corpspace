@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-      <RootNamespace>Corpspace.Services.Identity.API</RootNamespace>
+    <TargetFramework>net70</TargetFramework>
+    <RootNamespace>Corpspace.Services.Identity.API</RootNamespace>
     <UserSecretsId>aspnet-Corpspace.Identity-90487118-103c-4ff0-b9da-e5e26f7ab0c5</UserSecretsId>
     <DockerComposeProjectPath>..\..\..\..\docker-compose.dcproj</DockerComposeProjectPath>
     <GenerateErrorForMissingTargetingPacks>false</GenerateErrorForMissingTargetingPacks>
