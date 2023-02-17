@@ -25,21 +25,23 @@ public class ThreadResponseTypeConfiguration : IEntityTypeConfiguration<ThreadRe
 {
     public void Configure(EntityTypeBuilder<ThreadResponse> builder)
     {
-        builder.ToTable("ThreadResponse");
+        // Set primary key
         builder.HasKey(x => x.Id);
 
+        // Set properties
         builder.Property(x => x.MessageId)
-            .HasMaxLength(200)
             .IsRequired();
 
         builder.Property(x => x.ReplyCount)
             .IsRequired();
 
         builder.Property(x => x.LastReplyAt)
-            .IsRequired();
+            .IsRequired()
+            .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
         builder.Property(x => x.LastViewedAt)
-            .IsRequired();
+            .IsRequired()
+            .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
         builder.HasOne(x => x.AppThreads)
             .WithMany(x => x.ThreadResponses)
@@ -59,16 +61,19 @@ public class ThreadResponseTypeConfiguration : IEntityTypeConfiguration<ThreadRe
             .IsRequired();
 
         builder.Property(x => x.ModificationAt)
-            .IsRequired();
+            .IsRequired()
+            .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
         builder.Property(x => x.CreationAt)
-            .IsRequired();
+            .IsRequired()
+            .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
         builder.Property(x => x.DeletionAt)
             .IsRequired(false);
 
         builder.Property(x => x.IsDeleted)
-            .IsRequired();
+            .IsRequired()
+            .HasDefaultValue(false);
 
         builder.HasMany(x => x.Participants)
             .WithOne();

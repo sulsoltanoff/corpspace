@@ -25,36 +25,39 @@ public class ThreadsTypeConfiguration : IEntityTypeConfiguration<Threads>
 {
     public void Configure(EntityTypeBuilder<Threads> builder)
     {
-            builder.ToTable("Threads");
+        // Set primary key
+        builder.HasKey(x => x.Id);
     
-            builder.HasKey(x => x.Id);
-    
-            builder.Property(x => x.Total)
-                .IsRequired();
-    
-            builder.Property(x => x.TotalUnreadThreads)
-                .IsRequired();
-    
-            builder.Property(x => x.TotalUnreadMentions)
-                .IsRequired();
-    
-            builder.Property(x => x.TotalUnreadUrgentMentions)
-                .IsRequired();
-    
-            builder.Property(x => x.ModificationAt)
-                .IsRequired();
-    
-            builder.Property(x => x.CreationAt)
-                .IsRequired();
-    
-            builder.Property(x => x.DeletionAt)
-                .IsRequired(false);
-    
-            builder.Property(x => x.IsDeleted)
-                .IsRequired();
-    
-            builder.HasMany(x => x.ThreadResponses)
-                .WithOne(x => x.AppThreads)
-                .HasForeignKey(x => x.ThreadsId);
-        }
+        // Set properties
+        builder.Property(x => x.Total)
+            .IsRequired();
+
+        builder.Property(x => x.TotalUnreadThreads)
+            .IsRequired();
+
+        builder.Property(x => x.TotalUnreadMentions)
+            .IsRequired();
+
+        builder.Property(x => x.TotalUnreadUrgentMentions)
+            .IsRequired();
+
+        builder.Property(x => x.ModificationAt)
+            .IsRequired()
+            .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+        builder.Property(x => x.CreationAt)
+            .IsRequired()
+            .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+        builder.Property(x => x.DeletionAt)
+            .IsRequired(false);
+
+        builder.Property(x => x.IsDeleted)
+            .IsRequired()
+            .HasDefaultValue(false);
+
+        builder.HasMany(x => x.ThreadResponses)
+            .WithOne(x => x.AppThreads)
+            .HasForeignKey(x => x.ThreadsId);
+    }
 }

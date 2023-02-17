@@ -15,6 +15,7 @@
 // limitations under the License.
 #endregion
 
+using ChatSpace.Domain.Constants;
 using ChatSpace.Domain.Entities.Messages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -25,30 +26,33 @@ public class DraftTypeConfiguration : IEntityTypeConfiguration<Draft>
 {
     public void Configure(EntityTypeBuilder<Draft> builder)
     {
-        builder.ToTable("Drafts");
+        // Set primary key
+        builder.HasKey(draft => draft.Id);
 
-        builder.HasKey(x => x.Id);
-
-        builder.Property(x => x.UserId)
+        // Set properties
+        builder.Property(draft => draft.UserId)
             .IsRequired();
 
-        builder.Property(x => x.ChannelId)
+        builder.Property(draft => draft.ChannelId)
             .IsRequired();
 
-        builder.Property(x => x.Content)
+        builder.Property(draft => draft.Content)
             .IsRequired()
-            .HasMaxLength(1024);
+            .HasMaxLength(GeneralConstants.MaxMessageLength);
 
-        builder.Property(x => x.ModificationAt)
-            .IsRequired();
+        builder.Property(draft => draft.ModificationAt)
+            .IsRequired()
+            .HasDefaultValueSql("CURRENT_TIMESTAMP");;
 
-        builder.Property(x => x.CreationAt)
-            .IsRequired();
+        builder.Property(draft => draft.CreationAt)
+            .IsRequired()
+            .HasDefaultValueSql("CURRENT_TIMESTAMP");;
 
-        builder.Property(x => x.DeletionAt)
+        builder.Property(draft => draft.DeletionAt)
             .IsRequired(false);
 
-        builder.Property(x => x.IsDeleted)
-            .IsRequired();
+        builder.Property(draft => draft.IsDeleted)
+            .IsRequired()
+            .HasDefaultValue(false);
     }
 }

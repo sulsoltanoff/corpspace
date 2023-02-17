@@ -15,6 +15,7 @@
 // limitations under the License.
 #endregion
 
+using ChatSpace.Domain.Constants;
 using ChatSpace.Domain.Entities.Team;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -25,24 +26,39 @@ public class TeamTypeConfiguration : IEntityTypeConfiguration<Team>
 {
     public void Configure(EntityTypeBuilder<Team> builder)
     {
-        builder.ToTable("Teams");
-        
+        // Set primary key
         builder.HasKey(team => team.Id);
         
-        builder.Property(team => team.Name).IsRequired().HasMaxLength(256);
+        // Set properties
+        builder.Property(team => team.Name)
+            .IsRequired()
+            .HasMaxLength(GeneralConstants.ChannelNameMaxLenght);
         
-        builder.Property(team => team.DisplayName).IsRequired().HasMaxLength(256);
-        
-        builder.Property(team => team.Description).HasMaxLength(512);
-        
-        builder.Property(team => team.ModificationAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
-        
-        builder.Property(team => team.CreationAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
-        
-        builder.Property(team => team.DeletionAt).IsRequired(false);
-        
-        builder.Property(team => team.IsDeleted).IsRequired().HasDefaultValue(false);
+        builder.Property(team => team.DisplayName)
+            .IsRequired()
+            .HasMaxLength(GeneralConstants.ChannelNameMaxLenght);
 
-        builder.HasMany(team => team.Members).WithOne().HasForeignKey(member => member.TeamId);
+        builder.Property(team => team.Description)
+            .IsRequired(false)
+            .HasDefaultValue(GeneralConstants.DescriptionMaxLenght);
+        
+        builder.Property(team => team.ModificationAt)
+            .IsRequired()
+            .HasDefaultValueSql("CURRENT_TIMESTAMP");
+        
+        builder.Property(team => team.CreationAt)
+            .IsRequired()
+            .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+        builder.Property(team => team.DeletionAt)
+            .IsRequired(false);
+        
+        builder.Property(team => team.IsDeleted)
+            .IsRequired()
+            .HasDefaultValue(false);
+
+        builder.HasMany(team => team.Members)
+            .WithOne()
+            .HasForeignKey(member => member.UserTeamId);
     }
 }

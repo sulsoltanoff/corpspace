@@ -25,10 +25,23 @@ public class ImageTypeConfiguration : IEntityTypeConfiguration<Image>
 {
     public void Configure(EntityTypeBuilder<Image> builder)
     {
+        // Set primary key
         builder.HasKey(x => x.Id);
-        builder.Property(x => x.CreationAt).IsRequired();
-        builder.Property(x => x.ModificationAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
-        builder.Property(x => x.DeletionAt);
-        builder.Property(x => x.IsDeleted).HasDefaultValue(false);
+        
+        // Set properties
+        builder.Property(x => x.CreationAt)
+            .IsRequired()
+            .HasDefaultValueSql("CURRENT_TIMESTAMP");;
+        
+        builder.Property(x => x.ModificationAt)
+            .IsRequired()
+            .HasDefaultValueSql("CURRENT_TIMESTAMP");
+        
+        builder.Property(x => x.DeletionAt)
+            .IsRequired(false);
+        
+        builder.Property(x => x.IsDeleted)
+            .IsRequired()
+            .HasDefaultValue(false);
     }
 }

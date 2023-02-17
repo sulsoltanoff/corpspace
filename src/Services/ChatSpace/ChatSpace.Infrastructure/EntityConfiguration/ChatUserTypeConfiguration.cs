@@ -15,6 +15,7 @@
 // limitations under the License.
 #endregion
 
+using ChatSpace.Domain.Constants;
 using ChatSpace.Domain.Entities.User;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -25,61 +26,85 @@ public class ChatUserTypeConfiguration : IEntityTypeConfiguration<ChatUser>
 {
     public void Configure(EntityTypeBuilder<ChatUser> builder)
     {
-        builder.ToTable("ChatUsers");
-        
+        // Set primary key
         builder.HasKey(chatUser => chatUser.Id);
         
-        builder.Property(chatUser => chatUser.Username).IsRequired().HasMaxLength(64);
+        // Set properties
+        builder.Property(chatUser => chatUser.Username)
+            .IsRequired()
+            .HasMaxLength(GeneralConstants.UserNameMaxLenght);
         
-        builder.Property(chatUser => chatUser.Email).IsRequired().HasMaxLength(256);
+        builder.Property(chatUser => chatUser.Email)
+            .IsRequired()
+            .HasMaxLength(GeneralConstants.EmailMaxLenght);
         
-        builder.Property(chatUser => chatUser.EmailVerified).IsRequired().HasDefaultValue(false);
+        builder.Property(chatUser => chatUser.EmailVerified)
+            .IsRequired(false)
+            .HasDefaultValue(false);
         
-        builder.Property(chatUser => chatUser.FirstName).HasMaxLength(32);
+        builder.Property(chatUser => chatUser.FirstName)
+            .HasMaxLength(GeneralConstants.NameMaxLight);
         
-        builder.Property(chatUser => chatUser.LastName).HasMaxLength(32);
-        
-        builder.Property(chatUser => chatUser.Position).HasMaxLength(128);
-        
-        builder.Property(chatUser => chatUser.Roles).HasMaxLength(256);
-        
-        builder.Property(chatUser => chatUser.ChannelId).IsRequired();
-        
-        builder.Property(chatUser => chatUser.TeamId).IsRequired();
+        builder.Property(chatUser => chatUser.LastName)
+            .HasMaxLength(GeneralConstants.NameMaxLight);
 
-        // builder.HasOne(chatUser => chatUser.Team)
-        //     .WithMany(team => team.Members)
-        //     .HasForeignKey(chatUser => chatUser.TeamId)
-        //     .OnDelete(DeleteBehavior.Restrict);
+        builder.Property(chatUser => chatUser.Position);
+
+        builder.Property(chatUser => chatUser.Roles);
+
+        builder.Property(chatUser => chatUser.ChannelId)
+            .IsRequired();
+
+        builder.Property(chatUser => chatUser.UserTeamId);
+
+        builder.HasOne(chatUser => chatUser.Team)
+            .WithMany(team => team.Members)
+            .HasForeignKey(chatUser => chatUser.UserTeamId)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Restrict);
         
-        builder.Property(chatUser => chatUser.Props).HasColumnType("jsonb");
+        builder.Property(chatUser => chatUser.Props)
+            .HasColumnType("jsonb");
         
-        builder.Property(chatUser => chatUser.NotifyProps).HasColumnType("jsonb");
+        builder.Property(chatUser => chatUser.NotifyProps)
+            .HasColumnType("jsonb");
         
-        builder.Property(chatUser => chatUser.LastPictureUpdate).IsRequired();
+        builder.Property(chatUser => chatUser.LastPictureUpdate)
+            .IsRequired(false);
         
-        builder.Property(chatUser => chatUser.FailedAttempts).HasDefaultValue(0);
+        builder.Property(chatUser => chatUser.FailedAttempts)
+            .HasDefaultValue(0);
         
-        builder.Property(chatUser => chatUser.Locale).IsRequired().HasMaxLength(5);
+        builder.Property(chatUser => chatUser.Locale)
+            .IsRequired()
+            .HasMaxLength(GeneralConstants.LocaleLenght);
         
-        builder.Property(chatUser => chatUser.LastActivityAt).IsRequired();
+        builder.Property(chatUser => chatUser.LastActivityAt)
+            .IsRequired(false);
         
-        builder.Property(chatUser => chatUser.IsBot).IsRequired().HasDefaultValue(false);
+        builder.Property(chatUser => chatUser.IsBot)
+            .IsRequired()
+            .HasDefaultValue(false);
         
-        builder.Property(chatUser => chatUser.BotDescription).HasMaxLength(512);
+        builder.Property(chatUser => chatUser.BotDescription)
+            .HasMaxLength(GeneralConstants.ChannelDescriptionMaxLenght);
         
-        builder.Property(chatUser => chatUser.BotLastIconUpdate).HasDefaultValue(0);
+        builder.Property(chatUser => chatUser.BotLastIconUpdate)
+            .IsRequired(false);
         
         builder.Property(chatUser => chatUser.ModificationAt)
             .IsRequired()
-            .HasDefaultValueSql("NOW()");
+            .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
         builder.Property(chatUser => chatUser.CreationAt)
             .IsRequired()
-            .HasDefaultValueSql("NOW()");
+            .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-        builder.Property(chatUser => chatUser.DeletionAt).IsRequired(false);
+        builder.Property(chatUser => chatUser.DeletionAt)
+            .IsRequired(false);
         
-        builder.Property(chatUser => chatUser.IsDeleted).IsRequired().HasDefaultValue(false);
+        builder.Property(chatUser => chatUser.IsDeleted)
+            .IsRequired()
+            .HasDefaultValue(false);
     }
 }

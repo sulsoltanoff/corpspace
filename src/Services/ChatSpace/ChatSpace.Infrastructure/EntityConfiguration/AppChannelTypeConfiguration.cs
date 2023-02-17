@@ -26,30 +26,32 @@ public class AppChannelTypeConfiguration : IEntityTypeConfiguration<AppChannel>
 {
     public void Configure(EntityTypeBuilder<AppChannel> builder)
     {
+        // Set primary key
         builder.HasKey(appChannel => appChannel.Id);
 
+        // Set properties
         builder.Property(appChannel => appChannel.TeamId)
-            .IsRequired();
+            .IsRequired(false);
 
         builder.Property(appChannel => appChannel.ChannelsType)
-            .IsRequired();
+            .IsRequired(false);
 
         builder.Property(appChannel => appChannel.DisplayName)
-            .IsRequired()
+            .IsRequired(false)
             .HasMaxLength(GeneralConstants.ChannelNameMaxLenght);
 
         builder.Property(appChannel => appChannel.Description)
             .HasMaxLength(GeneralConstants.ChannelDescriptionMaxLenght);
 
         builder.Property(appChannel => appChannel.Name)
-            .IsRequired()
+            .IsRequired(false)
             .HasMaxLength(GeneralConstants.ChannelNameMaxLenght);
 
         builder.Property(appChannel => appChannel.LastPostAt)
             .IsRequired();
 
         builder.Property(appChannel => appChannel.CreatorId)
-            .IsRequired();
+            .IsRequired(false);
 
         builder.HasMany(appChannel => appChannel.ChannelMembers)
             .WithOne(member => member.AppChannel)
@@ -57,15 +59,17 @@ public class AppChannelTypeConfiguration : IEntityTypeConfiguration<AppChannel>
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.Property(appChannel => appChannel.ModificationAt)
-            .IsRequired();
+            .IsRequired()
+            .HasDefaultValueSql("CURRENT_TIMESTAMP");;
 
         builder.Property(appChannel => appChannel.CreationAt)
-            .IsRequired();
+            .IsRequired()
+            .HasDefaultValueSql("CURRENT_TIMESTAMP");;
 
         builder.Property(appChannel => appChannel.DeletionAt)
             .IsRequired(false);
 
         builder.Property(appChannel => appChannel.IsDeleted)
-            .IsRequired();
+            .IsRequired().HasDefaultValue(false);
     }
 }
