@@ -126,7 +126,7 @@ public class ChatAppContextSeed : IChatAppContextSeed
             new()
             {
                 TeamId = teamId,
-                ChannelsType = ChannelsType.Open,
+                ChannelsType = ChannelType.Open,
                 DisplayName = "General",
                 Description = "General channel",
                 Name = "general",
