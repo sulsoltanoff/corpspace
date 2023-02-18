@@ -24,16 +24,36 @@ using ChatSpace.Domain.Entities.User;
 
 namespace Corpspace.ChatSpace.API.Infrastructure.AutoMapper;
 
+/// <summary>
+/// Represents a configuration for mapping between data transfer objects (DTOs) and entity objects.
+/// </summary>
 public class MappingProfile : Profile
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="MappingProfile"/> class with pre-defined mappings between entity and DTO types.
+    /// </summary>
     public MappingProfile()
     {
+        // Define mappings for AppChannel
         CreateMap<AppChannel, ChannelDto>();
         CreateMap<ChannelDto, AppChannel>();
+        CreateMap<ChannelsTypeEnum, ChannelsTypeDto>();
+        CreateMap<ChannelsTypeDto, ChannelsTypeEnum>();
+        CreateMap<CreateChannelDto, AppChannel>();
+        CreateMap<AppChannel, CreateChannelDto>();
+        CreateMap<CreateOneToOneChannelDto, AppChannel>();
+        CreateMap<AppChannel, CreateOneToOneChannelDto>();
+        CreateMap<UpdateChannelDto, AppChannel>();
+        CreateMap<AppChannel, UpdateChannelDto>();
+        CreateMap<SearchChannelDto, AppChannel>();
+        CreateMap<AppChannel, SearchChannelDto>();
+
+        // Define mappings for ChatUser
         CreateMap<ChatUser, UserDto>();
         CreateMap<UserDto, ChatUser>();
+        
+        // Define mappings for Message
         CreateMap<Message, MessageDto>();
         CreateMap<MessageDto, Message>();
-        CreateMap<ChannelsType, ChannelsTypeDto>();
     }
 }
