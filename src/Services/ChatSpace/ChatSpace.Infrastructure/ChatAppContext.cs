@@ -20,6 +20,7 @@ using ChatSpace.Domain.Entities.Messages;
 using ChatSpace.Domain.Entities.Team;
 using ChatSpace.Domain.Entities.User;
 using Corpspace.ChatSpace.Infrastructure.EntityConfiguration;
+using Corpspace.ChatSpace.Infrastructure.Utils;
 using Corpspace.Commons.Domain.UnitOfWork;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -60,6 +61,7 @@ public class ChatAppContext : DbContext, IUnitOfWork
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfiguration(new AppChannelTypeConfiguration());
+        modelBuilder.ApplyConfiguration(new ChannelTypeConfiguration());
         modelBuilder.ApplyConfiguration(new ChatUserTypeConfiguration());
         modelBuilder.ApplyConfiguration(new DraftTypeConfiguration());
         modelBuilder.ApplyConfiguration(new ImageTypeConfiguration());
@@ -68,6 +70,10 @@ public class ChatAppContext : DbContext, IUnitOfWork
         modelBuilder.ApplyConfiguration(new TeamTypeConfiguration());
         modelBuilder.ApplyConfiguration(new ThreadResponseTypeConfiguration());
         modelBuilder.ApplyConfiguration(new ThreadsTypeConfiguration());
+        
+        modelBuilder.Entity<AppChannel>()
+            .Property(x => x.ChannelsType)
+            .HasConversion(new ChannelTypeConverter());
     }
 
     public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default)

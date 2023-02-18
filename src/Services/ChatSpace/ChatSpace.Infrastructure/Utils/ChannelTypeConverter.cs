@@ -15,16 +15,15 @@
 // limitations under the License.
 #endregion
 
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+using ChatSpace.Domain.Entities.Channels;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Corpspace.ChatSpace.Infrastructure.Utils;
 
-public class ListValueComparer<T> : ValueComparer<List<T>>
+public class ChannelTypeConverter : ValueConverter<ChannelType?, string>
 {
-    public ListValueComparer() : base(
-        (c1, c2) => c1.SequenceEqual(c2),
-        c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
-        c => new List<T>(c))
-    {
-    }
+    public ChannelTypeConverter() : base(
+        v => (v != null ? v.ToString() : null)!,
+        v => v != null ? (ChannelType?)Enum.Parse(typeof(ChannelType), v) : null)
+    { }
 }

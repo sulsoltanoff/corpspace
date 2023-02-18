@@ -17,7 +17,7 @@
 
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace ChatSpace.Domain.Utils;
+namespace Corpspace.ChatSpace.Infrastructure.Utils;
 
 public class DictionaryValueComparer<TKey, TValue> : ValueComparer<Dictionary<TKey, TValue>>
 {
