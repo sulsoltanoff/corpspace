@@ -32,4 +32,5 @@ public static class GeneralConstants
     public const int ChannelDescriptionMaxLenght = 256;
     public const int NameMaxLight = 32;
     public const int LocaleLenght = 32;
+    public const int ChannelTypeMaxLenght = 32;
 }
