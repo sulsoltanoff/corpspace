@@ -21,6 +21,7 @@ using ChatSpace.Application.Channel.DTO;
 using ChatSpace.Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Corpspace.ChatSpace.API.Controllers;
 
@@ -99,8 +100,9 @@ public class ChannelsController : Controller
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     public async Task<IActionResult> GetAllChannels()
     {
+        _logger.LogDebug("GetAllChannels");
         var channel = await _appChannelAppService.GetListChannelAsync();
-        if (channel == null) return NotFound();
+        if (channel.IsNullOrEmpty()) return NotFound();
 
         return Ok(channel);
     }
@@ -118,7 +120,7 @@ public class ChannelsController : Controller
     public async Task<IActionResult> GetChannelById(Guid channelId)
     {
         var channel = await _appChannelAppService.GetChannelByIdAsync(channelId);
-        if (channel == null) return NotFound();
+        if (channel.Equals(null)) return NotFound();
 
         return Ok(channel);
     }
