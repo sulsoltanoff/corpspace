@@ -19,6 +19,7 @@ using System.Net;
 using ChatSpace.Application.Channel;
 using ChatSpace.Application.Channel.DTO;
 using ChatSpace.Application.Channel.Impl;
+using ChatSpace.Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -69,11 +70,24 @@ public class ChannelsController : Controller
     [HttpPost]
     [ProducesResponseType((int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType((int)HttpStatusCode.Conflict)]
     public async Task<IActionResult> CreatePublicChannel([FromBody] CreateChannelDto channelDto)
     {
         _logger.LogDebug("CreatePublicChannel");
-        await _channelAppService.CreateChannelAsync(channelDto);
-        return Ok();
+        try
+        {
+            await _channelAppService.CreateChannelAsync(channelDto);
+            return Ok();
+        }
+        catch (ChannelAlreadyExistsException ex)
+        {
+            return Conflict(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error creating public channel");
+            return BadRequest("Error creating public channel");
+        }
     }
     
     /// <summary>
