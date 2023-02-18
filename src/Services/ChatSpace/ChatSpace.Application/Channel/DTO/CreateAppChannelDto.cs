@@ -15,12 +15,21 @@
 // limitations under the License.
 #endregion
 
-namespace ChatSpace.Domain.Entities.Channels;
+using Corpspace.Commons.Applications.Services.DTO;
 
-public enum ChannelsTypeEnum
+namespace ChatSpace.Application.Channel.DTO;
+
+public class CreateAppChannelDto : BaseDto<Guid>
 {
-    Open,
-    Private,
-    Group,
-    OneToOne
+    public Guid TeamId { get; set; }
+    
+    public AppChannelsTypeDto AppChannelsType { get; set; }
+    
+    public string DisplayName { get; set; }
+    
+    public string Description { get; set; }
+    
+    public string Name { get; set; }
+    
+    public Guid CreatorId { get; set; }
 }

@@ -25,7 +25,6 @@ using Corpspace.Commons.Domain.UnitOfWork;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using Npgsql;
 
 namespace Corpspace.ChatSpace.Infrastructure;
 
@@ -47,28 +46,28 @@ public class ChatAppContext : DbContext, IUnitOfWork
         System.Diagnostics.Debug.WriteLine("ChatAppContext::ctor ->" + GetHashCode());
     }
 
-    public DbSet<ChatUser> ChatUsers { get; set; }
-    public DbSet<Team> Teams { get; set; }
+    public DbSet<AppUser> AppUsers { get; set; }
+    public DbSet<AppTeam> AppTeams { get; set; }
     public DbSet<Message> Messages { get; set; }
     public DbSet<AppChannel> AppChannels { get; set; }
     public DbSet<Metadata> Metadatas { get; set; }
     public DbSet<Draft> Drafts { get; set; }
     public DbSet<Image> Images { get; set; }
-    public DbSet<Threads> Threads { get; set; }
-    public DbSet<ThreadResponse> ThreadResponses { get; set; }
+    public DbSet<ChatThreads> ChatThreads { get; set; }
+    public DbSet<ChatThreadResponse> ChatThreadResponses { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfiguration(new AppChannelTypeConfiguration());
         modelBuilder.ApplyConfiguration(new ChannelTypeConfiguration());
-        modelBuilder.ApplyConfiguration(new ChatUserTypeConfiguration());
+        modelBuilder.ApplyConfiguration(new AppUserTypeConfiguration());
         modelBuilder.ApplyConfiguration(new DraftTypeConfiguration());
         modelBuilder.ApplyConfiguration(new ImageTypeConfiguration());
         modelBuilder.ApplyConfiguration(new MessageTypeConfiguration());
         modelBuilder.ApplyConfiguration(new MetadataTypeConfiguration());
-        modelBuilder.ApplyConfiguration(new TeamTypeConfiguration());
-        modelBuilder.ApplyConfiguration(new ThreadResponseTypeConfiguration());
+        modelBuilder.ApplyConfiguration(new AppTeamTypeConfiguration());
+        modelBuilder.ApplyConfiguration(new ChatThreadResponseTypeConfiguration());
         modelBuilder.ApplyConfiguration(new ThreadsTypeConfiguration());
         
         modelBuilder.Entity<AppChannel>()

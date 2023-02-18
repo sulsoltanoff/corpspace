@@ -344,9 +344,9 @@ static class CustomExtensionsMethods
             };
         });
         services.AddScoped<IChatAppContextSeed, ChatAppContextSeed>();
-        services.AddScoped<IChannelService, ChannelAppService>();
+        services.AddScoped<IAppChannelService, AppAppChannelAppService>();
         services.AddScoped<IRepository<AppChannel, Guid>, AppChannelRepository>();
-        services.AddScoped<IRepository<ChatUser, Guid>, ChannelMemberRepository>();
+        services.AddScoped<IRepository<AppUser, Guid>, AppChannelMemberRepository>();
         services.AddMediatR(typeof(Startup).Assembly);
         services.AddAutoMapper(typeof(Startup));
         services.AddAutoMapper(typeof(MappingProfile));

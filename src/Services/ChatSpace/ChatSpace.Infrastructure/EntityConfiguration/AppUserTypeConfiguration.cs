@@ -23,9 +23,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Corpspace.ChatSpace.Infrastructure.EntityConfiguration;
 
-public class ChatUserTypeConfiguration : IEntityTypeConfiguration<ChatUser>
+public class AppUserTypeConfiguration : IEntityTypeConfiguration<AppUser>
 {
-    public void Configure(EntityTypeBuilder<ChatUser> builder)
+    public void Configure(EntityTypeBuilder<AppUser> builder)
     {
         // Set primary key
         builder.HasKey(chatUser => chatUser.Id);
@@ -100,17 +100,16 @@ public class ChatUserTypeConfiguration : IEntityTypeConfiguration<ChatUser>
             .IsRequired()
             .HasDefaultValue(false);
         
+        // Set relationships
         builder.HasMany(x => x.AppChannel)
             .WithMany(x => x.ChannelMembers)
             .UsingEntity<Dictionary<string, object>>(
                 "UserChannel",
-                j => j.HasOne<AppChannel>().WithMany().HasForeignKey("ChannelId").OnDelete(DeleteBehavior.Cascade),
-                j => j.HasOne<ChatUser>().WithMany().HasForeignKey("UserId").OnDelete(DeleteBehavior.Cascade),
+                j => j.HasOne<AppChannel>().WithMany().HasForeignKey("AppChannel"),
+                j => j.HasOne<AppUser>().WithMany().HasForeignKey("AppUser"),
                 j =>
                 {
-                    j.HasKey("ChannelId", "UserId");
-                    j.HasData(
-                        new { ChannelId = Guid.NewGuid(), UserId = Guid.NewGuid() });
+                    j.HasKey("AppChannel", "AppUser");
                 });
 
         builder.HasOne(x => x.Team)

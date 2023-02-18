@@ -17,37 +17,23 @@
 
 using System.ComponentModel.DataAnnotations.Schema;
 using ChatSpace.Domain.Constants;
-using ChatSpace.Domain.Entities.User;
 using Corpspace.Commons.Domain.Entities;
 using Corpspace.Commons.Domain.Entities.Auditing;
 
 namespace ChatSpace.Domain.Entities.Messages;
 
-[Table($"{GeneralConstants.ServiceName}_ThreadResponse")]
-public class ThreadResponse : Entity<Guid>, IHasModificationTime
+public class ChatThreads : Entity<Guid>, IHasModificationTime
 {
-    public Guid MessageId { get; set; }
+    public long Total { get; set; }
     
-    public long ReplyCount { get; set; }
+    public long TotalUnreadThreads { get; set; }
     
-    public DateTime? LastReplyAt { get; set; }
+    public long TotalUnreadMentions { get; set; }
     
-    public DateTime? LastViewedAt { get; set; }
+    public long TotalUnreadUrgentMentions { get; set; }
     
-    public List<ChatUser> Participants { get; set; }
+    public List<ChatThreadResponse> ThreadResponses { get; set; }
     
-    public Guid ThreadsId { get; set; }
-    
-    public Threads AppThreads { get; set; }
-    
-    public Message Message { get; set; }
-
-    public long UnreadReplies { get; set; }
-    
-    public long UnreadMentions { get; set; }
-    
-    public bool IsUrgent { get; set; }
-
     public DateTime? ModificationAt { get; set; }
     
     public DateTime? CreationAt { get; set; }

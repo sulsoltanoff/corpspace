@@ -15,28 +15,29 @@
 // limitations under the License.
 #endregion
 
-using System.ComponentModel.DataAnnotations.Schema;
-using ChatSpace.Domain.Constants;
-using ChatSpace.Domain.Entities.User;
-using Corpspace.Commons.Domain.Entities;
-using Corpspace.Commons.Domain.Entities.Auditing;
+using Corpspace.Commons.Applications.Services.DTO;
 
-namespace ChatSpace.Domain.Entities.Team;
+namespace ChatSpace.Application.Channel.DTO;
 
-[Table($"{GeneralConstants.ServiceName}_Team")]
-public class Team : Entity<Guid>, IHasModificationTime
+public class AppChannelDto : BaseDto<Guid>
 {
-    public string Name { get; set; }
+    public Guid TeamId { get; set; }
+    
+    public AppChannelsTypeDto AppChannelsType { get; set; }
     
     public string DisplayName { get; set; }
     
     public string Description { get; set; }
-
-    public List<ChatUser> Members { get; set; }
     
-    public DateTime? ModificationAt { get; set; }
+    public string Name { get; set; }
     
-    public DateTime? CreationAt { get; set; }
+    public DateTime LastPostAt { get; set; }
+    
+    public Guid CreatorId { get; set; }
+    
+    public DateTime ModificationAt { get; set; }
+    
+    public DateTime CreationAt { get; set; }
     
     public DateTime? DeletionAt { get; set; }
     

@@ -20,10 +20,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Corpspace.ChatSpace.Infrastructure.Utils;
 
-public class ChannelTypeConverter : ValueConverter<ChannelType?, string>
+public class ChannelTypeConverter : ValueConverter<AppChannelType?, string>
 {
     public ChannelTypeConverter() : base(
         v => (v != null ? v.ToString() : null)!,
-        v => v != null ? (ChannelType?)Enum.Parse(typeof(ChannelType), v) : null)
+        v => v != null ? (AppChannelType?)Enum.Parse(typeof(AppChannelType), v) : null)
     { }
 }

@@ -22,9 +22,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Corpspace.ChatSpace.Infrastructure.EntityConfiguration;
 
-public class TeamTypeConfiguration : IEntityTypeConfiguration<Team>
+public class AppTeamTypeConfiguration : IEntityTypeConfiguration<AppTeam>
 {
-    public void Configure(EntityTypeBuilder<Team> builder)
+    public void Configure(EntityTypeBuilder<AppTeam> builder)
     {
         // Set primary key
         builder.HasKey(team => team.Id);

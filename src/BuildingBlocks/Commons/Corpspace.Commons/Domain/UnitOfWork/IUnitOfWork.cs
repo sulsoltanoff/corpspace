@@ -15,8 +15,6 @@
 // limitations under the License.
 #endregion
 
-using System.Linq.Expressions;
-
 namespace Corpspace.Commons.Domain.UnitOfWork;
 
 public interface IUnitOfWork : IDisposable

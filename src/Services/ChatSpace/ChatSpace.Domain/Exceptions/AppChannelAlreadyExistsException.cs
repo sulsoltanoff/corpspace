@@ -15,17 +15,19 @@
 // limitations under the License.
 #endregion
 
-using Corpspace.Commons.Applications.Services.DTO;
+namespace ChatSpace.Domain.Exceptions;
 
-namespace ChatSpace.Application.Channel.DTO;
-
-public class SearchChannelDto : BaseDto<Guid>
+public class AppChannelAlreadyExistsException : Exception
 {
-    public string Name { get; set; }
-    
-    public string Description { get; set; }
-    
-    public bool? IsPublic { get; set; }
-    
-    public DateTime CreationAt { get; set; }
+    public AppChannelAlreadyExistsException() : base("The channel already exists.")
+    {
+    }
+
+    public AppChannelAlreadyExistsException(string message) : base(message)
+    {
+    }
+
+    public AppChannelAlreadyExistsException(string message, Exception innerException) : base(message, innerException)
+    {
+    }
 }

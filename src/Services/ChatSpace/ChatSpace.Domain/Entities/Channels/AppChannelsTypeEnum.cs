@@ -15,27 +15,12 @@
 // limitations under the License.
 #endregion
 
-using Corpspace.Commons.Applications.Services.DTO;
+namespace ChatSpace.Domain.Entities.Channels;
 
-namespace ChatSpace.Application.Channel.DTO;
-
-public class CreateOneToOneChannelDto : BaseDto<Guid>
+public enum AppChannelsTypeEnum
 {
-    public string Name { get; set; }
-    
-    public ChannelsTypeDto ChannelsType { get; set; }
-    
-    public DateTime LastPostAt { get; set; }
-    
-    public Guid UserIdOne { get; set; }
-    
-    public Guid UserIdTwo { get; set; }
-    
-    public DateTime ModificationAt { get; set; }
-    
-    public DateTime CreationAt { get; set; }
-    
-    public DateTime? DeletionAt { get; set; }
-    
-    public bool IsDeleted { get; set; }
+    Open,
+    Private,
+    Group,
+    OneToOne
 }

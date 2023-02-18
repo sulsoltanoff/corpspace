@@ -15,7 +15,6 @@
 // limitations under the License.
 #endregion
 
-using System.Text.Json;
 using ChatSpace.Domain.Constants;
 using ChatSpace.Domain.Entities.Messages;
 using ChatSpace.Domain.Entities.User;
@@ -71,9 +70,9 @@ public class MessageTypeConfiguration : IEntityTypeConfiguration<Message>
         builder.Property(m => m.Participants)
             .HasConversion(
                 v => JsonConvert.SerializeObject(v),
-                v => JsonConvert.DeserializeObject<List<ChatUser>>(v, new JsonSerializerSettings { EqualityComparer = EqualityComparer<ChatUser>.Default })!)
+                v => JsonConvert.DeserializeObject<List<AppUser>>(v, new JsonSerializerSettings { EqualityComparer = EqualityComparer<AppUser>.Default })!)
             .Metadata
-            .SetValueComparer(new ListValueComparer<ChatUser>());
+            .SetValueComparer(new ListValueComparer<AppUser>());
 
 
         builder.Property(m => m.FileIds)

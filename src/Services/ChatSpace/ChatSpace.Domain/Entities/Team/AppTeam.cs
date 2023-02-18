@@ -15,11 +15,29 @@
 // limitations under the License.
 #endregion
 
-using Corpspace.Commons.Applications.Services;
+using System.ComponentModel.DataAnnotations.Schema;
+using ChatSpace.Domain.Constants;
+using ChatSpace.Domain.Entities.User;
+using Corpspace.Commons.Domain.Entities;
+using Corpspace.Commons.Domain.Entities.Auditing;
 
-namespace ChatSpace.Application.Channel;
+namespace ChatSpace.Domain.Entities.Team;
 
-public abstract class ChannelServiceBase : ApplicationService
+public class AppTeam : Entity<Guid>, IHasModificationTime
 {
+    public string Name { get; set; }
     
+    public string DisplayName { get; set; }
+    
+    public string Description { get; set; }
+
+    public List<AppUser> Members { get; set; }
+    
+    public DateTime? ModificationAt { get; set; }
+    
+    public DateTime? CreationAt { get; set; }
+    
+    public DateTime? DeletionAt { get; set; }
+    
+    public bool IsDeleted { get; set; }
 }

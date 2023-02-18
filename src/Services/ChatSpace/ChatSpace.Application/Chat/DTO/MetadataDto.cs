@@ -15,7 +15,6 @@
 // limitations under the License.
 #endregion
 
-using ChatSpace.Domain.Entities.Messages;
 using Corpspace.Commons.Applications.Services.DTO;
 
 namespace ChatSpace.Application.Chat.DTO;

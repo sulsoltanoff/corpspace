@@ -15,7 +15,6 @@
 // limitations under the License.
 #endregion
 
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using ChatSpace.Domain.Constants;
 using Corpspace.Commons.Domain.Entities;
@@ -23,7 +22,6 @@ using Corpspace.Commons.Domain.Entities.Auditing;
 
 namespace ChatSpace.Domain.Entities.Messages;
 
-[Table($"{GeneralConstants.ServiceName}_Image")]
 public class Image : Entity<Guid>, IHasModificationTime
 {
     public DateTime? ModificationAt { get; set; }

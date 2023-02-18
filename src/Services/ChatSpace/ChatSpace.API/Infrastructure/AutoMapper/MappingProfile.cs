@@ -35,22 +35,22 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         // Define mappings for AppChannel
-        CreateMap<AppChannel, ChannelDto>();
-        CreateMap<ChannelDto, AppChannel>();
-        CreateMap<ChannelsTypeEnum, ChannelsTypeDto>();
-        CreateMap<ChannelsTypeDto, ChannelsTypeEnum>();
-        CreateMap<CreateChannelDto, AppChannel>();
-        CreateMap<AppChannel, CreateChannelDto>();
-        CreateMap<CreateOneToOneChannelDto, AppChannel>();
-        CreateMap<AppChannel, CreateOneToOneChannelDto>();
-        CreateMap<UpdateChannelDto, AppChannel>();
-        CreateMap<AppChannel, UpdateChannelDto>();
-        CreateMap<SearchChannelDto, AppChannel>();
-        CreateMap<AppChannel, SearchChannelDto>();
+        CreateMap<AppChannel, AppChannelDto>();
+        CreateMap<AppChannelDto, AppChannel>();
+        CreateMap<AppChannelsTypeEnum, AppChannelsTypeDto>();
+        CreateMap<AppChannelsTypeDto, AppChannelsTypeEnum>();
+        CreateMap<CreateAppChannelDto, AppChannel>();
+        CreateMap<AppChannel, CreateAppChannelDto>();
+        CreateMap<CreateOneToOneAppChannelDto, AppChannel>();
+        CreateMap<AppChannel, CreateOneToOneAppChannelDto>();
+        CreateMap<UpdateAppChannelDto, AppChannel>();
+        CreateMap<AppChannel, UpdateAppChannelDto>();
+        CreateMap<SearchAppChannelDto, AppChannel>();
+        CreateMap<AppChannel, SearchAppChannelDto>();
 
         // Define mappings for ChatUser
-        CreateMap<ChatUser, UserDto>();
-        CreateMap<UserDto, ChatUser>();
+        CreateMap<AppUser, UserDto>();
+        CreateMap<UserDto, AppUser>();
         
         // Define mappings for Message
         CreateMap<Message, MessageDto>();

@@ -22,7 +22,6 @@ using Corpspace.Commons.Domain.Entities.Auditing;
 
 namespace ChatSpace.Domain.Entities.Messages;
 
-[Table($"{GeneralConstants.ServiceName}_Draft")]
 public class Draft : Entity<Guid>, IHasModificationTime
 {
     public Guid? UserId { get; set; }

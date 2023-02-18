@@ -26,36 +26,36 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ChatSpace.Application.Channel.Impl;
 
-public class ChannelAppService : ChannelServiceBase, IChannelService
+public class AppAppChannelAppService : AppChannelServiceBase, IAppChannelService
 {
     private readonly IRepository<AppChannel, Guid> _channelRepository;
-    private readonly IRepository<ChatUser, Guid> _chatMemberRepository;
+    private readonly IRepository<AppUser, Guid> _chatMemberRepository;
     private readonly IMapper _mapper;
 
-    public ChannelAppService(IRepository<AppChannel, Guid> channelRepository, 
-        IMapper mapper, IRepository<ChatUser, Guid> chatMemberRepository)
+    public AppAppChannelAppService(IRepository<AppChannel, Guid> channelRepository, 
+        IMapper mapper, IRepository<AppUser, Guid> chatMemberRepository)
     {
         _channelRepository = channelRepository;
         _mapper = mapper;
         _chatMemberRepository = chatMemberRepository;
     }
 
-    public async Task<ChannelDto> GetChannelByIdAsync(Guid id)
+    public async Task<AppChannelDto> GetChannelByIdAsync(Guid id)
     {
         var channel = await _channelRepository.GetAsync(id);
-        return _mapper.Map<ChannelDto>(channel);
+        return _mapper.Map<AppChannelDto>(channel);
     }
 
-    public ChannelDto GetChannelById(Guid id)
+    public AppChannelDto GetChannelById(Guid id)
     {
         var channel = _channelRepository.Get(id);
-        return _mapper.Map<ChannelDto>(channel);
+        return _mapper.Map<AppChannelDto>(channel);
     }
 
-    public async Task<ChannelDto> GetDirectChannelAsync(Guid userId1, Guid userId2)
+    public async Task<AppChannelDto> GetDirectChannelAsync(Guid userId1, Guid userId2)
     {
-        var channel = await _channelRepository.FirstOrDefaultAsync(x => x.ChannelsType == ChannelType.OneToOne && (x.CreatorId == userId1 || x.CreatorId == userId2));
-        return _mapper.Map<ChannelDto>(channel);
+        var channel = await _channelRepository.FirstOrDefaultAsync(x => x.ChannelsType == AppChannelType.OneToOne && (x.CreatorId == userId1 || x.CreatorId == userId2));
+        return _mapper.Map<AppChannelDto>(channel);
     }
 
     public async Task<UserDto> GetChannelMemberAsync(Guid channelId, Guid userId)
@@ -70,20 +70,20 @@ public class ChannelAppService : ChannelServiceBase, IChannelService
         throw new NotImplementedException();
     }
 
-    public async Task<List<ChannelDto>> GetListChannelAsync()
+    public async Task<List<AppChannelDto>> GetListChannelAsync()
     {
         var channels = await _channelRepository.GetAllListAsync();
-        return _mapper.Map<List<ChannelDto>>(channels);
+        return _mapper.Map<List<AppChannelDto>>(channels);
     }
 
-    public async Task<ChannelDto> CreateChannelAsync(CreateChannelDto input)
+    public async Task<AppChannelDto> CreateChannelAsync(CreateAppChannelDto input)
     {
         var channelExists = await _channelRepository.GetAll()
             .AnyAsync(x => x.Name == input.Name);
         
         if (channelExists)
         {
-            throw new ChannelAlreadyExistsException("Channel with this name already exists.");
+            throw new AppChannelAlreadyExistsException("Channel with this name already exists.");
         }
         
         var channel = _mapper.Map<AppChannel>(input);
@@ -91,11 +91,11 @@ public class ChannelAppService : ChannelServiceBase, IChannelService
         channel.CreationAt = DateTime.Now;
         channel.ModificationAt = DateTime.Now;
         await _channelRepository.InsertAsync(channel);
-        return _mapper.Map<ChannelDto>(channel);
+        return _mapper.Map<AppChannelDto>(channel);
     }
 
 
-    public async Task<ChannelDto> CreateOneToOneChannelAsync(CreateOneToOneChannelDto oneToOneChannelDto)
+    public async Task<AppChannelDto> CreateOneToOneChannelAsync(CreateOneToOneAppChannelDto oneToOneChannelDto)
     {
         var userOne = await _chatMemberRepository.GetAsync(oneToOneChannelDto.UserIdOne);
         var userTwo = await _chatMemberRepository.GetAsync(oneToOneChannelDto.UserIdTwo);
@@ -106,15 +106,15 @@ public class ChannelAppService : ChannelServiceBase, IChannelService
         
         var channel = new AppChannel
         {
-            ChannelsType = ChannelType.OneToOne,
-            ChannelMembers = new List<ChatUser> { userOne, userTwo }
+            ChannelsType = AppChannelType.OneToOne,
+            ChannelMembers = new List<AppUser> { userOne, userTwo }
         };
         var createdChannel = await _channelRepository.CreateAsync(channel);
         
-        return _mapper.Map<ChannelDto>(createdChannel);
+        return _mapper.Map<AppChannelDto>(createdChannel);
     }
 
-    public async Task<AppChannel> UpdateChannelAsync(Guid id, UpdateChannelDto input)
+    public async Task<AppChannel> UpdateChannelAsync(Guid id, UpdateAppChannelDto input)
     {
         var channel = await _channelRepository.GetAsync(id);
         _mapper.Map(input, channel);
@@ -134,7 +134,7 @@ public class ChannelAppService : ChannelServiceBase, IChannelService
         return true;
     }
 
-    public async Task<List<ChannelDto>> AddUserChannel(Guid channelId, Guid userId)
+    public async Task<List<AppChannelDto>> AddUserChannel(Guid channelId, Guid userId)
     {
         var channelMember = await _chatMemberRepository.GetAsync(userId);
         var channel = await _channelRepository.GetAsync(channelId);
@@ -153,7 +153,7 @@ public class ChannelAppService : ChannelServiceBase, IChannelService
         return await GetListChannelAsync();
     }
 
-    public async Task<List<ChannelDto>> RemoveUserChannel(Guid channelId, Guid userId)
+    public async Task<List<AppChannelDto>> RemoveUserChannel(Guid channelId, Guid userId)
     {
         var channelMember = await _chatMemberRepository.GetAsync(userId);
         var channel = await _channelRepository.GetAsync(channelId);
@@ -170,25 +170,25 @@ public class ChannelAppService : ChannelServiceBase, IChannelService
         return await GetListChannelAsync();
     }
 
-    public async Task<List<ChannelDto>> SearchChannelsAsync(SearchChannelDto searchDto)
+    public async Task<List<AppChannelDto>> SearchChannelsAsync(SearchAppChannelDto searchAppDto)
     {
         var channels = await _channelRepository.GetAllListAsync();
 
-        if (!string.IsNullOrEmpty(searchDto.Name))
+        if (!string.IsNullOrEmpty(searchAppDto.Name))
         {
-            channels = channels.Where(c => c.Name.Contains(searchDto.Name, StringComparison.OrdinalIgnoreCase)).ToList();
+            channels = channels.Where(c => c.Name.Contains(searchAppDto.Name, StringComparison.OrdinalIgnoreCase)).ToList();
         }
 
-        if (!string.IsNullOrEmpty(searchDto.Description))
+        if (!string.IsNullOrEmpty(searchAppDto.Description))
         {
-            channels = channels.Where(c => c.Description.Contains(searchDto.Description, StringComparison.OrdinalIgnoreCase)).ToList();
+            channels = channels.Where(c => c.Description.Contains(searchAppDto.Description, StringComparison.OrdinalIgnoreCase)).ToList();
         }
 
-        if (searchDto.IsPublic.HasValue)
+        if (searchAppDto.IsPublic.HasValue)
         {
-            channels = channels.Where(c => c.IsPublic == searchDto.IsPublic).ToList();
+            channels = channels.Where(c => c.IsPublic == searchAppDto.IsPublic).ToList();
         }
 
-        return _mapper.Map<List<ChannelDto>>(channels);
+        return _mapper.Map<List<AppChannelDto>>(channels);
     }
 }

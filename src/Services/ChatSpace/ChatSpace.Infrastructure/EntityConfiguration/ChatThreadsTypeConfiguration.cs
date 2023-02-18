@@ -21,43 +21,24 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Corpspace.ChatSpace.Infrastructure.EntityConfiguration;
 
-public class ThreadResponseTypeConfiguration : IEntityTypeConfiguration<ThreadResponse>
+public class ThreadsTypeConfiguration : IEntityTypeConfiguration<ChatThreads>
 {
-    public void Configure(EntityTypeBuilder<ThreadResponse> builder)
+    public void Configure(EntityTypeBuilder<ChatThreads> builder)
     {
         // Set primary key
         builder.HasKey(x => x.Id);
-
+    
         // Set properties
-        builder.Property(x => x.MessageId)
+        builder.Property(x => x.Total)
             .IsRequired();
 
-        builder.Property(x => x.ReplyCount)
+        builder.Property(x => x.TotalUnreadThreads)
             .IsRequired();
 
-        builder.Property(x => x.LastReplyAt)
-            .IsRequired()
-            .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-        builder.Property(x => x.LastViewedAt)
-            .IsRequired()
-            .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-        builder.HasOne(x => x.AppThreads)
-            .WithMany(x => x.ThreadResponses)
-            .HasForeignKey(x => x.ThreadsId);
-
-        builder.HasOne(x => x.Message)
-            .WithOne()
-            .HasForeignKey<ThreadResponse>(x => x.MessageId);
-
-        builder.Property(x => x.UnreadReplies)
+        builder.Property(x => x.TotalUnreadMentions)
             .IsRequired();
 
-        builder.Property(x => x.UnreadMentions)
-            .IsRequired();
-
-        builder.Property(x => x.IsUrgent)
+        builder.Property(x => x.TotalUnreadUrgentMentions)
             .IsRequired();
 
         builder.Property(x => x.ModificationAt)
@@ -75,7 +56,8 @@ public class ThreadResponseTypeConfiguration : IEntityTypeConfiguration<ThreadRe
             .IsRequired()
             .HasDefaultValue(false);
 
-        builder.HasMany(x => x.Participants)
-            .WithOne();
+        builder.HasMany(x => x.ThreadResponses)
+            .WithOne(x => x.AppChatThreads)
+            .HasForeignKey(x => x.ThreadsId);
     }
 }

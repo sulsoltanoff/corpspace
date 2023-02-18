@@ -15,19 +15,19 @@
 // limitations under the License.
 #endregion
 
-namespace ChatSpace.Domain.Exceptions;
+using Corpspace.Commons.Applications.Services.DTO;
 
-public class ChannelAlreadyExistsException : Exception
+namespace ChatSpace.Application.Channel.DTO;
+
+public class UpdateAppChannelDto : BaseDto<Guid>
 {
-    public ChannelAlreadyExistsException() : base("The channel already exists.")
-    {
-    }
-
-    public ChannelAlreadyExistsException(string message) : base(message)
-    {
-    }
-
-    public ChannelAlreadyExistsException(string message, Exception innerException) : base(message, innerException)
-    {
-    }
+    public Guid TeamId { get; set; }
+    
+    public AppChannelsTypeDto AppChannelsType { get; set; }
+    
+    public string DisplayName { get; set; }
+    
+    public string Description { get; set; }
+    
+    public string Name { get; set; }
 }

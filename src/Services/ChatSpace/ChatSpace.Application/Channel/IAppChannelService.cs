@@ -22,31 +22,31 @@ using Corpspace.Commons.Applications.Services;
 
 namespace ChatSpace.Application.Channel;
 
-public interface IChannelService : IApplicationService
+public interface IAppChannelService : IApplicationService
 {
-    Task<ChannelDto> GetChannelByIdAsync(Guid id);
+    Task<AppChannelDto> GetChannelByIdAsync(Guid id);
     
-    ChannelDto GetChannelById(Guid id);
+    AppChannelDto GetChannelById(Guid id);
 
-    Task<ChannelDto> GetDirectChannelAsync(Guid userId1, Guid userId2);
+    Task<AppChannelDto> GetDirectChannelAsync(Guid userId1, Guid userId2);
 
     Task<UserDto> GetChannelMemberAsync(Guid channelId, Guid userId);
     
     Task<List<UserDto>> GetChannelMembersAsync(Guid channelId, Guid userId);
 
-    Task<List<ChannelDto>> GetListChannelAsync();
+    Task<List<AppChannelDto>> GetListChannelAsync();
     
-    Task<ChannelDto> CreateChannelAsync(CreateChannelDto input);
+    Task<AppChannelDto> CreateChannelAsync(CreateAppChannelDto input);
 
-    Task<ChannelDto> CreateOneToOneChannelAsync(CreateOneToOneChannelDto createOneToOneChannel);
+    Task<AppChannelDto> CreateOneToOneChannelAsync(CreateOneToOneAppChannelDto createOneToOneAppChannel);
 
-    Task<AppChannel> UpdateChannelAsync(Guid id, UpdateChannelDto input);
+    Task<AppChannel> UpdateChannelAsync(Guid id, UpdateAppChannelDto input);
     
     Task<bool> DeleteChannelAsync(Guid id);
     
-    Task<List<ChannelDto>> AddUserChannel(Guid channelId, Guid userId);
+    Task<List<AppChannelDto>> AddUserChannel(Guid channelId, Guid userId);
     
-    Task<List<ChannelDto>> RemoveUserChannel(Guid channelId, Guid userId);
+    Task<List<AppChannelDto>> RemoveUserChannel(Guid channelId, Guid userId);
     
-    Task<List<ChannelDto>> SearchChannelsAsync(SearchChannelDto searchDto);
+    Task<List<AppChannelDto>> SearchChannelsAsync(SearchAppChannelDto searchAppDto);
 }

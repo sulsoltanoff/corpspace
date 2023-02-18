@@ -15,10 +15,11 @@
 // limitations under the License.
 #endregion
 
-namespace ChatSpace.Domain.Entities.Messages;
+using Corpspace.Commons.Applications.Services.DTO;
 
-public enum ChatMessageReadState
+namespace ChatSpace.Application.Channel.DTO;
+
+public class AppChannelsTypeDto : BaseDto<Guid>
 {
-    Unread,
-    Read
+    public string Value { get; set; }
 }

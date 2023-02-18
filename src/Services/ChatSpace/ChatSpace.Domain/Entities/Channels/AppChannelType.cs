@@ -15,23 +15,25 @@
 // limitations under the License.
 #endregion
 
+using System.ComponentModel.DataAnnotations.Schema;
+using ChatSpace.Domain.Constants;
 using Corpspace.Commons.Domain.Entities;
 using Corpspace.Commons.Domain.Entities.Auditing;
 
 namespace ChatSpace.Domain.Entities.Channels;
 
-public class ChannelType : Entity<Guid>, IHasModificationTime
+public class AppChannelType : Entity<Guid>, IHasModificationTime
 {
-    private ChannelType(string value) => Value = value;
+    private AppChannelType(string value) => Value = value;
 
     public string Value { get; }
 
-    public static ChannelType Open { get; } = new ChannelType(nameof(Open));
-    public static ChannelType Private { get; } = new ChannelType(nameof(Private));
-    public static ChannelType Group { get; } = new ChannelType(nameof(Group));
-    public static ChannelType OneToOne { get; } = new ChannelType(nameof(OneToOne));
+    public static AppChannelType Open { get; } = new AppChannelType(nameof(Open));
+    public static AppChannelType Private { get; } = new AppChannelType(nameof(Private));
+    public static AppChannelType Group { get; } = new AppChannelType(nameof(Group));
+    public static AppChannelType OneToOne { get; } = new AppChannelType(nameof(OneToOne));
 
-    public static readonly IReadOnlyCollection<ChannelType> All = new[]
+    public static readonly IReadOnlyCollection<AppChannelType> All = new[]
     {
         Open,
         Private,
@@ -39,15 +41,15 @@ public class ChannelType : Entity<Guid>, IHasModificationTime
         OneToOne
     };
 
-    public static ChannelType FromString(string value)
+    public static AppChannelType FromString(string value)
     {
         return All.FirstOrDefault(x => string.Equals(x.Value, value, StringComparison.OrdinalIgnoreCase))
                ?? throw new InvalidOperationException($"Possible values: {string.Join(", ", All.Select(x => x.Value))}");
     }
 
-    public static implicit operator string(ChannelType type) => type.Value;
+    public static implicit operator string(AppChannelType type) => type.Value;
 
-    public static implicit operator ChannelType(string value) => FromString(value);
+    public static implicit operator AppChannelType(string value) => FromString(value);
     
     public DateTime? ModificationAt { get; set; }
     

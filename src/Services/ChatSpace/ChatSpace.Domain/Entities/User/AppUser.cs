@@ -18,13 +18,13 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using ChatSpace.Domain.Constants;
 using ChatSpace.Domain.Entities.Channels;
+using ChatSpace.Domain.Entities.Team;
 using Corpspace.Commons.Domain.Entities;
 using Corpspace.Commons.Domain.Entities.Auditing;
 
 namespace ChatSpace.Domain.Entities.User;
 
-[Table($"{GeneralConstants.ServiceName}_User")]
-public class ChatUser : Entity<Guid>, IHasModificationTime
+public class AppUser : Entity<Guid>, IHasModificationTime
 {
     public string Username { get; set; }
     
@@ -46,7 +46,7 @@ public class ChatUser : Entity<Guid>, IHasModificationTime
     
     public Guid? UserTeamId { get; set; }
     
-    public Team.Team? Team { get; set; }
+    public AppTeam? Team { get; set; }
 
     public Dictionary<string, string> Props { get; set; }
     

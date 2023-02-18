@@ -24,7 +24,6 @@ using Corpspace.Commons.Domain.Entities.Auditing;
 
 namespace ChatSpace.Domain.Entities.Messages;
 
-[Table($"{GeneralConstants.ServiceName}_Message")]
 public class Message : Entity<Guid>, IHasModificationTime
 {
     public Guid UserId { get; set; }
@@ -50,7 +49,7 @@ public class Message : Entity<Guid>, IHasModificationTime
 
     public long ReplyCount { get; set; }
 
-    public List<ChatUser> Participants { get; set; }
+    public List<AppUser> Participants { get; set; }
     
     public bool? IsFollowing { get; set; }
     

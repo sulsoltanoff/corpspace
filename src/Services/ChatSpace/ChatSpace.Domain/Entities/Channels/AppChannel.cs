@@ -24,12 +24,11 @@ using Corpspace.Commons.Domain.Entities.Auditing;
 
 namespace ChatSpace.Domain.Entities.Channels;
 
-[Table($"{GeneralConstants.ServiceName}_Channel")]
 public class AppChannel : Entity<Guid>, IHasModificationTime
 {
     public Guid? TeamId { get; set; }
     
-    public ChannelType? ChannelsType { get; set; }
+    public AppChannelType? ChannelsType { get; set; }
     
     public string DisplayName { get; set; }
     
@@ -42,7 +41,7 @@ public class AppChannel : Entity<Guid>, IHasModificationTime
     
     public Guid? CreatorId { get; set; }
     
-    public List<ChatUser> ChannelMembers { get; set; }
+    public List<AppUser> ChannelMembers { get; set; }
 
     public DateTime? ModificationAt { get; set; }
     

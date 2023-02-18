@@ -59,9 +59,9 @@ public class ChatAppContextSeed : IChatAppContextSeed
             {
                 _context.Database.Migrate();
 
-                if (!_context.Teams.Any())
+                if (!_context.AppTeams.Any())
                 {
-                    _context.Teams.AddRange(GetPredefinedTeams(_context));
+                    _context.AppTeams.AddRange(GetPredefinedTeams(_context));
 
                     await _context.SaveChangesAsync();
                 }
@@ -73,9 +73,9 @@ public class ChatAppContextSeed : IChatAppContextSeed
                     await _context.SaveChangesAsync();
                 }
                 
-                if (!_context.ChatUsers.Any())
+                if (!_context.AppUsers.Any())
                 {
-                    _context.ChatUsers.AddRange(GetPredefinedUsers(_context));
+                    _context.AppUsers.AddRange(GetPredefinedUsers(_context));
                 
                     await _context.SaveChangesAsync();
                 }
@@ -98,16 +98,16 @@ public class ChatAppContextSeed : IChatAppContextSeed
             );
     }
 
-    private IEnumerable<Team> GetPredefinedTeams(ChatAppContext context)
+    private IEnumerable<AppTeam> GetPredefinedTeams(ChatAppContext context)
     {
-        var teams = new List<Team>
+        var teams = new List<AppTeam>
         {
             new ()
             {
                 Name = "team1",
                 DisplayName = "Team 1",
                 Description = "First team",
-                Members = new List<ChatUser>(),
+                Members = new List<AppUser>(),
                 CreationAt = DateTime.Now,
                 ModificationAt = DateTime.Now,
                 IsDeleted = false
@@ -119,20 +119,20 @@ public class ChatAppContextSeed : IChatAppContextSeed
     
     private IEnumerable<AppChannel> GetPredefinedChannels(ChatAppContext context)
     {
-        var teamId = context.Set<Team>().First().Id;
+        var teamId = context.Set<AppTeam>().First().Id;
         
         var channels = new List<AppChannel>
         {
             new()
             {
                 TeamId = teamId,
-                ChannelsType = ChannelType.Open,
+                ChannelsType = AppChannelType.Open,
                 DisplayName = "General",
                 Description = "General channel",
                 Name = "general",
                 LastPostAt = DateTime.Now,
                 CreatorId = Guid.Empty,
-                ChannelMembers = new List<ChatUser>(),
+                ChannelMembers = new List<AppUser>(),
                 ModificationAt = DateTime.Now,
                 CreationAt = DateTime.Now,
                 DeletionAt = null,
@@ -144,16 +144,16 @@ public class ChatAppContextSeed : IChatAppContextSeed
         return channels;
     }
     
-    private IEnumerable<ChatUser> GetPredefinedUsers(ChatAppContext context)
+    private IEnumerable<AppUser> GetPredefinedUsers(ChatAppContext context)
     {
-        var team = context.Teams.FirstOrDefault(t => t.Name == "team1");
+        var team = context.AppTeams.FirstOrDefault(t => t.Name == "team1");
         var channel = context.AppChannels.FirstOrDefault(t => t.Name == "general");
         if (team == null || channel == null)
         {
             throw new Exception("Cannot seed users without team or channel");
         }
         
-        var chatUsers = new List<ChatUser>
+        var chatUsers = new List<AppUser>
         {
             new()
             {

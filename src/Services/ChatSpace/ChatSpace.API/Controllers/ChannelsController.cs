@@ -18,7 +18,6 @@
 using System.Net;
 using ChatSpace.Application.Channel;
 using ChatSpace.Application.Channel.DTO;
-using ChatSpace.Application.Channel.Impl;
 using ChatSpace.Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -46,19 +45,19 @@ public class ChannelsController : Controller
     /// <summary>
     /// ChannelAppService is a service for managing channels.
     /// </summary>
-    private readonly IChannelService _channelAppService;
+    private readonly IAppChannelService _appChannelAppService;
 
     /// <summary>
     /// ChannelsController constructor.
     /// </summary>
     /// <param name="mediator">IMediator instance for sending commands and publishing events.</param>
     /// <param name="logger">ILogger<ChannelsController> instance for logging messages.</param>
-    /// <param name="channelAppService">ChannelAppService instance for managing channels.</param>
-    public ChannelsController(IMediator mediator, ILogger<ChannelsController> logger, IChannelService channelAppService)
+    /// <param name="appChannelAppService">ChannelAppService instance for managing channels.</param>
+    public ChannelsController(IMediator mediator, ILogger<ChannelsController> logger, IAppChannelService appChannelAppService)
     {
         _mediator = mediator;
         _logger = logger;
-        _channelAppService = channelAppService;
+        _appChannelAppService = appChannelAppService;
     }
 
     /// <summary>
@@ -71,15 +70,15 @@ public class ChannelsController : Controller
     [ProducesResponseType((int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
     [ProducesResponseType((int)HttpStatusCode.Conflict)]
-    public async Task<IActionResult> CreatePublicChannel([FromBody] CreateChannelDto channelDto)
+    public async Task<IActionResult> CreatePublicChannel([FromBody] CreateAppChannelDto channelDto)
     {
         _logger.LogDebug("CreatePublicChannel");
         try
         {
-            await _channelAppService.CreateChannelAsync(channelDto);
+            await _appChannelAppService.CreateChannelAsync(channelDto);
             return Ok();
         }
-        catch (ChannelAlreadyExistsException ex)
+        catch (AppChannelAlreadyExistsException ex)
         {
             return Conflict(ex.Message);
         }
@@ -100,7 +99,7 @@ public class ChannelsController : Controller
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     public async Task<IActionResult> GetAllChannels()
     {
-        var channel = await _channelAppService.GetListChannelAsync();
+        var channel = await _appChannelAppService.GetListChannelAsync();
         if (channel == null) return NotFound();
 
         return Ok(channel);
@@ -118,7 +117,7 @@ public class ChannelsController : Controller
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     public async Task<IActionResult> GetChannelById(Guid channelId)
     {
-        var channel = await _channelAppService.GetChannelByIdAsync(channelId);
+        var channel = await _appChannelAppService.GetChannelByIdAsync(channelId);
         if (channel == null) return NotFound();
 
         return Ok(channel);
@@ -131,11 +130,11 @@ public class ChannelsController : Controller
     /// <returns>HTTP status code OK (200) on success, HTTP status code Bad Request (400) on failure.</returns>
     [Route("one-to-one/")]
     [HttpPost]
-    [ProducesResponseType(typeof(CreateOneToOneChannelDto), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(CreateOneToOneAppChannelDto), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-    public async Task<IActionResult> CreateOneToOneChat(CreateOneToOneChannelDto channelDto)
+    public async Task<IActionResult> CreateOneToOneChat(CreateOneToOneAppChannelDto channelDto)
     {
-        var channel = await _channelAppService.CreateOneToOneChannelAsync(channelDto);
+        var channel = await _appChannelAppService.CreateOneToOneChannelAsync(channelDto);
         if (channel == null)
         {
             return BadRequest();
@@ -148,7 +147,7 @@ public class ChannelsController : Controller
     /// Updates a channel with the specified id and information in the `UpdateChannelDto` object.
     /// </summary>
     /// <param name="id">The unique identifier of the channel to be updated.</param>
-    /// <param name="channelDto">The information to be used for updating the channel.</param>
+    /// <param name="appChannelDto">The information to be used for updating the channel.</param>
     /// <returns>An `IActionResult` indicating the result of the update operation.
     /// If the channel was successfully updated, returns `Ok` with the updated channel.
     /// If the channel was not found, returns `NotFound`.
@@ -157,9 +156,9 @@ public class ChannelsController : Controller
     [HttpPut]
     [ProducesResponseType((int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
-    public async Task<IActionResult> UpdateChannel(Guid id, [FromBody] UpdateChannelDto channelDto)
+    public async Task<IActionResult> UpdateChannel(Guid id, [FromBody] UpdateAppChannelDto appChannelDto)
     {
-        var channel = await _channelAppService.UpdateChannelAsync(id, channelDto);
+        var channel = await _appChannelAppService.UpdateChannelAsync(id, appChannelDto);
         if (channel == null) return NotFound();
 
         return Ok(channel);
@@ -169,15 +168,15 @@ public class ChannelsController : Controller
     /// <summary>
     /// Gets a list of all channels based on the search criteria specified in the `searchDto` parameter.
     /// </summary>
-    /// <param name="searchDto">An instance of `SearchChannelDto` that contains the search criteria for the channels.</param>
+    /// <param name="searchAppDto">An instance of `SearchChannelDto` that contains the search criteria for the channels.</param>
     /// <returns>Returns a list of channels that match the search criteria.</returns>
     /// <response code="200">Returns the list of channels.</response>
     [Route("search/")]
     [HttpGet]
     [ProducesResponseType((int)HttpStatusCode.OK)]
-    public async Task<IActionResult> SearchChannels([FromQuery] SearchChannelDto searchDto)
+    public async Task<IActionResult> SearchChannels([FromQuery] SearchAppChannelDto searchAppDto)
     {
-        var channels = await _channelAppService.SearchChannelsAsync(searchDto);
+        var channels = await _appChannelAppService.SearchChannelsAsync(searchAppDto);
         return Ok(channels);
     }
 
@@ -193,7 +192,7 @@ public class ChannelsController : Controller
     [ProducesResponseType((int)HttpStatusCode.NotFound)]
     public async Task<IActionResult> DeleteChannel(Guid id)
     {
-        var success = await _channelAppService.DeleteChannelAsync(id);
+        var success = await _appChannelAppService.DeleteChannelAsync(id);
         if (!success) return NotFound();
 
         return NoContent();

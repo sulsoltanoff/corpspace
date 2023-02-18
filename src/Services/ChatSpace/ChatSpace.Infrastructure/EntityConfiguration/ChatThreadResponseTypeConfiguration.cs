@@ -21,24 +21,43 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Corpspace.ChatSpace.Infrastructure.EntityConfiguration;
 
-public class ThreadsTypeConfiguration : IEntityTypeConfiguration<Threads>
+public class ChatThreadResponseTypeConfiguration : IEntityTypeConfiguration<ChatThreadResponse>
 {
-    public void Configure(EntityTypeBuilder<Threads> builder)
+    public void Configure(EntityTypeBuilder<ChatThreadResponse> builder)
     {
         // Set primary key
         builder.HasKey(x => x.Id);
-    
+
         // Set properties
-        builder.Property(x => x.Total)
+        builder.Property(x => x.MessageId)
             .IsRequired();
 
-        builder.Property(x => x.TotalUnreadThreads)
+        builder.Property(x => x.ReplyCount)
             .IsRequired();
 
-        builder.Property(x => x.TotalUnreadMentions)
+        builder.Property(x => x.LastReplyAt)
+            .IsRequired()
+            .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+        builder.Property(x => x.LastViewedAt)
+            .IsRequired()
+            .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+        builder.HasOne(x => x.AppChatThreads)
+            .WithMany(x => x.ThreadResponses)
+            .HasForeignKey(x => x.ThreadsId);
+
+        builder.HasOne(x => x.Message)
+            .WithOne()
+            .HasForeignKey<ChatThreadResponse>(x => x.MessageId);
+
+        builder.Property(x => x.UnreadReplies)
             .IsRequired();
 
-        builder.Property(x => x.TotalUnreadUrgentMentions)
+        builder.Property(x => x.UnreadMentions)
+            .IsRequired();
+
+        builder.Property(x => x.IsUrgent)
             .IsRequired();
 
         builder.Property(x => x.ModificationAt)
@@ -56,8 +75,7 @@ public class ThreadsTypeConfiguration : IEntityTypeConfiguration<Threads>
             .IsRequired()
             .HasDefaultValue(false);
 
-        builder.HasMany(x => x.ThreadResponses)
-            .WithOne(x => x.AppThreads)
-            .HasForeignKey(x => x.ThreadsId);
+        builder.HasMany(x => x.Participants)
+            .WithOne();
     }
 }

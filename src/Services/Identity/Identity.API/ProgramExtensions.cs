@@ -16,7 +16,6 @@
 #endregion
 
 using Corpspace.Services.Identity.API.Configuration;
-using Corpspace.Services.Identity.API.Data;
 using Corpspace.Services.Identity.API.Services;
 using Serilog;
 

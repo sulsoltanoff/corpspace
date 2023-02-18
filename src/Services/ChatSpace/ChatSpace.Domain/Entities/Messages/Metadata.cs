@@ -22,7 +22,6 @@ using Corpspace.Commons.Domain.Entities.Auditing;
 
 namespace ChatSpace.Domain.Entities.Messages;
 
-[Table($"{GeneralConstants.ServiceName}_Metadata")]
 public class Metadata : Entity<Guid>, IHasModificationTime
 {
     public List<string> Embeds { get; set; }

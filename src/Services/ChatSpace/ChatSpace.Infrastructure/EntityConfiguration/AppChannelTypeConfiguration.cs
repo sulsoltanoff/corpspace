@@ -55,19 +55,6 @@ public class AppChannelTypeConfiguration : IEntityTypeConfiguration<AppChannel>
         builder.Property(appChannel => appChannel.CreatorId)
             .IsRequired(false);
 
-        builder.HasMany(appChannel => appChannel.ChannelMembers)
-            .WithMany(member => member.AppChannel)
-            .UsingEntity<ChatUser>(
-                configure => configure
-                    .HasOne<ChatUser>().WithMany().HasForeignKey("UserId"),
-                configure => configure
-                    .HasOne<AppChannel>().WithMany().HasForeignKey("ChannelId"),
-                configure =>
-                {
-                    configure.Property<DateTime>("JoinTime").IsRequired();
-                    configure.HasKey("UserId", "ChannelId");
-                });
-
         builder.Property(appChannel => appChannel.ModificationAt)
             .IsRequired()
             .HasDefaultValueSql("CURRENT_TIMESTAMP");;
@@ -81,5 +68,21 @@ public class AppChannelTypeConfiguration : IEntityTypeConfiguration<AppChannel>
 
         builder.Property(appChannel => appChannel.IsDeleted)
             .IsRequired().HasDefaultValue(false);
+        
+        // Set relationships
+        builder.HasMany(appChannel => appChannel.ChannelMembers)
+            .WithMany(member => member.AppChannel)
+            .UsingEntity<Dictionary<string, object>>(
+                "UserChannel",
+                configure => configure
+                    .HasOne<AppUser>().WithMany().HasForeignKey("AppUser"),
+                configure => configure
+                    .HasOne<AppChannel>().WithMany().HasForeignKey("AppChannel"),
+                configure =>
+                {
+                    configure.ToTable("UserChannel");
+                    configure.Property<DateTime>("JoinTime").HasDefaultValueSql("CURRENT_TIMESTAMP");
+                    configure.HasKey("AppUser", "AppChannel");
+                });
     }
 }

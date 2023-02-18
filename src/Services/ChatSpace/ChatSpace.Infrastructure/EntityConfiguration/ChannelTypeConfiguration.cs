@@ -22,9 +22,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Corpspace.ChatSpace.Infrastructure.EntityConfiguration;
 
-public class ChannelTypeConfiguration : IEntityTypeConfiguration<ChannelType>
+public class ChannelTypeConfiguration : IEntityTypeConfiguration<AppChannelType>
 {
-    public void Configure(EntityTypeBuilder<ChannelType> builder)
+    public void Configure(EntityTypeBuilder<AppChannelType> builder)
     {
         // Set primary key
         builder.HasKey(ct => ct.Id);

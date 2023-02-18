@@ -13,12 +13,12 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "ChatSpace_Channel",
+                name: "AppChannels",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     TeamId = table.Column<Guid>(type: "uuid", nullable: true),
-                    ChannelsType = table.Column<int>(type: "integer", nullable: true),
+                    ChannelsType = table.Column<string>(type: "text", nullable: false),
                     DisplayName = table.Column<string>(type: "character varying(76)", maxLength: 76, nullable: true),
                     Description = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
                     Name = table.Column<string>(type: "character varying(76)", maxLength: 76, nullable: true),
@@ -32,11 +32,64 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ChatSpace_Channel", x => x.Id);
+                    table.PrimaryKey("PK_AppChannels", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ChatSpace_Draft",
+                name: "AppChannelType",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Value = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
+                    ModificationAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    CreationAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    DeletionAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppChannelType", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AppTeams",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "character varying(76)", maxLength: 76, nullable: false),
+                    DisplayName = table.Column<string>(type: "character varying(76)", maxLength: 76, nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true, defaultValue: "512"),
+                    ModificationAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    CreationAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    DeletionAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppTeams", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ChatThreads",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Total = table.Column<long>(type: "bigint", nullable: false),
+                    TotalUnreadThreads = table.Column<long>(type: "bigint", nullable: false),
+                    TotalUnreadMentions = table.Column<long>(type: "bigint", nullable: false),
+                    TotalUnreadUrgentMentions = table.Column<long>(type: "bigint", nullable: false),
+                    ModificationAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    CreationAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    DeletionAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ChatThreads", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Drafts",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -50,11 +103,11 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ChatSpace_Draft", x => x.Id);
+                    table.PrimaryKey("PK_Drafts", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ChatSpace_Image",
+                name: "Images",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -65,11 +118,11 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ChatSpace_Image", x => x.Id);
+                    table.PrimaryKey("PK_Images", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ChatSpace_Metadata",
+                name: "Metadatas",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -87,48 +140,11 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ChatSpace_Metadata", x => x.Id);
+                    table.PrimaryKey("PK_Metadatas", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ChatSpace_Team",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "character varying(76)", maxLength: 76, nullable: false),
-                    DisplayName = table.Column<string>(type: "character varying(76)", maxLength: 76, nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: true, defaultValue: "512"),
-                    ModificationAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
-                    CreationAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
-                    DeletionAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ChatSpace_Team", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ChatSpace_Threads",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Total = table.Column<long>(type: "bigint", nullable: false),
-                    TotalUnreadThreads = table.Column<long>(type: "bigint", nullable: false),
-                    TotalUnreadMentions = table.Column<long>(type: "bigint", nullable: false),
-                    TotalUnreadUrgentMentions = table.Column<long>(type: "bigint", nullable: false),
-                    ModificationAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
-                    CreationAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
-                    DeletionAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ChatSpace_Threads", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ChatSpace_Message",
+                name: "Messages",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -154,17 +170,17 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ChatSpace_Message", x => x.Id);
+                    table.PrimaryKey("PK_Messages", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ChatSpace_Message_ChatSpace_Metadata_MetadataId",
+                        name: "FK_Messages_Metadatas_MetadataId",
                         column: x => x.MetadataId,
-                        principalTable: "ChatSpace_Metadata",
+                        principalTable: "Metadatas",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ChatSpace_ThreadResponse",
+                name: "ChatThreadResponses",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -183,23 +199,23 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ChatSpace_ThreadResponse", x => x.Id);
+                    table.PrimaryKey("PK_ChatThreadResponses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ChatSpace_ThreadResponse_ChatSpace_Message_MessageId",
-                        column: x => x.MessageId,
-                        principalTable: "ChatSpace_Message",
+                        name: "FK_ChatThreadResponses_ChatThreads_ThreadsId",
+                        column: x => x.ThreadsId,
+                        principalTable: "ChatThreads",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ChatSpace_ThreadResponse_ChatSpace_Threads_ThreadsId",
-                        column: x => x.ThreadsId,
-                        principalTable: "ChatSpace_Threads",
+                        name: "FK_ChatThreadResponses_Messages_MessageId",
+                        column: x => x.MessageId,
+                        principalTable: "Messages",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ChatSpace_User",
+                name: "AppUsers",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -211,7 +227,7 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                     Position = table.Column<string>(type: "text", nullable: false),
                     Roles = table.Column<string>(type: "text", nullable: false),
                     ChannelId = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserTeamId = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserTeamId = table.Column<Guid>(type: "uuid", nullable: true),
                     TeamId = table.Column<Guid>(type: "uuid", nullable: true),
                     Props = table.Column<Dictionary<string, string>>(type: "jsonb", nullable: false),
                     NotifyProps = table.Column<Dictionary<string, string>>(type: "jsonb", nullable: false),
@@ -226,116 +242,141 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                     CreationAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     DeletionAt = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
-                    ThreadResponseId = table.Column<Guid>(type: "uuid", nullable: true)
+                    ChatThreadResponseId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ChatSpace_User", x => x.Id);
+                    table.PrimaryKey("PK_AppUsers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ChatSpace_User_ChatSpace_Channel_ChannelId",
-                        column: x => x.ChannelId,
-                        principalTable: "ChatSpace_Channel",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ChatSpace_User_ChatSpace_Team_TeamId",
+                        name: "FK_AppUsers_AppTeams_TeamId",
                         column: x => x.TeamId,
-                        principalTable: "ChatSpace_Team",
+                        principalTable: "AppTeams",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_ChatSpace_User_ChatSpace_Team_UserTeamId",
+                        name: "FK_AppUsers_AppTeams_UserTeamId",
                         column: x => x.UserTeamId,
-                        principalTable: "ChatSpace_Team",
+                        principalTable: "AppTeams",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
-                        name: "FK_ChatSpace_User_ChatSpace_ThreadResponse_ThreadResponseId",
-                        column: x => x.ThreadResponseId,
-                        principalTable: "ChatSpace_ThreadResponse",
+                        name: "FK_AppUsers_ChatThreadResponses_ChatThreadResponseId",
+                        column: x => x.ChatThreadResponseId,
+                        principalTable: "ChatThreadResponses",
                         principalColumn: "Id");
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_ChatSpace_Message_ChannelId",
-                table: "ChatSpace_Message",
-                column: "ChannelId");
+            migrationBuilder.CreateTable(
+                name: "UserChannel",
+                columns: table => new
+                {
+                    AppChannel = table.Column<Guid>(type: "uuid", nullable: false),
+                    AppUser = table.Column<Guid>(type: "uuid", nullable: false),
+                    JoinTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserChannel", x => new { x.AppChannel, x.AppUser });
+                    table.ForeignKey(
+                        name: "FK_UserChannel_AppChannels_AppChannel",
+                        column: x => x.AppChannel,
+                        principalTable: "AppChannels",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserChannel_AppUsers_AppUser",
+                        column: x => x.AppUser,
+                        principalTable: "AppUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ChatSpace_Message_CreationAt",
-                table: "ChatSpace_Message",
-                column: "CreationAt");
+                name: "IX_AppUsers_ChatThreadResponseId",
+                table: "AppUsers",
+                column: "ChatThreadResponseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ChatSpace_Message_IsDeleted",
-                table: "ChatSpace_Message",
-                column: "IsDeleted");
+                name: "IX_AppUsers_TeamId",
+                table: "AppUsers",
+                column: "TeamId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ChatSpace_Message_MetadataId",
-                table: "ChatSpace_Message",
-                column: "MetadataId");
+                name: "IX_AppUsers_UserTeamId",
+                table: "AppUsers",
+                column: "UserTeamId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ChatSpace_ThreadResponse_MessageId",
-                table: "ChatSpace_ThreadResponse",
+                name: "IX_ChatThreadResponses_MessageId",
+                table: "ChatThreadResponses",
                 column: "MessageId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ChatSpace_ThreadResponse_ThreadsId",
-                table: "ChatSpace_ThreadResponse",
+                name: "IX_ChatThreadResponses_ThreadsId",
+                table: "ChatThreadResponses",
                 column: "ThreadsId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ChatSpace_User_ChannelId",
-                table: "ChatSpace_User",
+                name: "IX_Messages_ChannelId",
+                table: "Messages",
                 column: "ChannelId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ChatSpace_User_TeamId",
-                table: "ChatSpace_User",
-                column: "TeamId");
+                name: "IX_Messages_CreationAt",
+                table: "Messages",
+                column: "CreationAt");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ChatSpace_User_ThreadResponseId",
-                table: "ChatSpace_User",
-                column: "ThreadResponseId");
+                name: "IX_Messages_IsDeleted",
+                table: "Messages",
+                column: "IsDeleted");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ChatSpace_User_UserTeamId",
-                table: "ChatSpace_User",
-                column: "UserTeamId");
+                name: "IX_Messages_MetadataId",
+                table: "Messages",
+                column: "MetadataId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserChannel_AppUser",
+                table: "UserChannel",
+                column: "AppUser");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ChatSpace_Draft");
+                name: "AppChannelType");
 
             migrationBuilder.DropTable(
-                name: "ChatSpace_Image");
+                name: "Drafts");
 
             migrationBuilder.DropTable(
-                name: "ChatSpace_User");
+                name: "Images");
 
             migrationBuilder.DropTable(
-                name: "ChatSpace_Channel");
+                name: "UserChannel");
 
             migrationBuilder.DropTable(
-                name: "ChatSpace_Team");
+                name: "AppChannels");
 
             migrationBuilder.DropTable(
-                name: "ChatSpace_ThreadResponse");
+                name: "AppUsers");
 
             migrationBuilder.DropTable(
-                name: "ChatSpace_Message");
+                name: "AppTeams");
 
             migrationBuilder.DropTable(
-                name: "ChatSpace_Threads");
+                name: "ChatThreadResponses");
 
             migrationBuilder.DropTable(
-                name: "ChatSpace_Metadata");
+                name: "ChatThreads");
+
+            migrationBuilder.DropTable(
+                name: "Messages");
+
+            migrationBuilder.DropTable(
+                name: "Metadatas");
         }
     }
 }
