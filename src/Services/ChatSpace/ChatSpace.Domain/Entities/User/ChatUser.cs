@@ -42,7 +42,7 @@ public class ChatUser : Entity<Guid>, IHasModificationTime
     
     public Guid? ChannelId { get; set; }
     
-    public AppChannel AppChannel { get; set; }
+    public IEnumerable<AppChannel>? AppChannel { get; set; }
     
     public Guid? UserTeamId { get; set; }
     

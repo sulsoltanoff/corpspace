@@ -29,7 +29,7 @@ public class AppChannel : Entity<Guid>, IHasModificationTime
 {
     public Guid? TeamId { get; set; }
     
-    public ChannelsType? ChannelsType { get; set; }
+    public ChannelType? ChannelsType { get; set; }
     
     public string DisplayName { get; set; }
     

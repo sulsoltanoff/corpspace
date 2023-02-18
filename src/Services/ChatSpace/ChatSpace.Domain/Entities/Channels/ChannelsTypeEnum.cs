@@ -17,7 +17,7 @@
 
 namespace ChatSpace.Domain.Entities.Channels;
 
-public enum ChannelsType
+public enum ChannelsTypeEnum
 {
     Open,
     Private,
