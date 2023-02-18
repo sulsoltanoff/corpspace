@@ -22,6 +22,7 @@ using ChatSpace.Domain.Entities.Channels;
 using ChatSpace.Domain.Entities.User;
 using ChatSpace.Domain.Exceptions;
 using Corpspace.Commons.Domain.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace ChatSpace.Application.Channel.Impl;
 
@@ -53,7 +54,7 @@ public class ChannelAppService : ChannelServiceBase, IChannelService
 
     public async Task<ChannelDto> GetDirectChannelAsync(Guid userId1, Guid userId2)
     {
-        var channel = await _channelRepository.FirstOrDefaultAsync(x => x.ChannelsType == ChannelsType.OneToOne && (x.CreatorId == userId1 || x.CreatorId == userId2));
+        var channel = await _channelRepository.FirstOrDefaultAsync(x => x.ChannelsType == ChannelType.OneToOne && (x.CreatorId == userId1 || x.CreatorId == userId2));
         return _mapper.Map<ChannelDto>(channel);
     }
 
@@ -77,6 +78,14 @@ public class ChannelAppService : ChannelServiceBase, IChannelService
 
     public async Task<ChannelDto> CreateChannelAsync(CreateChannelDto input)
     {
+        var channelExists = await _channelRepository.GetAll()
+            .AnyAsync(x => x.Name == input.Name);
+        
+        if (channelExists)
+        {
+            throw new ChannelAlreadyExistsException("Channel with this name already exists.");
+        }
+        
         var channel = _mapper.Map<AppChannel>(input);
         channel.Id = Guid.NewGuid();
         channel.CreationAt = DateTime.Now;
@@ -97,7 +106,7 @@ public class ChannelAppService : ChannelServiceBase, IChannelService
         
         var channel = new AppChannel
         {
-            ChannelsType = ChannelsType.OneToOne,
+            ChannelsType = ChannelType.OneToOne,
             ChannelMembers = new List<ChatUser> { userOne, userTwo }
         };
         var createdChannel = await _channelRepository.CreateAsync(channel);
