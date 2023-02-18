@@ -103,6 +103,14 @@ IConfiguration GetConfiguration()
         .SetBasePath(Directory.GetCurrentDirectory())
         .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
         .AddEnvironmentVariables();
+    
+    var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+    if (!string.IsNullOrWhiteSpace(env))
+    {
+        builder.AddJsonFile($"appsettings.{env}.json", optional: true);
+    }
+
 
     var config = builder.Build();
 
