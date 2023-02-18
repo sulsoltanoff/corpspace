@@ -16,7 +16,7 @@
 #endregion
 
 using ChatSpace.Domain.Entities.Messages;
-using ChatSpace.Domain.Utils;
+using Corpspace.ChatSpace.Infrastructure.Utils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

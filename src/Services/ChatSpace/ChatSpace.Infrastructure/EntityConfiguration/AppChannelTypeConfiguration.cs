@@ -17,6 +17,7 @@
 
 using ChatSpace.Domain.Constants;
 using ChatSpace.Domain.Entities.Channels;
+using ChatSpace.Domain.Entities.User;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -33,8 +34,9 @@ public class AppChannelTypeConfiguration : IEntityTypeConfiguration<AppChannel>
         builder.Property(appChannel => appChannel.TeamId)
             .IsRequired(false);
 
-        builder.Property(appChannel => appChannel.ChannelsType)
-            .IsRequired(false);
+        builder.Property(x => x.ChannelsType)
+            .HasConversion<string>()
+            .IsRequired();
 
         builder.Property(appChannel => appChannel.DisplayName)
             .IsRequired(false)
@@ -54,9 +56,17 @@ public class AppChannelTypeConfiguration : IEntityTypeConfiguration<AppChannel>
             .IsRequired(false);
 
         builder.HasMany(appChannel => appChannel.ChannelMembers)
-            .WithOne(member => member.AppChannel)
-            .HasForeignKey(cm => cm.ChannelId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .WithMany(member => member.AppChannel)
+            .UsingEntity<ChatUser>(
+                configure => configure
+                    .HasOne<ChatUser>().WithMany().HasForeignKey("UserId"),
+                configure => configure
+                    .HasOne<AppChannel>().WithMany().HasForeignKey("ChannelId"),
+                configure =>
+                {
+                    configure.Property<DateTime>("JoinTime").IsRequired();
+                    configure.HasKey("UserId", "ChannelId");
+                });
 
         builder.Property(appChannel => appChannel.ModificationAt)
             .IsRequired()

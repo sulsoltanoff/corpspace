@@ -16,6 +16,7 @@
 #endregion
 
 using ChatSpace.Domain.Constants;
+using ChatSpace.Domain.Entities.Channels;
 using ChatSpace.Domain.Entities.User;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -55,14 +56,6 @@ public class ChatUserTypeConfiguration : IEntityTypeConfiguration<ChatUser>
         builder.Property(chatUser => chatUser.ChannelId)
             .IsRequired();
 
-        builder.Property(chatUser => chatUser.UserTeamId);
-
-        builder.HasOne(chatUser => chatUser.Team)
-            .WithMany(team => team.Members)
-            .HasForeignKey(chatUser => chatUser.UserTeamId)
-            .IsRequired()
-            .OnDelete(DeleteBehavior.Restrict);
-        
         builder.Property(chatUser => chatUser.Props)
             .HasColumnType("jsonb");
         
@@ -106,5 +99,23 @@ public class ChatUserTypeConfiguration : IEntityTypeConfiguration<ChatUser>
         builder.Property(chatUser => chatUser.IsDeleted)
             .IsRequired()
             .HasDefaultValue(false);
+        
+        builder.HasMany(x => x.AppChannel)
+            .WithMany(x => x.ChannelMembers)
+            .UsingEntity<Dictionary<string, object>>(
+                "UserChannel",
+                j => j.HasOne<AppChannel>().WithMany().HasForeignKey("ChannelId").OnDelete(DeleteBehavior.Cascade),
+                j => j.HasOne<ChatUser>().WithMany().HasForeignKey("UserId").OnDelete(DeleteBehavior.Cascade),
+                j =>
+                {
+                    j.HasKey("ChannelId", "UserId");
+                    j.HasData(
+                        new { ChannelId = Guid.NewGuid(), UserId = Guid.NewGuid() });
+                });
+
+        builder.HasOne(x => x.Team)
+            .WithMany(x => x.Members)
+            .HasForeignKey(x => x.UserTeamId)
+            .OnDelete(DeleteBehavior.SetNull);
     }
 }

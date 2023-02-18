@@ -29,8 +29,9 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<int?>("ChannelsType")
-                        .HasColumnType("integer");
+                    b.Property<string>("ChannelsType")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("CreationAt")
                         .IsRequired()
@@ -80,6 +81,42 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ChatSpace_Channel");
+                });
+
+            modelBuilder.Entity("ChatSpace.Domain.Entities.Channels.ChannelType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("CreationAt")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp without time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<DateTime?>("DeletionAt")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<DateTime?>("ModificationAt")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp without time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ChannelType");
                 });
 
             modelBuilder.Entity("ChatSpace.Domain.Entities.Messages.Draft", b =>
@@ -522,6 +559,9 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                         .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
+                    b.Property<DateTime>("JoinTime")
+                        .HasColumnType("timestamp without time zone");
+
                     b.Property<DateTime?>("LastActivityAt")
                         .HasColumnType("timestamp without time zone");
 
@@ -566,8 +606,10 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                     b.Property<Guid?>("ThreadResponseId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid?>("UserTeamId")
-                        .IsRequired()
                         .HasColumnType("uuid");
 
                     b.Property<string>("Username")
@@ -583,9 +625,33 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
 
                     b.HasIndex("ThreadResponseId");
 
+                    b.HasIndex("UserId");
+
                     b.HasIndex("UserTeamId");
 
                     b.ToTable("ChatSpace_User");
+                });
+
+            modelBuilder.Entity("UserChannel", b =>
+                {
+                    b.Property<Guid>("ChannelId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("ChannelId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserChannel");
+
+                    b.HasData(
+                        new
+                        {
+                            ChannelId = new Guid("c73e09c9-2427-4e3d-bb08-244bb93f1f23"),
+                            UserId = new Guid("206b50ae-13da-4e23-9483-350c65794917")
+                        });
                 });
 
             modelBuilder.Entity("ChatSpace.Domain.Entities.Messages.Message", b =>
@@ -620,8 +686,8 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
 
             modelBuilder.Entity("ChatSpace.Domain.Entities.User.ChatUser", b =>
                 {
-                    b.HasOne("ChatSpace.Domain.Entities.Channels.AppChannel", "AppChannel")
-                        .WithMany("ChannelMembers")
+                    b.HasOne("ChatSpace.Domain.Entities.Channels.AppChannel", null)
+                        .WithMany()
                         .HasForeignKey("ChannelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -634,20 +700,33 @@ namespace Corpspace.ChatSpace.Infrastructure.Migrations
                         .WithMany("Participants")
                         .HasForeignKey("ThreadResponseId");
 
+                    b.HasOne("ChatSpace.Domain.Entities.User.ChatUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ChatSpace.Domain.Entities.Team.Team", null)
                         .WithMany("Members")
                         .HasForeignKey("UserTeamId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("AppChannel");
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Team");
                 });
 
-            modelBuilder.Entity("ChatSpace.Domain.Entities.Channels.AppChannel", b =>
+            modelBuilder.Entity("UserChannel", b =>
                 {
-                    b.Navigation("ChannelMembers");
+                    b.HasOne("ChatSpace.Domain.Entities.Channels.AppChannel", null)
+                        .WithMany()
+                        .HasForeignKey("ChannelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ChatSpace.Domain.Entities.User.ChatUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ChatSpace.Domain.Entities.Messages.ThreadResponse", b =>
