@@ -102,7 +102,7 @@ public class AppAppChannelAppService : AppChannelServiceBase, IAppChannelService
     /// <exception cref="ChatAppException">ChatAppException if no direct channel is found.</exception>
     public async Task<AppChannelDto> GetDirectChannelAsync(Guid userId1, Guid userId2)
     {
-        var channel = await _channelRepository.FirstOrDefaultAsync(x => x.ChannelsType == AppChannelType.OneToOne && (x.CreatorId == userId1 || x.CreatorId == userId2));
+        var channel = await _channelRepository.FirstOrDefaultAsync(x => x.AppChannelType == AppChannelType.OneToOne && (x.CreatorId == userId1 || x.CreatorId == userId2));
         if (channel == null)
         {
             _logger.LogInformation("Direct channel not found.");
@@ -228,7 +228,7 @@ public class AppAppChannelAppService : AppChannelServiceBase, IAppChannelService
         
         var channel = new AppChannel
         {
-            ChannelsType = AppChannelType.OneToOne,
+            AppChannelType = AppChannelType.OneToOne,
             ChannelMembers = new List<AppUser> { userOne, userTwo }
         };
         var createdChannel = await _channelRepository.CreateAsync(channel);

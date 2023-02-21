@@ -17,72 +17,37 @@
 
 using ChatSpace.Domain.Constants;
 using ChatSpace.Domain.Entities.Channels;
-using ChatSpace.Domain.Entities.User;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Corpspace.ChatSpace.Infrastructure.EntityConfiguration;
 
-public class AppChannelTypeConfiguration : IEntityTypeConfiguration<AppChannel>
+public class AppChannelTypeConfiguration : IEntityTypeConfiguration<AppChannelType>
 {
-    public void Configure(EntityTypeBuilder<AppChannel> builder)
+    public void Configure(EntityTypeBuilder<AppChannelType> builder)
     {
-        // Set primary key
-        builder.HasKey(appChannel => appChannel.Id);
+        builder.HasKey(e => e.Id);
 
-        // Set properties
-        builder.Property(appChannel => appChannel.TeamId)
-            .IsRequired(false);
+        builder.Property(e => e.Value)
+            .IsRequired()
+            .HasMaxLength(GeneralConstants.ChannelTypeMaxLenght);
 
-        builder.Property(x => x.ChannelsType)
-            .HasConversion<string>()
+        builder.Property(e => e.CreationAt)
             .IsRequired();
 
-        builder.Property(appChannel => appChannel.DisplayName)
-            .IsRequired(false)
-            .HasMaxLength(GeneralConstants.ChannelNameMaxLenght);
-
-        builder.Property(appChannel => appChannel.Description)
-            .HasMaxLength(GeneralConstants.ChannelDescriptionMaxLenght);
-
-        builder.Property(appChannel => appChannel.Name)
-            .IsRequired(false)
-            .HasMaxLength(GeneralConstants.ChannelNameMaxLenght);
-
-        builder.Property(appChannel => appChannel.LastPostAt)
-            .IsRequired();
-
-        builder.Property(appChannel => appChannel.CreatorId)
+        builder.Property(e => e.ModificationAt)
             .IsRequired(false);
 
-        builder.Property(appChannel => appChannel.ModificationAt)
-            .IsRequired()
-            .HasDefaultValueSql("CURRENT_TIMESTAMP");;
-
-        builder.Property(appChannel => appChannel.CreationAt)
-            .IsRequired()
-            .HasDefaultValueSql("CURRENT_TIMESTAMP");;
-
-        builder.Property(appChannel => appChannel.DeletionAt)
+        builder.Property(e => e.DeletionAt)
             .IsRequired(false);
 
-        builder.Property(appChannel => appChannel.IsDeleted)
-            .IsRequired().HasDefaultValue(false);
-        
-        // Set relationships
-        builder.HasMany(appChannel => appChannel.ChannelMembers)
-            .WithMany(member => member.AppChannel)
-            .UsingEntity<Dictionary<string, object>>(
-                "UserChannel",
-                configure => configure
-                    .HasOne<AppUser>().WithMany().HasForeignKey("AppUser"),
-                configure => configure
-                    .HasOne<AppChannel>().WithMany().HasForeignKey("AppChannel"),
-                configure =>
-                {
-                    configure.ToTable("UserChannel");
-                    configure.Property<DateTime>("JoinTime").HasDefaultValueSql("CURRENT_TIMESTAMP");
-                    configure.HasKey("AppUser", "AppChannel");
-                });
+        builder.Property(e => e.IsDeleted)
+            .IsRequired()
+            .HasDefaultValue(false);
+
+        builder.HasData(AppChannelType.All);
+
+        builder.HasIndex(e => e.Value)
+            .IsUnique();
     }
 }

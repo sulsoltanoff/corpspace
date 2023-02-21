@@ -28,10 +28,10 @@ public class AppChannelType : Entity<Guid>, IHasModificationTime
 
     public string Value { get; }
 
-    public static AppChannelType Open { get; } = new AppChannelType(nameof(Open));
-    public static AppChannelType Private { get; } = new AppChannelType(nameof(Private));
-    public static AppChannelType Group { get; } = new AppChannelType(nameof(Group));
-    public static AppChannelType OneToOne { get; } = new AppChannelType(nameof(OneToOne));
+    public static AppChannelType Open { get; } = new("Open");
+    public static AppChannelType Private { get; } = new("Private");
+    public static AppChannelType Group { get; } = new("Group");
+    public static AppChannelType OneToOne { get; } = new("OneToOne");
 
     public static readonly IReadOnlyCollection<AppChannelType> All = new[]
     {
@@ -44,18 +44,20 @@ public class AppChannelType : Entity<Guid>, IHasModificationTime
     public static AppChannelType FromString(string value)
     {
         return All.FirstOrDefault(x => string.Equals(x.Value, value, StringComparison.OrdinalIgnoreCase))
-               ?? throw new InvalidOperationException($"Possible values: {string.Join(", ", All.Select(x => x.Value))}");
+               ?? throw new InvalidOperationException(
+                   $"Possible values: {string.Join(", ", All.Select(x => x.Value))}");
     }
 
     public static implicit operator string(AppChannelType type) => type.Value;
 
     public static implicit operator AppChannelType(string value) => FromString(value);
-    
+
     public DateTime? ModificationAt { get; set; }
-    
+
     public DateTime? CreationAt { get; set; }
-    
+
     public DateTime? DeletionAt { get; set; }
-    
+
     public bool IsDeleted { get; set; }
 }
+

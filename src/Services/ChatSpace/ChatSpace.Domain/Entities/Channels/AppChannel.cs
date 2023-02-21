@@ -16,8 +16,8 @@
 #endregion
 
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using ChatSpace.Domain.Constants;
+using ChatSpace.Domain.Entities.Team;
 using ChatSpace.Domain.Entities.User;
 using Corpspace.Commons.Domain.Entities;
 using Corpspace.Commons.Domain.Entities.Auditing;
@@ -28,7 +28,11 @@ public class AppChannel : Entity<Guid>, IHasModificationTime
 {
     public Guid? TeamId { get; set; }
     
-    public AppChannelType? ChannelsType { get; set; }
+    public AppTeam Team { get; set; }
+    
+    public AppChannelType? AppChannelType { get; set; }
+    
+    public Guid AppChannelTypeId { get; set; }
     
     public string DisplayName { get; set; }
     

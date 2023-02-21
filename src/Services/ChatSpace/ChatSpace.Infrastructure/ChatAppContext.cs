@@ -50,6 +50,7 @@ public class ChatAppContext : DbContext, IUnitOfWork
     public DbSet<AppTeam> AppTeams { get; set; }
     public DbSet<Message> Messages { get; set; }
     public DbSet<AppChannel> AppChannels { get; set; }
+    public DbSet<AppChannelType> AppChannelTypes { get; set; }
     public DbSet<Metadata> Metadatas { get; set; }
     public DbSet<Draft> Drafts { get; set; }
     public DbSet<Image> Images { get; set; }
@@ -59,8 +60,8 @@ public class ChatAppContext : DbContext, IUnitOfWork
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        modelBuilder.ApplyConfiguration(new AppChannelConfiguration());
         modelBuilder.ApplyConfiguration(new AppChannelTypeConfiguration());
-        modelBuilder.ApplyConfiguration(new ChannelTypeConfiguration());
         modelBuilder.ApplyConfiguration(new AppUserTypeConfiguration());
         modelBuilder.ApplyConfiguration(new DraftTypeConfiguration());
         modelBuilder.ApplyConfiguration(new ImageTypeConfiguration());
@@ -71,7 +72,7 @@ public class ChatAppContext : DbContext, IUnitOfWork
         modelBuilder.ApplyConfiguration(new ThreadsTypeConfiguration());
         
         modelBuilder.Entity<AppChannel>()
-            .Property(x => x.ChannelsType)
+            .Property(x => x.AppChannelType)
             .HasConversion(new ChannelTypeConverter());
     }
 
